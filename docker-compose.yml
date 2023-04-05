@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  db:
+    container_name: booking-app-db
+    image: postgres
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5042:5042"
+
+  backend:
+    container_name: booking-app-backend
+    depends_on:
+      - database
+    build:
+      context: booking-app-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+
+  frontend:
+    container_name: booking-app-frontend
+    depends_on:
+      - backend
+    build:
+      context: booking-app-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
