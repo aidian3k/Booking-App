@@ -1,19 +1,15 @@
 package aidian3k.project.bookingappbackend.entity;
 
 import aidian3k.project.bookingappbackend.constants.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity(name = "users")
@@ -21,12 +17,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Schema(description = "The table for storing the users used in application")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false, unique = true)
-    private Long id;
+    private Integer id;
 
     @Schema(description = "Field for user's name")
     @Column(nullable = false)
@@ -38,7 +35,7 @@ public class User implements UserDetails {
 
     @Schema(description = "Field for user's login")
     @Column(nullable = false)
-    private String login;
+    private String email;
 
     @Schema(description = "Field for user's phoneNumber assuming that it is Polish number", example = "728111321")
     @Column(length = 10, nullable = false)
@@ -49,11 +46,13 @@ public class User implements UserDetails {
 
     @Schema(description = "Field for storing user's creation date")
     @Column(nullable = false)
-    private ZonedDateTime creationDate;
+    private Date creationDate;
 
     @Enumerated(EnumType.STRING)
-    @JsonIgnore
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     @Override
     public boolean equals(Object comparedObject) {
@@ -73,7 +72,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.login;
+        return this.email;
     }
 
     @Override

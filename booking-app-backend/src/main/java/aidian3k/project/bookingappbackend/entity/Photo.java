@@ -17,7 +17,7 @@ public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "The photo's unique Id", example = "1")
-    private Long photoId;
+    private Integer photoId;
 
     @Column(nullable = false)
     @Schema(description = "The photo's name", example = "room123Photo")
