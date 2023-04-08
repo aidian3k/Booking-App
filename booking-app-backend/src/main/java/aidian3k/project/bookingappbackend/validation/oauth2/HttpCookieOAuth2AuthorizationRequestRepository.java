@@ -1,6 +1,7 @@
 package aidian3k.project.bookingappbackend.validation.oauth2;
 
 import com.nimbusds.oauth2.sdk.util.StringUtils;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class HttpCookieOAuth2AuthorizationRequestRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
     public static final String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
-    public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
+    public static final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirectUri";
     private static final int cookieExpireSeconds = 180;
 
     @Override
@@ -29,8 +30,7 @@ public class HttpCookieOAuth2AuthorizationRequestRepository implements Authoriza
         }
 
         CookieUtils.addCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, CookieUtils.serialize(authorizationRequest), cookieExpireSeconds);
-        String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
-
+        String redirectUriAfterLogin = authorizationRequest.getRedirectUri();
         if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
             CookieUtils.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin, cookieExpireSeconds);
         }

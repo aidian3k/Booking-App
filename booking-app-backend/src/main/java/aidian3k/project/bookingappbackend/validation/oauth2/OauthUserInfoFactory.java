@@ -1,6 +1,9 @@
 package aidian3k.project.bookingappbackend.validation.oauth2;
 
 import aidian3k.project.bookingappbackend.constants.AuthProvider;
+import aidian3k.project.bookingappbackend.validation.oauth2.model.FacebookOAuthUserInfo;
+import aidian3k.project.bookingappbackend.validation.oauth2.model.GoogleOAuthUserInfo;
+import aidian3k.project.bookingappbackend.validation.oauth2.model.OAuthUserInfo;
 
 import java.util.Map;
 

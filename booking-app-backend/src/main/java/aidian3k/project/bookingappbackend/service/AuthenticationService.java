@@ -9,14 +9,17 @@ import aidian3k.project.bookingappbackend.security.TokenProvider;
 import aidian3k.project.bookingappbackend.validation.AuthenticationRequest;
 import aidian3k.project.bookingappbackend.validation.AuthenticationResponse;
 import aidian3k.project.bookingappbackend.validation.RegisterModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -30,15 +33,7 @@ public class AuthenticationService {
     private final TokenRepository tokenRepository;
 
     public AuthenticationResponse registerUser(RegisterModel registerModel) {
-        User createdUser = User.builder()
-                .name(registerModel.getName())
-                .surname(registerModel.getSurname())
-                .email(registerModel.getEmail())
-                .phoneNumber(registerModel.getPhoneNumber())
-                .password(passwordEncoder.encode(registerModel.getPassword()))
-                .role(Role.USER)
-                .creationDate(new Date())
-                .build();
+        User createdUser = User.builder().name(registerModel.getName()).surname(registerModel.getSurname()).email(registerModel.getEmail()).phoneNumber(registerModel.getPhoneNumber()).password(passwordEncoder.encode(registerModel.getPassword())).role(Role.USER).creationDate(new Date()).build();
 
         userRepository.save(createdUser);
         final String jwtToken = tokenProvider.generateShortToken(createdUser);
@@ -48,12 +43,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticateRequest(AuthenticationRequest authenticationRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getEmail(),
-                        authenticationRequest.getPassword()
-                )
-        );
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
 
         User user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow(IllegalArgumentException::new);
         final String jwtToken = tokenProvider.generateShortToken(user);
@@ -62,8 +52,32 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).requestDate(new Date()).build();
     }
 
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        final String authenticationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String refreshToken;
+        final String userEmail;
 
+        if (authenticationHeader == null || !authenticationHeader.startsWith("Bearer ")) {
+            return;
+        }
+
+        refreshToken = authenticationHeader.substring(7);
+        userEmail = tokenProvider.extractSubjectFromToken(refreshToken);
+
+        if (userEmail != null) {
+            User user = this.userRepository.findByEmail(userEmail).orElseThrow();
+
+            if (tokenProvider.validateToken(refreshToken, user)) {
+                String accessToken = tokenProvider.generateShortToken(user);
+
+                revokeAllUserTokens(user);
+                saveUserToken(user, accessToken);
+
+                AuthenticationResponse authResponse = AuthenticationResponse.builder().token(accessToken).refreshToken(refreshToken).build();
+
+                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+            }
+        }
     }
 
     private Token saveUserToken(User user, String token) {
@@ -84,3 +98,4 @@ public class AuthenticationService {
     }
 
 }
+

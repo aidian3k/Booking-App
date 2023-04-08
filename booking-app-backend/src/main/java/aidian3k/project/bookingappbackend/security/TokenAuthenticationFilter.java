@@ -30,19 +30,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-
-        if (request.getServletPath().contains("/api/v1/auth")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         final String authenticationHeader = request.getHeader("Authorization");
         final String jwtToken;
         final int headerLength = 7;
 
         if (authenticationHeader == null || !authenticationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
-            throw new IllegalStateException("The state of the jwt header is not valid!");
+            return;
         }
 
         jwtToken = authenticationHeader.substring(headerLength);

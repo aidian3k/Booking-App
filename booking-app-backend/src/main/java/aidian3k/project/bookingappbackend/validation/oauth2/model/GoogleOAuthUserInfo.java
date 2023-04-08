@@ -1,4 +1,4 @@
-package aidian3k.project.bookingappbackend.validation.oauth2;
+package aidian3k.project.bookingappbackend.validation.oauth2.model;
 
 import java.util.Map;
 
@@ -18,9 +18,9 @@ public class GoogleOAuthUserInfo extends OAuthUserInfo{
         return attributes.get("name").toString();
     }
 
-    @Override
+
     public String getSurname() {
-        return attributes.get("surname").toString();
+        return "Nowosielski";
     }
 
     @Override
@@ -28,8 +28,8 @@ public class GoogleOAuthUserInfo extends OAuthUserInfo{
         return attributes.get("email").toString();
     }
 
-    @Override
+
     public String phoneNumber() {
-        return attributes.get("phone").toString();
+        return "728221243";
     }
 }

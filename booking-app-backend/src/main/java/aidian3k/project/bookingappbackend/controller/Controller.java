@@ -12,4 +12,9 @@ public class Controller {
     public String test() {
         return "Hello";
     }
+
+    @GetMapping("http://localhost:8080/login/oauth2/code/google")
+    public String testEndPoint() {
+        return "hello";
+    }
 }

@@ -1,4 +1,4 @@
-package aidian3k.project.bookingappbackend.validation.oauth2;
+package aidian3k.project.bookingappbackend.validation.oauth2.model;
 
 import java.util.Map;
 
@@ -15,8 +15,6 @@ public abstract class OAuthUserInfo {
 
     public abstract String getId();
     public abstract String getName();
-    public abstract String getSurname();
     public abstract String getEmail();
-    public abstract String phoneNumber();
 
 }

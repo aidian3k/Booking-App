@@ -3,7 +3,7 @@ package aidian3k.project.bookingappbackend.service;
 import aidian3k.project.bookingappbackend.entity.User;
 import aidian3k.project.bookingappbackend.repository.UserRepository;
 import aidian3k.project.bookingappbackend.validation.UserPrincipal;
-import aidian3k.project.bookingappbackend.validation.oauth2.OAuthUserInfo;
+import aidian3k.project.bookingappbackend.validation.oauth2.model.OAuthUserInfo;
 import aidian3k.project.bookingappbackend.validation.oauth2.OauthUserInfoFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +44,7 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
             user = authenticateUser.get();
             user = updateExisitingUser(user, oAuthUserInfo);
         } else {
-            user = registerUser(userRequest, oAuthUserInfo);
+            user = registerUser(oAuthUserInfo);
         }
 
         return UserPrincipal.create(user, oAuthUserInfo.getAttributes());
@@ -52,14 +52,13 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
 
     private User updateExisitingUser(User existingUser, OAuthUserInfo oAuth2User) {
         existingUser.setName(oAuth2User.getName());
-        existingUser.setName(oAuth2User.getSurname());
         existingUser.setEmail(oAuth2User.getEmail());
 
         return userRepository.save(existingUser);
     }
 
-    private User registerUser(OAuth2UserRequest userRequest, OAuthUserInfo oAuthUserInfo) {
-        User newUser = User.builder().name(oAuthUserInfo.getName()).surname(oAuthUserInfo.getSurname())
+    private User registerUser(OAuthUserInfo oAuthUserInfo) {
+        User newUser = User.builder().name(oAuthUserInfo.getName()).surname("Nowosielski")
                 .email(oAuthUserInfo.getEmail()).build();
 
         return userRepository.save(newUser);
