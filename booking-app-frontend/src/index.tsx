@@ -4,11 +4,11 @@ import './index.css';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
-import { Authorization } from './pages/Authorization';
+import App from "./App";
 
 const routes = createBrowserRouter([{
     path: '/',
-    element: <Authorization/>
+    element: <App/>
 }])
 
 const root = ReactDOM.createRoot(
