@@ -2,7 +2,7 @@ import {FC} from "react";
 
 export const PropertyBlock: FC = () => {
     return (
-        <div className={'flex flex-col items-center'}>
+        <div className={'flex flex-col items-center cursor-pointer'}>
             <div className={'bg-gray-500 rounded-2xl w-72'}>
                 <img className={'rounded-2xl object-cover'} alt={'image'}
                      src={'https://fujifilm-x.com/wp-content/uploads/2021/01/gfx100s_sample_04_thum-1.jpg'}/>
@@ -22,7 +22,8 @@ export const PropertyBlock: FC = () => {
                     </div>
                 </div>
 
-                <h3 className="text-sm text-gray-500">{'View for moutains'}</h3>
+                <h3 className="text-sm text-gray-500">{'View for mountains'}</h3>
+
                 <div className="mt-1 flex gap-1">
                     <p className="font-semibold">${100}</p>
                     <p className={'font-serif'}> per night </p>
