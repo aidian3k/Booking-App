@@ -1,7 +1,16 @@
 import {FC} from "react";
+import NetworkWifiIcon from '@mui/icons-material/NetworkWifi';
+import PetsIcon from '@mui/icons-material/Pets';
+import KitchenIcon from '@mui/icons-material/Kitchen';
+import PoolIcon from '@mui/icons-material/Pool';
+import WorkIcon from '@mui/icons-material/Work';
+import GasMeterIcon from '@mui/icons-material/GasMeter';
+import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
+import AcUnitIcon from '@mui/icons-material/AcUnit';
 
 export const PropertyPage: FC = () => {
     const sampleImg = 'https://fujifilm-x.com/wp-content/uploads/2021/01/gfx100s_sample_04_thum-1.jpg';
+
     return (
         <div className={'mt-4 bg-gray-100 md:px-20 px-5 py-2 flex-col'}>
             <h2 className={'text-serif text-3xl font-semibold'}>Amazing house in Croatia</h2>
@@ -62,15 +71,17 @@ export const PropertyPage: FC = () => {
 
                             <div className={'grid grid-cols-2 mt-1'}>
                                 <div className={'flex flex-col justify-center'}>
-                                    <FindingIcon name={'Wi-fi'}/>
-                                    <FindingIcon name={'Allowed animals'}/>
-                                    <FindingIcon name={'Kitchen'}/>
+                                    <FindingIcon name={'Wi-fi'} icon={<NetworkWifiIcon/>}/>
+                                    <FindingIcon name={'Allowed animals'} icon={<PetsIcon/>}/>
+                                    <FindingIcon name={'Kitchen'} icon={<KitchenIcon/>}/>
+                                    <FindingIcon name={'Air conditioning'} icon={<AcUnitIcon/>}/>
                                 </div>
 
                                 <div className={'flex flex-col justify-center'}>
-                                    <FindingIcon name={'Swimming pool'}/>
-                                    <FindingIcon name={'Place for work'}/>
-                                    <FindingIcon name={'Gas filter'}/>
+                                    <FindingIcon name={'Swimming pool'} icon={<PoolIcon/>}/>
+                                    <FindingIcon name={'Place for work'} icon={<WorkIcon/>}/>
+                                    <FindingIcon name={'Gas meter'} icon={<GasMeterIcon/>}/>
+                                    <FindingIcon name={'Washing machine'} icon={<LocalLaundryServiceIcon/>}/>
                                 </div>
                             </div>
                         </div>
@@ -79,8 +90,15 @@ export const PropertyPage: FC = () => {
 
                         <div className={'flex flex-col gap-2 mt-2'}>
                             <p className={'font-serif text-lg font-semibold'}>Place description</p>
-                            <p className={'font-serif'}>The luxury spacious suite is furnished with a cozy seating area, flat screen-tv, minibar
-                            , double box, spring, hairdryer.</p>
+                            <p className={'font-serif'}>The house is a charming two-story brick home with a peaked roof and dormer windows. It has a neatly manicured front lawn with a winding stone path leading up to the front porch. The porch is spacious and features two white rocking chairs, perfect for enjoying the fresh air on a warm summer day.
+                                Upon entering the house, you are greeted by a cozy living room with plush carpeting and a large bay window that lets in plenty of natural light. To the left is a spacious dining area with a beautiful wooden table and six matching chairs. The kitchen is adjacent to the dining area and features modern stainless steel appliances and sleek granite countertops.</p>
+                        </div>
+
+                        <div className={'flex flex-col gap-2 mt-2'}>
+                            <p className={'font-serif text-lg font-semibold'}>Extra information</p>
+                            <p className={'font-serif'}>The house has a total of 3 bedrooms and 2.5 bathrooms, including the master en-suite.
+                                The flooring on the main level is a combination of plush carpeting and hardwood.
+                                </p>
                         </div>
                     </div>
 
@@ -89,7 +107,17 @@ export const PropertyPage: FC = () => {
 
                 <div className={'flex justify-center items-center'}>
                     <div className={'bg-white shadow shadow-gray-300 p-4 rounded-2xl'}>
-                        <p className={'font-serif text-2xl'}>100$ / per night</p>
+                        <div className={'flex justify-between'}>
+                            <p className={'font-serif text-2xl'}>100$ / per night</p>
+                            <div className={'flex gap-1 items-center'}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 24 24" strokeWidth="1.5"
+                                     stroke="currentColor" className="w-4 h-4">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                          d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/>
+                                </svg>
+                                <p className={'text-serif text-sm'}>5,0</p>
+                            </div>
+                        </div>
 
                         <div className={'border rounded-2xl mt-4'}>
                             <div className={'flex'}>
@@ -139,6 +167,35 @@ export const PropertyPage: FC = () => {
                     </div>
                 </div>
             </div>
+
+            <div className={'w-full border border-gray-200 border-1 my-2'}></div>
+
+            <div className={'grid md:grid-cols-2 grid-cols-1 gap-2'}>
+                <div>
+                    <p className={'text-xl font-serif font-semibold'}>The host is Adrian</p>
+                    <p className={'text-sm font-serif'}>With us from October 2022</p>
+                </div>
+                <div>
+                    <p className={'text-xl font-serif font-semibold'}>Reviews about the host:</p>
+
+                    <div className={'border border-1 rounded-2xl p-2'}>
+                        <div className={'flex gap-1 justify-center'}>
+                            <div className={'flex gap-1 items-center'}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="yellow" viewBox="0 0 24 24" strokeWidth="1.5"
+                                     stroke="currentColor" className="w-4 h-4">
+                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                          d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/>
+                                </svg>
+                                <p className={'text-serif text-sm'}>5,0</p>
+                            </div>
+                            <p className={'text-base font-serif '}>Adrian October 2023</p>
+                        </div>
+                        <p className={'text-base font-serif '}>As a frequent Airbnb user, I can confidently say that my experience with my recent host was nothing short of exceptional. From the moment I made the booking, the host went above and beyond to ensure that my stay was comfortable and enjoyable.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div className={'w-full h-5'}></div>
         </div>
     )
 }
@@ -146,9 +203,7 @@ export const PropertyPage: FC = () => {
 export const FindingIcon = (props: any) => {
     return (
         <div className={'flex gap-2'}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z" />
-            </svg>
+            {props.icon}
             <p className={'font-serif text-gray-700'}>{props.name}</p>
         </div>
     )

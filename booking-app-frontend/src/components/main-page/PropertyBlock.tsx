@@ -2,7 +2,7 @@ import {FC} from "react";
 
 export const PropertyBlock: FC = () => {
     return (
-        <div className={'flex flex-col items-center cursor-pointer'}>
+        <div className={'flex flex-col items-center cursor-pointer hover:scale-105 transition-all'}>
             <div className={'bg-gray-500 rounded-2xl w-72'}>
                 <img className={'rounded-2xl object-cover'} alt={'image'}
                      src={'https://fujifilm-x.com/wp-content/uploads/2021/01/gfx100s_sample_04_thum-1.jpg'}/>

@@ -1,11 +1,13 @@
 import React from 'react';
-import {PropertyPage} from "./components/property-page/PropertyPage";
 import {Navbar} from "./components/navbar/Navbar";
+import {PropertyList} from "./components/main-page/PropertyList";
+import {Footer} from "./components/footer/Footer";
 function App() {
     return (
         <>
             <Navbar/>
-            <PropertyPage/>
+            <PropertyList/>
+            <Footer/>
         </>
     )
 }
