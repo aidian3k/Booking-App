@@ -4,6 +4,7 @@ import {Email, Facebook, Google, Person, Person2, Phone, Visibility, VisibilityO
 import {Checkbox, FormControlLabel, IconButton, InputAdornment, TextField} from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import {LoadingButton} from "@mui/lab";
+import {RegisterInformation} from "./RegisterInformation";
 
 export const Register: FC<any> = (props) => {
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
@@ -17,8 +18,8 @@ export const Register: FC<any> = (props) => {
     return (
         <>
             <div className={'flex flex-col gap-2 mb-4'}>
-                <IconicButton text={'Zaloguj się przez Google'} icon={<Google/>}/>
-                <IconicButton text={'Zaloguj się przez Facebooka'} icon={<Facebook/>}/>
+                <IconicButton text={'Register via Google'} icon={<Google/>}/>
+                <IconicButton text={'Register via Facebook'} icon={<Facebook/>}/>
             </div>
 
             <TextField
@@ -46,7 +47,7 @@ export const Register: FC<any> = (props) => {
                     variant="outlined"
                     type={'text'}
                     margin="normal"
-                    label={'Imię'}
+                    label={'Name'}
                 />
 
                 <TextField
@@ -59,7 +60,7 @@ export const Register: FC<any> = (props) => {
                     variant="outlined"
                     type={'text'}
                     margin="normal"
-                    label={'Nazwisko'}
+                    label={'Surname'}
                 />
             </div>
 
@@ -74,12 +75,12 @@ export const Register: FC<any> = (props) => {
                     variant="outlined"
                     type={'text'}
                     margin="normal"
-                    label={'Numer telefonu'}
+                    label={'Phone number'}
                 />
             </div>
 
             <TextField
-                placeholder={'Wpisz swoje hasło'}
+                placeholder={'Type in your password'}
                 InputProps={{
                     startAdornment: (<InputAdornment position="start">
                         {<LockIcon/>}
@@ -98,33 +99,24 @@ export const Register: FC<any> = (props) => {
                 fullWidth={true}
                 margin="normal"
                 type={"password"}
-                label={'Hasło'}
+                label={'Password'}
             />
 
             <FormControlLabel
                 control={<Checkbox color={'success'}/>}
-                label={<Information/>}
+                label={<RegisterInformation/>}
             />
 
             <div className={'mt-2 flex justify-center'}>
                 <LoadingButton variant="contained" fullWidth={true} sx={{bgcolor: '#00BFFF', height: '50px'}}>
-                    <p className={'font-serif font-semibold text-xl'}>Zarejestruj się</p>
+                    <p className={'font-serif font-semibold text-xl'}>Register</p>
                 </LoadingButton>
             </div>
 
-            <div className={'flex text-center justify-center mt-4 border-2 border-gray-500 p-2 border-double'}>
-                <p className={'text-base font-serif'}>Masz już konto?</p>
-                <button className={'text-base font-serif text-cyan-600'} onClick={() => props.setIsLogging(!props.logging)}>Zaloguj się!</button>
+            <div className={'flex text-center justify-center mt-4 border-2 border-gray-500 p-2 border-double gap-1'}>
+                <p className={'text-base font-serif'}>Already have an account?</p>
+                <button className={'text-base font-serif text-cyan-600'} onClick={() => props.setIsLogging(!props.logging)}>Login</button>
             </div>
         </>
     )
-}
-
-export const Information: FC = () => {
-    return (<span className={'text-xs'}>Akceptuję
-            <span className={'font-semibold'}> Warunki korzystania z usługi </span>
-            <span className={'text-xs'}>oraz </span>
-            <span className={'font-semibold'}>Politykę prywatności </span>
-            <span className={'text-xs'}>Rentify</span>
-        </span>)
 }

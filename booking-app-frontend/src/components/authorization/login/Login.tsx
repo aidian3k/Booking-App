@@ -5,6 +5,8 @@ import LockIcon from '@mui/icons-material/Lock';
 import {IconicButton} from "./IconicButton";
 import {LoginInput} from "./LoginInput";
 import {LoadingButton} from "@mui/lab";
+import {LoginInformation} from "./LoginInformation";
+import {RememberPassword} from "./RememberPassword";
 
 export const Login: FC<any> = (props) => {
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
@@ -18,16 +20,16 @@ export const Login: FC<any> = (props) => {
     return (
         <>
             <div className={'flex flex-col gap-2 mb-4'}>
-                <IconicButton text={'Zaloguj się przez Google'} icon={<Google/>}/>
-                <IconicButton text={'Zaloguj się przez Facebooka'} icon={<Facebook/>}/>
-                <IconicButton text={'Zaloguj się przez Apple'} icon={<Apple/>}/>
+                <IconicButton text={'Login using Google'} icon={<Google/>}/>
+                <IconicButton text={'Login using Facebook'} icon={<Facebook/>}/>
+                <IconicButton text={'Login using Apple'} icon={<Apple/>}/>
             </div>
 
 
-            <LoginInput icon={<AccountCircle/>} placeholder={'Wpisz swój adres e-mail'} formHelper={'E-MAIL'}/>
+            <LoginInput icon={<AccountCircle/>} placeholder={'Type in your e-mail'} formHelper={'E-MAIL'}/>
             <FormControl fullWidth={true} variant={'standard'} margin={'normal'}>
                 <TextField
-                    placeholder={'Wpisz swoje hasło'}
+                    placeholder={'Type in your password'}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -52,42 +54,24 @@ export const Login: FC<any> = (props) => {
                     margin="normal"
                     type={"password"}
                 />
-                <FormHelperText>{'HASŁO'}</FormHelperText>
+                <FormHelperText>{'Password'}</FormHelperText>
             </FormControl>
 
-            <div className={'text-center m-0'}>
-                    <span className={'text-xs '}>Klikając zaloguj się akceptujesz
-                        <span className={'font-semibold'}> Warunki korzystania z usługi </span>
-                    </span>
-
-                <span className={'text-xs font-serif'}>
-                        oraz  <span className={'font-semibold'}> politykę prywatności</span> Rentify
-                    </span>
-            </div>
+            <LoginInformation/>
 
             <div className={'mt-2 flex justify-center'}>
                 <LoadingButton variant="contained" fullWidth={true} sx={{bgcolor: '#00BFFF', height: '50px'}}>
-                    <p className={'font-serif font-semibold text-xl'}>Zaloguj się</p>
+                    <p className={'font-serif font-semibold text-xl'}>Login</p>
                 </LoadingButton>
             </div>
 
-            <div className={'md:flex flex-col md:flex-row md:justify-between p-2 justify-center items-center'}>
-                <div className={'md:w-1/2 w-full md:text-base text-center'}>
-                    <p className={'text-xs font-serif'}>
-                        Pamiętaj, aby wylogować się z urządzeń, z których mogą korzystać inne osoby!
-                    </p>
-                </div>
+            <RememberPassword/>
 
-                <p className={'text-xs font-serif text-[#00BFFF] hover:text-yellow flex justify-center'}>
-                    <button>Nie pamiętasz hasła?</button>
-                </p>
-            </div>
-
-            <div className={'md:mt-4 mt-2'}>
-                <Button variant="outlined" fullWidth={true} sx={{height: '40px', marginTop: '4px'}}>
-                    <p className={'text-serif text-sm text-black'}>Jesteś nowy w Rentify?</p>
+            <div className={'mt-2'}>
+                <Button variant="outlined" fullWidth={true} sx={{height: '40px', marginTop: '4px'}} className={'flex gap-1'}>
+                    <p className={'text-serif text-sm text-black'}>Are you new in Rentify?</p>
                     <button className={'text-serif text-[#00BFFF]'} onClick={() => props.setIsLogging(!props.logging)}>
-                        <button> Stwórz konto</button>
+                        <button> Create an account</button>
                     </button>
                 </Button>
             </div>

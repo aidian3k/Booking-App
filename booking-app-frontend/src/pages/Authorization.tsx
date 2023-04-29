@@ -13,18 +13,11 @@ export const Authorization: FC = () => {
             <div className="sm:w-1/2 w-screen h-screen bg-gray-200 sm:p-10 p-2 flex justify-center overflow-y-scroll">
                 <div className={'sm:w-4/5 w-full flex-col'}>
                     <div className={'flex justify-between flex-row mb-4'}>
-                        <button className="max-w-lg text-2xl font-arial font-bold leading-relaxed"
-                        style={{color: isLogging ? 'black' : 'yellow'}} onClick={() => setIsLogging(!isLogging)}>Zarejestruj
-                            się
-                        </button>
-                        <button className="max-w-lg text-2xl font-arial font-bold leading-relaxed"
-                        style={{color: isLogging ? 'yellow' : 'black'}} onClick={() => setIsLogging(!isLogging)}>Zaloguj
-                            się
-                        </button>
+                        <button className="max-w-lg text-2xl font-arial font-bold leading-relaxed" style={{color: isLogging ? 'black' : 'yellow'}} onClick={() => setIsLogging(!isLogging)}>Register</button>
+                        <button className="max-w-lg text-2xl font-arial font-bold leading-relaxed" style={{color: isLogging ? 'yellow' : 'black'}} onClick={() => setIsLogging(!isLogging)}>Login</button>
                     </div>
 
-                    {isLogging ? <Login setIsLogging={setIsLogging} logging={isLogging}/>
-                        : <Register setIsLogging={setIsLogging} logging={isLogging}/>}
+                    {isLogging ? <Login setIsLogging={setIsLogging} logging={isLogging}/> : <Register setIsLogging={setIsLogging} logging={isLogging}/>}
 
                     <div className={'w-full h-7'}>
                     </div>
