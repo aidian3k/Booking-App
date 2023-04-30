@@ -1,9 +1,16 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import {RentifyLogoNavbar} from "../navbar/RentifyLogoNavbar";
 import {FooterBreak} from "./FooterBreak";
 import {FooterHelp} from "./FooterHelp";
+import {AboutUs} from "../help-contact/AboutUs";
+import {PrivacyPolicy} from "../help-contact/PrivacyPolicy";
+import {Contact} from "../help-contact/Contact";
 
 export const Footer: FC = () => {
+    const [isAboutUsOpened, setAboutUsOpened] = useState<boolean>(false);
+    const [isPrivacyPolicyOpened, setPrivacyPolicyOpened] = useState<boolean>(false);
+    const [isContactOpened, setIsContactOpened] = useState<boolean>(false);
+
     return (
         <>
             <FooterBreak/>
@@ -17,13 +24,16 @@ export const Footer: FC = () => {
 
                         <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0">
                             <li>
-                                <a href="#" className="mr-4 hover:underline md:mr-6 ">About</a>
+                                <button className="mr-4 hover:underline md:mr-6" onClick={() => setAboutUsOpened(true)}>About</button>
+                                <AboutUs isOpen={isAboutUsOpened} onClose={() => setAboutUsOpened(false)}/>
                             </li>
                             <li>
-                                <a href="#" className="mr-4 hover:underline md:mr-6">Privacy Policy</a>
+                                <button className="mr-4 hover:underline md:mr-6" onClick={() => setPrivacyPolicyOpened(true)}>Privacy Policy</button>
+                                <PrivacyPolicy isOpen={isPrivacyPolicyOpened} onClose={() => setPrivacyPolicyOpened(false)}/>
                             </li>
                             <li>
-                                <a href="#" className="hover:underline">Contact</a>
+                                <button className="hover:underline" onClick={() => setIsContactOpened(true)}>Contact</button>
+                                <Contact isOpen={isContactOpened} onClose={() => setIsContactOpened(false)}/>
                             </li>
                         </ul>
 

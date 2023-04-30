@@ -3,8 +3,11 @@ import {Navbar} from "../components/navbar/Navbar";
 import AddIcon from "@mui/icons-material/Add";
 import {Footer} from "../components/footer/Footer";
 import {PropertyElement} from "../components/profile-page/PropertyElement";
+import {NavigateFunction, useNavigate} from "react-router-dom";
 
 export const UserAccommodationPage: FC = () => {
+    const navigate: NavigateFunction = useNavigate();
+
     return (
         <>
             <Navbar/>
@@ -15,7 +18,7 @@ export const UserAccommodationPage: FC = () => {
             </div>
 
             <div className={'flex w-full justify-center'}>
-                <button className={'rounded-full border border-1 px-2 py-2 bg-red-500 hover:scale-105 cursor-pointer border-1 flex gap-2 items-center transition-all'}>
+                <button className={'rounded-full border border-1 px-2 py-2 bg-red-500 hover:scale-105 cursor-pointer border-1 flex gap-2 items-center transition-all'} onClick={() => navigate('/profile/accommodations/add')}>
                     <AddIcon/>
                     <p className={'font-serif text-lg text-white font-semibold'}>Add new place</p>
                 </button>
