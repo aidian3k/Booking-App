@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {PropertyImages} from "./PropertyImages";
-import {LocationSvg} from "./LocationSvg";
+import {LocationSvg} from "../../assets/LocationSvg";
 import {PropertyBreak} from "./PropertyBreak";
 import {PropertyMainInformation} from "./PropertyMainInformation";
 import {PropertyUtils} from "./PropertyUtils";

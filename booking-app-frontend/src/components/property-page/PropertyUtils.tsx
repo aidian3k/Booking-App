@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {FindingIcon} from "./FindingIcon";
+import {FindingIcon} from "../../assets/FindingIcon";
 import NetworkWifiIcon from "@mui/icons-material/NetworkWifi";
 import PetsIcon from "@mui/icons-material/Pets";
 import KitchenIcon from "@mui/icons-material/Kitchen";

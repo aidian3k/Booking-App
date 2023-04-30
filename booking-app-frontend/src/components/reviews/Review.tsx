@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {StarSvg} from "../main-page/MainListPropertyInformation";
+import {StarSvg} from "../../assets/StarSvg";
 
 export const Review: FC = () => {
     return (

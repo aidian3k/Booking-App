@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {UserIconSvg} from "./UserIconSvg";
+import {UserIconSvg} from "../../assets/UserIconSvg";
 
 export const PropertyMainInformation: FC = () => {
     return (
