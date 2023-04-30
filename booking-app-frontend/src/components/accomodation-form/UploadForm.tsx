@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, {FC, useState} from "react";
 
-export const ImageUploader: React.FC = () => {
+export const UploadForm:FC = () => {
     const [images, setImages] = useState<File[]>([]);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

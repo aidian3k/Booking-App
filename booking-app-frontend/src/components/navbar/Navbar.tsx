@@ -5,6 +5,7 @@ import {NavbarUserMenu} from "./NavbarUserMenu";
 import {NavbarBreak} from "./NavbarBreak";
 import {NavbarDirections} from "./NavbarDirections";
 import {NavbarSearchMenu} from "./NavbarSearchMenu";
+import { motion } from "framer-motion";
 
 export const Navbar: FC = () => {
     const [searchMenuShown, setSearchMenuShown] = useState<boolean>(false);
@@ -20,7 +21,10 @@ export const Navbar: FC = () => {
                 <NavbarUserMenu/>
             </header>
 
-            {searchMenuShown && <NavbarSearchMenu/>}
+            {searchMenuShown &&
+                (<motion.div initial={{ y: -100 }}
+                             animate={{ y: 0 }}
+                             transition={{ duration: 0.3 }}><NavbarSearchMenu/></motion.div>)}
             <NavbarBreak/>
             <NavbarDirections/>
             <NavbarBreak/>

@@ -1,7 +1,7 @@
 import React, {FC} from "react";
-import {Navbar} from "../navbar/Navbar";
+import {Navbar} from "../components/navbar/Navbar";
 import AddIcon from "@mui/icons-material/Add";
-import {Footer} from "../footer/Footer";
+import {Footer} from "../components/footer/Footer";
 
 export const AccommodationPage: FC = () => {
     return (
