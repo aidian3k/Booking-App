@@ -4,40 +4,55 @@ import './index.css';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Provider} from "react-redux";
 import {store} from "./redux/store";
-import App from "./App";
-import {Authorization} from "./pages/Authorization";
-import {Navbar} from "./components/navbar/Navbar";
-import {PropertyList} from "./components/main-page/PropertyList";
-import {PropertyPage} from "./components/property-page/PropertyPage";
+import {AuthorizationPage} from "./pages/AuthorizationPage";
+import {SinglePropertyPage} from "./pages/SinglePropertyPage";
+import {ErrorPage} from "./pages/ErrorPage";
+import {ProfilePage} from "./pages/ProfilePage";
+import {UserAccommodationPage} from "./pages/UserAccommodationPage";
+import {AccommodationAddPage} from "./pages/AccommodationAddPage";
+import {MainPage} from "./pages/MainPage";
 
-const routes = createBrowserRouter([{
-    path: '/',
-    element: <App/>
+const routes = createBrowserRouter([
+    {
+        path: '/',
+        element: <MainPage/>
     },
     {
-        path: '/auth',
-        element: <Authorization/>
+        path: 'authorization',
+        element: <AuthorizationPage/>
     },
     {
-        path: '/main',
-        element: <><Navbar/> <PropertyList/></>
+        path: 'accommodation/:id',
+        element: <SinglePropertyPage/>
     },
     {
-        path: '/property-page',
-        element: <PropertyPage/>
+        path: '/profile',
+        element: <ProfilePage/>
+    },
+    {
+        path: '/profile/accommodations',
+        element: <UserAccommodationPage/>
+    },
+    {
+        path: '/profile/accommodations/add',
+        element: <AccommodationAddPage/>
+    },
+    {
+        path: '*',
+        element: <ErrorPage/>
     }
     ]
 )
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 
 root.render(
-  <React.StrictMode>
-      <Provider store={store}>
-          <RouterProvider router={routes}/>
-      </Provider>
-  </React.StrictMode>
+    <React.StrictMode>
+        <Provider store={store}>
+            <RouterProvider router={routes}/>
+        </Provider>
+    </React.StrictMode>
 );
 

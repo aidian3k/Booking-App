@@ -3,7 +3,7 @@ import { Login } from "../components/authorization/login/Login";
 import { HeaderPhoto } from "../components/authorization/HeaderPhoto";
 import {Register} from "../components/authorization/register/Register";
 
-export const Authorization: FC = () => {
+export const AuthorizationPage: FC = () => {
     const [isLogging, setIsLogging] = useState<boolean>(true);
 
     return (

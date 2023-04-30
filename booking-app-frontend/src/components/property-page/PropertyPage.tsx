@@ -12,7 +12,7 @@ import {Review} from "../reviews/Review";
 export const PropertyPage: FC = () => {
 
     return (
-        <div className={'mt-4 bg-gray-100 md:px-20 px-5 py-2 flex-col'}>
+        <div className={'bg-gray-100 md:px-20 px-5 py-2 flex-col'}>
             <h2 className={'text-serif text-3xl font-semibold'}>Amazing house in Croatia</h2>
             <a className={'flex gap-1 font-semibold underline'} target="_blank"
                href={'https://maps.google.com/?q=' + 'Croatia'}>
