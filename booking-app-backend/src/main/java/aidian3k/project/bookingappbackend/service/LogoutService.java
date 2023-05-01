@@ -23,6 +23,7 @@ public class LogoutService implements LogoutHandler {
         if (authenticationHeader == null || !authenticationHeader.startsWith("Bearer ")) {
             return;
         }
+
         jwtToken = authenticationHeader.substring(7);
         Token storedToken = tokenRepository.findByToken(jwtToken).orElse(null);
 

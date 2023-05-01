@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -61,7 +62,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         Token token = tokenRepository.findByToken(jwtToken).orElseThrow(() -> new IllegalStateException("No token present exception!"));
 
         if (token.isExpired() || token.isRevoked()) {
-            throw new TokenAuthorizationException("There is expired or revoke key!", token.getToken());
+            throw new TokenAuthorizationException("There is expired or revoke key! Token: %s".formatted(token.getToken()), HttpStatus.UNAUTHORIZED);
         }
 
         return false;

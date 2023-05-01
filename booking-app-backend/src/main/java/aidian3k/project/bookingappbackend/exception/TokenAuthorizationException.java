@@ -1,21 +1,9 @@
 package aidian3k.project.bookingappbackend.exception;
 
-public class TokenAuthorizationException extends RuntimeException {
-    private final String message;
-    private final String token;
+import org.springframework.http.HttpStatus;
 
-    public TokenAuthorizationException(String message, String token) {
-        super(message);
-        this.token = token;
-        this.message = message;
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
-    public String getToken() {
-        return token;
+public class TokenAuthorizationException extends AbstractException {
+    public TokenAuthorizationException(String message, HttpStatus httpStatus) {
+        super(message, httpStatus);
     }
 }

@@ -8,9 +8,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.HashMap;
 
@@ -34,11 +34,11 @@ public class TokenProvider {
     }
 
     public String generateShortToken(UserDetails userDetails) {
-        return generateToken(userDetails, jwtConstants.getTokenExpirationTimeInMillisecs());
+        return generateToken(userDetails, jwtConstants.getTokenExpirationTimeInMillisecond());
     }
 
     public String generateRefreshToken(UserDetails userDetails) {
-        return generateToken(userDetails, jwtConstants.getRefreshTokenExpirationTimeInMillisecs());
+        return generateToken(userDetails, jwtConstants.getRefreshTokenExpirationTimeInMillisecond());
     }
 
     public String extractSubjectFromToken(String token) {
@@ -58,13 +58,12 @@ public class TokenProvider {
             String userName = extractSubjectFromToken(authorizedToken);
 
             if (expirationDate.before(new Date()) && userName.equals(userDetails.getUsername())) {
-                throw new TokenAuthorizationException("Token expiration date exception", authorizedToken);
+                throw new TokenAuthorizationException("Token expiration date exception! Token: %s".formatted(authorizedToken), HttpStatus.UNAUTHORIZED);
             }
 
             return true;
         } catch (TokenAuthorizationException exception) {
-            log.error("Invalid jwt token authorization");
-            throw new TokenAuthorizationException("Invalid jwt token authorization", authorizedToken);
+            throw new TokenAuthorizationException("Invalid jwt token authorization! Token: %s".formatted(authorizedToken), HttpStatus.UNAUTHORIZED);
         }
     }
 }

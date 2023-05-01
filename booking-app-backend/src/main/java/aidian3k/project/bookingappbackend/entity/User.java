@@ -3,7 +3,11 @@ package aidian3k.project.bookingappbackend.entity;
 import aidian3k.project.bookingappbackend.constants.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,21 +31,27 @@ public class User implements UserDetails {
 
     @Schema(description = "Field for user's name")
     @Column(nullable = false)
+    //@Pattern(regexp = "[A-Za-z]+", message = "Name must contain only letters")
     private String name;
 
     @Schema(description = "Field for user's surname")
     @Column(nullable = false)
+    //@Pattern(regexp = "[A-Za-z]+", message = "Surname must contain only letters")
     private String surname;
 
     @Schema(description = "Field for user's login")
     @Column(nullable = false)
+    //@Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email must contain be valid")
     private String email;
 
     @Schema(description = "Field for user's phoneNumber assuming that it is Polish number", example = "728111321")
     @Column(length = 10, nullable = false)
+    //@Pattern(regexp = "\"\\\\d{3}-\\\\d{3}-\\\\d{3}\"", message = "Email must contain be valid")
     private String phoneNumber;
 
     @Schema(description = "Field for user's password", example = "root")
+    //@Pattern(regexp = "\"^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d)(?=.*[@$!%*?&])[A-Za-z\\\\d@$!%*?&]{8,}$\""
+            //, message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character")
     private String password;
 
     @Schema(description = "Field for storing user's creation date")
@@ -82,12 +92,12 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
