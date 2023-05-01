@@ -10,6 +10,7 @@ import {ErrorPage} from "./pages/ErrorPage";
 import {ProfilePage} from "./pages/ProfilePage";
 import {UserAccommodationPage} from "./pages/UserAccommodationPage";
 import {AccommodationAddPage} from "./pages/AccommodationAddPage";
+import {MyBookingsPage} from "./pages/MyBookingsPage";
 import {MainPage} from "./pages/MainPage";
 
 const routes = createBrowserRouter([
@@ -40,6 +41,10 @@ const routes = createBrowserRouter([
     {
         path: '*',
         element: <ErrorPage/>
+    },
+    {
+        path: '/profile/bookings',
+        element: <MyBookingsPage/>
     }
     ]
 )

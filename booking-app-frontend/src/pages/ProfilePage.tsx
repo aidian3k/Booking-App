@@ -4,6 +4,7 @@ import {ProfileEditingData} from "../components/profile-page/ProfileEditingData"
 import {ProfileStatistics} from "../components/profile-page/ProfileStatistics";
 import {Footer} from "../components/footer/Footer";
 import {Navbar} from "../components/navbar/Navbar";
+import {ReservedProperties} from "../components/profile-page/ReservedProperties";
 
 export const ProfilePage: FC = () => {
     return (
@@ -11,8 +12,9 @@ export const ProfilePage: FC = () => {
             <Navbar/>
             <div className={'p-4'}>
                 <ProfilePageHeading/>
-                <ProfileEditingData/>
                 <ProfileStatistics/>
+                <ReservedProperties/>
+                <ProfileEditingData/>
             </div>
             <Footer/>
         </>
