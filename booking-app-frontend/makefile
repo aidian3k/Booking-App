@@ -1,12 +1,23 @@
+frontend-container-name = frontend-booking-app
 run = docker run
-pull = docker pull
-build = docker build
 stop = docker stop
-remove = docker rm
+clean = docker rm
+docker build = build
 
-backend-container-name = booking-app-backend
-db-container-name = booking-app-db
-port = -p 8080:8080
-postgres-image = postgres:latest
+.PHONY all, frontend, build, stop, clean
 
-.PHONY database, stop, clean, clean, backend-image
+all:
+    build
+
+frontend:
+    $(run) --name $(frontend-container-name) -d -p 3000:3000
+
+build:
+    $(build) -t $(fronted-container-name) -p 3000:3000 .
+
+stop:
+    $(stop) $(frontend-container-name)
+
+clean:
+    $(remove) $(frontend-container-name)
+

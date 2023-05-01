@@ -9,7 +9,7 @@ build = docker build
 stop = docker stop
 remove = docker rm
 
-.PHONY database, stop, clean, clean, backend-image
+.PHONY database, stop, clean, pull, backend, spring
 
 backend: database, spring
     $(run) --name $(backend-container-name) -d -p 8080:8080 $(backend-container-name):latest
