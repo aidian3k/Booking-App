@@ -1,8 +1,10 @@
 package aidian3k.project.bookingappbackend.config;
 
+import aidian3k.project.bookingappbackend.exception.UserNotFoundException;
 import aidian3k.project.bookingappbackend.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -23,7 +25,8 @@ public class AuthenticationConfiguration {
     public UserDetailsService userDetailsService() throws UsernameNotFoundException {
         return username ->
                 userRepository.findByEmail(username)
-                        .orElseThrow(IllegalArgumentException::new);
+                        .orElseThrow(() ->
+                                new UserNotFoundException("User with email: %s has not been found".formatted(username), HttpStatus.NOT_FOUND));
     }
 
     @Bean

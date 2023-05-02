@@ -17,6 +17,7 @@ export const LoginInput: FC<any> = (props) => {
                 type={'email'}
                 fullWidth={true}
                 margin="normal"
+                onChange={(event) => props.onChange(event.target.value)}
             />
             <FormHelperText>{props.formHelper}</FormHelperText>
         </FormControl>

@@ -20,4 +20,7 @@ public class AuthenticationResponse {
     private String refreshToken;
 
     private Date requestDate;
+
+    @JsonProperty("user")
+    private UserDto user;
 }

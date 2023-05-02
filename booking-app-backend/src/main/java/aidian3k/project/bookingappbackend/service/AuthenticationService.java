@@ -3,6 +3,7 @@ package aidian3k.project.bookingappbackend.service;
 import aidian3k.project.bookingappbackend.constants.Role;
 import aidian3k.project.bookingappbackend.entity.Token;
 import aidian3k.project.bookingappbackend.entity.User;
+import aidian3k.project.bookingappbackend.exception.InvalidLoginInfoException;
 import aidian3k.project.bookingappbackend.exception.UserAlreadyCreatedException;
 import aidian3k.project.bookingappbackend.exception.UserNotFoundException;
 import aidian3k.project.bookingappbackend.repository.TokenRepository;
@@ -11,6 +12,7 @@ import aidian3k.project.bookingappbackend.security.TokenProvider;
 import aidian3k.project.bookingappbackend.validation.AuthenticationRequest;
 import aidian3k.project.bookingappbackend.validation.AuthenticationResponse;
 import aidian3k.project.bookingappbackend.validation.RegisterModel;
+import aidian3k.project.bookingappbackend.validation.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -58,10 +60,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticateRequest(AuthenticationRequest authenticationRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail()
-                        , authenticationRequest.getPassword(), new HashSet<>())
-        );
+        authenticateUserCredentials(authenticationRequest);
 
         User user = userRepository.findByEmail(authenticationRequest.getEmail())
                 .orElseThrow(() ->
@@ -71,8 +70,9 @@ public class AuthenticationService {
         final String refreshToken = tokenProvider.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
+        UserDto userDto = UserDto.builder().name(user.getName()).surname(user.getSurname()).phoneNumber(user.getPhoneNumber()).email(user.getEmail()).creationDate(user.getCreationDate()).build();
 
-        return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).requestDate(new Date()).build();
+        return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).requestDate(new Date()).user(userDto).build();
     }
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -100,6 +100,17 @@ public class AuthenticationService {
 
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
+        }
+    }
+
+    private void authenticateUserCredentials(AuthenticationRequest authenticationRequest) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail()
+                            , authenticationRequest.getPassword(), new HashSet<>())
+            );
+        } catch(Exception exception) {
+            throw new InvalidLoginInfoException("Invalid login information given while authenticating!", HttpStatus.NOT_ACCEPTABLE);
         }
     }
 

@@ -7,7 +7,6 @@ import {LoadingButton} from "@mui/lab";
 import {RegisterInformation} from "./RegisterInformation";
 import {RegisterError} from "../../../model/RegisterError";
 import {emailRegex, nameRegex, phoneRegex, surnameRegex} from "../../../constans/AuthRegex";
-import {User} from "../../../model/User";
 import {ApiErrorObject} from "../../../model/ApiErrorObject";
 import {AxiosError} from "axios";
 import {connector} from "../../../utils/axios";
@@ -15,6 +14,7 @@ import {NavigateFunction, useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../hooks/reduxHooks";
 import {ThunkDispatch} from "@reduxjs/toolkit";
 import {login} from "../../../redux/slices/UserSlice";
+import {RegistrationUser} from "../../../model/RegistrationUser";
 
 export const Register: FC<any> = (props) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -41,38 +41,44 @@ export const Register: FC<any> = (props) => {
         event.preventDefault();
     };
 
-    function checkRegistrationData() {
+    async function checkRegistrationData() {
         if (!nameRegex.test(name)) {
-            setError({...error, internal: true, name: true});
+            await setError({...error, internal: true, name: true});
         }
 
         if (!surnameRegex.test(surname)) {
-            setError({...error, internal: true, surname: true});
+            await setError({...error, internal: true, surname: true});
         }
 
         if (!phoneRegex.test(phoneNumber)) {
-            setError({...error, internal: true, phone: true});
+            await setError({...error, internal: true, phone: true});
         }
 
         if (!emailRegex.test(email)) {
-            setError({...error, internal: true, email: true});
+            await setError({...error, internal: true, email: true});
+        }
+
+        if (!checkbox) {
+            await setError({...error, internal: true, checkBox: true})
         }
     }
 
     const registerUser = async () => {
-        checkRegistrationData();
+        await setError({...error, internal: false});
+
+        await checkRegistrationData();
 
         if (error.internal) {
             return;
         }
 
-        const user: User = {
+        const user: RegistrationUser = {
             email: email,
             name: name,
-            password: password,
             surname: surname,
             phoneNumber: phoneNumber,
-            creationDate: new Date()
+            creationDate: new Date(),
+            password: password
         };
 
         try {
@@ -83,9 +89,24 @@ export const Register: FC<any> = (props) => {
                 localStorage.setItem('refresh_token', response.data.refresh_token);
             });
 
-            debugger
-            dispatch(login(user));
+
+            dispatch(login({
+                email: user.email,
+                name: user.email,
+                surname: user.email,
+                phoneNumber: user.phoneNumber,
+                creationDate: user.creationDate
+            }));
+
             setLoading(false);
+            setError({surname: false,
+                internal: false,
+                phone: false,
+                name: false,
+                password: false,
+                checkBox: false,
+                email: false})
+
             navigate('/profile');
         } catch (error: any) {
             const axiosError: AxiosError = error as AxiosError;
@@ -193,7 +214,7 @@ export const Register: FC<any> = (props) => {
                 variant="outlined"
                 fullWidth={true}
                 margin="normal"
-                type={"password"}
+                type={showPassword ? 'text' : 'password'}
                 label={'Password'}
                 onChange={(event) => setPassword(event.target.value)}
                 helperText={error.password ? 'Your password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character' : ''}
@@ -203,8 +224,11 @@ export const Register: FC<any> = (props) => {
             <FormControlLabel
                 control={<Checkbox color={'success'}/>}
                 label={<RegisterInformation/>}
+                checked={checkbox}
                 onChange={() => setCheckbox(!checkbox)}
             />
+
+            {!checkbox && <p className={'font-serif text-xs text-red-500'}>You have to accept it before register</p>}
 
             <div className={'mt-2 flex justify-center'}>
                 <LoadingButton variant="contained" fullWidth={true} sx={{bgcolor: '#00BFFF', height: '50px'}}

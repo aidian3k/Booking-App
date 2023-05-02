@@ -1,7 +1,7 @@
 import {User} from "../../model/User";
 import {createSlice, Draft, PayloadAction, Slice} from "@reduxjs/toolkit";
 
-const initialUserState:{value: User} = {value: {email: '', surname: '', name: '', phoneNumber: '', creationDate: new Date(), password: ''}};
+const initialUserState:{value: User} = {value: {email: '', surname: '', name: '', phoneNumber: '', creationDate: new Date()}};
 
 export const userSlice: Slice = createSlice({
     name: 'user',

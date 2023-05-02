@@ -1,7 +1,8 @@
-export interface User {
+export interface RegistrationUser {
     name: string,
     surname: string,
     email: string,
     phoneNumber: string,
-    creationDate: Date
+    creationDate: Date,
+    password: string
 }
