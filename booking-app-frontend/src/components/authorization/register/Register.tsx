@@ -8,6 +8,13 @@ import {RegisterInformation} from "./RegisterInformation";
 import {RegisterError} from "../../../model/RegisterError";
 import {emailRegex, nameRegex, phoneRegex, surnameRegex} from "../../../constans/AuthRegex";
 import {User} from "../../../model/User";
+import {ApiErrorObject} from "../../../model/ApiErrorObject";
+import {AxiosError} from "axios";
+import {connector} from "../../../utils/axios";
+import {NavigateFunction, useNavigate} from "react-router-dom";
+import {useAppDispatch} from "../../../hooks/reduxHooks";
+import {ThunkDispatch} from "@reduxjs/toolkit";
+import {login} from "../../../redux/slices/UserSlice";
 
 export const Register: FC<any> = (props) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -27,6 +34,8 @@ export const Register: FC<any> = (props) => {
         checkBox: false,
         email: false
     });
+    const navigate: NavigateFunction = useNavigate();
+    const dispatch: ThunkDispatch<any, any, any> = useAppDispatch();
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -45,19 +54,48 @@ export const Register: FC<any> = (props) => {
             setError({...error, internal: true, phone: true});
         }
 
-        if(!emailRegex.test(email)) {
+        if (!emailRegex.test(email)) {
             setError({...error, internal: true, email: true});
         }
     }
 
-    const registerUser = (): void => {
+    const registerUser = async () => {
         checkRegistrationData();
 
         if (error.internal) {
             return;
         }
 
-        const user: User = {email: email, name: name, password: password, surname: surname, phoneNumber: phoneNumber, creationDate: new Date()};
+        const user: User = {
+            email: email,
+            name: name,
+            password: password,
+            surname: surname,
+            phoneNumber: phoneNumber,
+            creationDate: new Date()
+        };
+
+        try {
+            setLoading(true);
+
+            await connector.post('/api/v1/auth/register', user).then(response => {
+                localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('refresh_token', response.data.refresh_token);
+            });
+
+            debugger
+            dispatch(login(user));
+            setLoading(false);
+            navigate('/profile');
+        } catch (error: any) {
+            const axiosError: AxiosError = error as AxiosError;
+            const errorData = axiosError.response?.data as ApiErrorObject | undefined;
+
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            console.log(errorData);
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
