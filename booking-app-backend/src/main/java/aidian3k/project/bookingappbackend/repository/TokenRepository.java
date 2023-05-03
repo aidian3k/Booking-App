@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TokenRepository extends JpaRepository<Token, Integer> {
-    Optional<Token> findByToken(String token);
+    Optional<List<Token>> findByToken(String token);
 
     @Query(value = """
       select t from tokens t inner join users u\s

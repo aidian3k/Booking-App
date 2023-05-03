@@ -14,38 +14,38 @@ import {MyBookingsPage} from "./pages/MyBookingsPage";
 import {MainPage} from "./pages/MainPage";
 
 const routes = createBrowserRouter([
-    {
-        path: '/',
-        element: <MainPage/>
-    },
-    {
-        path: 'authorization',
-        element: <AuthorizationPage/>
-    },
-    {
-        path: 'accommodation/:id',
-        element: <SinglePropertyPage/>
-    },
-    {
-        path: '/profile',
-        element: <ProfilePage/>
-    },
-    {
-        path: '/profile/accommodations',
-        element: <UserAccommodationPage/>
-    },
-    {
-        path: '/profile/accommodations/add',
-        element: <AccommodationAddPage/>
-    },
-    {
-        path: '*',
-        element: <ErrorPage/>
-    },
-    {
-        path: '/profile/bookings',
-        element: <MyBookingsPage/>
-    }
+        {
+            path: '/',
+            element: <MainPage/>
+        },
+        {
+            path: '/authorization',
+            element: <AuthorizationPage/>
+        },
+        {
+            path: 'accommodation/:id',
+            element: <SinglePropertyPage/>
+        },
+        {
+            path: '/profile',
+            element: <ProfilePage/>
+        },
+        {
+            path: '/profile/accommodations',
+            element: <UserAccommodationPage/>
+        },
+        {
+            path: '/profile/accommodations/add',
+            element: <AccommodationAddPage/>
+        },
+        {
+            path: '*',
+            element: <ErrorPage/>
+        },
+        {
+            path: '/profile/bookings',
+            element: <MyBookingsPage/>
+        }
     ]
 )
 
@@ -54,10 +54,8 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <RouterProvider router={routes}/>
-        </Provider>
-    </React.StrictMode>
+    <Provider store={store}>
+        <RouterProvider router={routes}/>
+    </Provider>
 );
 

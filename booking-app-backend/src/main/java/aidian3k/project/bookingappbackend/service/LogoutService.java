@@ -10,6 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
@@ -25,13 +27,15 @@ public class LogoutService implements LogoutHandler {
         }
 
         jwtToken = authenticationHeader.substring(7);
-        Token storedToken = tokenRepository.findByToken(jwtToken).orElse(null);
+        List<Token> storedTokens = tokenRepository.findByToken(jwtToken).orElseThrow();
 
-        if (storedToken != null) {
-            storedToken.setExpired(true);
-            storedToken.setRevoked(true);
-            tokenRepository.save(storedToken);
-            SecurityContextHolder.clearContext();
-        }
+        storedTokens.forEach(storedToken -> {
+            if (storedToken != null) {
+                storedToken.setExpired(true);
+                storedToken.setRevoked(true);
+                tokenRepository.save(storedToken);
+                SecurityContextHolder.clearContext();
+            }
+        });
     }
 }

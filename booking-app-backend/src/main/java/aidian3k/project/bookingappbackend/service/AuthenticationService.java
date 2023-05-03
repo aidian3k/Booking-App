@@ -13,7 +13,6 @@ import aidian3k.project.bookingappbackend.validation.AuthenticationRequest;
 import aidian3k.project.bookingappbackend.validation.AuthenticationResponse;
 import aidian3k.project.bookingappbackend.validation.RegisterModel;
 import aidian3k.project.bookingappbackend.validation.UserDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -68,20 +66,17 @@ public class AuthenticationService {
 
         final String jwtToken = tokenProvider.generateShortToken(user);
         final String refreshToken = tokenProvider.generateRefreshToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
-        UserDto userDto = UserDto.builder().name(user.getName()).surname(user.getSurname()).phoneNumber(user.getPhoneNumber()).email(user.getEmail()).creationDate(user.getCreationDate()).build();
 
-        return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).requestDate(new Date()).user(userDto).build();
+        return getAuthenticationResponse(user, jwtToken, refreshToken);
     }
 
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
         final String authenticationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String userEmail;
 
         if (authenticationHeader == null || !authenticationHeader.startsWith("Bearer ")) {
-            return;
+            throw new IllegalStateException("");
         }
 
         refreshToken = authenticationHeader.substring(7);
@@ -93,14 +88,19 @@ public class AuthenticationService {
             if (tokenProvider.validateToken(refreshToken, user)) {
                 String accessToken = tokenProvider.generateShortToken(user);
 
-                revokeAllUserTokens(user);
-                saveUserToken(user, accessToken);
-
-                AuthenticationResponse authResponse = AuthenticationResponse.builder().token(accessToken).refreshToken(refreshToken).requestDate(new Date()).build();
-
-                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+                return getAuthenticationResponse(user, accessToken, refreshToken);
             }
         }
+
+        return null;
+    }
+
+    private AuthenticationResponse getAuthenticationResponse(User user, String jwtToken, String refreshToken) {
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+        UserDto userDto = UserDto.builder().name(user.getName()).surname(user.getSurname()).phoneNumber(user.getPhoneNumber()).email(user.getEmail()).creationDate(user.getCreationDate()).build();
+
+        return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).requestDate(new Date()).user(userDto).build();
     }
 
     private void authenticateUserCredentials(AuthenticationRequest authenticationRequest) {

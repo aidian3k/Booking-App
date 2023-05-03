@@ -6,11 +6,15 @@ import aidian3k.project.bookingappbackend.exception.TokenAuthorizationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -29,7 +33,7 @@ public class TokenProvider {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(nowDate)
                 .setExpiration(expiryTokenDate)
-                .signWith(SignatureAlgorithm.HS256, jwtConstants.getTokenSecret())
+                .signWith(SignatureAlgorithm.HS256, getSignInKey())
                 .compact();
     }
 
@@ -65,5 +69,10 @@ public class TokenProvider {
         } catch (TokenAuthorizationException exception) {
             throw new TokenAuthorizationException("Invalid jwt token authorization! Token: %s".formatted(authorizedToken), HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    private Key getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(jwtConstants.getTokenSecret());
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }

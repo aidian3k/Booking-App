@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -59,11 +60,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean isTokenRevokedOrExpired(String jwtToken) {
-        Token token = tokenRepository.findByToken(jwtToken).orElseThrow(() -> new IllegalStateException("No token present exception!"));
+        List<Token> tokens = tokenRepository.findByToken(jwtToken).orElseThrow(() -> new IllegalStateException("No token present exception!"));
 
-        if (token.isExpired() || token.isRevoked()) {
-            throw new TokenAuthorizationException("There is expired or revoke key! Token: %s".formatted(token.getToken()), HttpStatus.UNAUTHORIZED);
-        }
+        tokens.forEach(token -> {
+            if (token.isExpired() || token.isRevoked()) {
+                throw new TokenAuthorizationException("There is expired or revoke key! Token: %s".formatted(token.getToken()), HttpStatus.UNAUTHORIZED);
+            }
+        });
 
         return false;
     }

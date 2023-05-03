@@ -34,7 +34,6 @@ export const Register: FC<any> = (props) => {
         checkBox: false,
         email: false
     });
-    const navigate: NavigateFunction = useNavigate();
     const dispatch: ThunkDispatch<any, any, any> = useAppDispatch();
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -107,7 +106,7 @@ export const Register: FC<any> = (props) => {
                 checkBox: false,
                 email: false})
 
-            navigate('/profile');
+            await props.setIsLogging(true);
         } catch (error: any) {
             const axiosError: AxiosError = error as AxiosError;
             const errorData = axiosError.response?.data as ApiErrorObject | undefined;
