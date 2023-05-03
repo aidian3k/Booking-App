@@ -2,8 +2,11 @@ import React, {FC} from "react";
 import {Navbar} from "../components/navbar/Navbar";
 import {Footer} from "../components/footer/Footer";
 import {MyBookingElement} from "../components/my-bookings/MyBookingElement";
+import {useAuth} from "../hooks/useAuth";
 
 export const MyBookingsPage: FC = () => {
+    useAuth();
+
     return (
         <>
             <Navbar/>

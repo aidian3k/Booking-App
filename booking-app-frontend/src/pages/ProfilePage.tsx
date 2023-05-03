@@ -8,11 +8,11 @@ import {ReservedProperties} from "../components/profile-page/ReservedProperties"
 import {useAuth} from "../hooks/useAuth";
 
 export const ProfilePage: FC = () => {
-    const [loggedIn, setLoggedIn] = useAuth();
+    useAuth();
 
     return (
         <>
-            <Navbar loggedIn={loggedIn}/>
+            <Navbar/>
             <div className={'p-4'}>
                 <ProfilePageHeading/>
                 <ProfileStatistics/>

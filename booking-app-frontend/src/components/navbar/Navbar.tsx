@@ -7,9 +7,11 @@ import {NavbarDirections} from "./NavbarDirections";
 import {NavbarSearchMenu} from "./NavbarSearchMenu";
 import { motion } from "framer-motion";
 import {NavbarNotLoggedInfo} from "./NavbarNotLoggedInfo";
+import {useAppSelector} from "../../hooks/reduxHooks";
 
-export const Navbar: FC<any> = (props) => {
+export const Navbar: FC = () => {
     const [searchMenuShown, setSearchMenuShown] = useState<boolean>(false);
+    const loggedIn: boolean = useAppSelector(state => state.auth.value);
 
     return (
         <>
@@ -29,7 +31,7 @@ export const Navbar: FC<any> = (props) => {
                              transition={{ duration: 0.3 }}><NavbarSearchMenu/></motion.div>)}
             <NavbarBreak/>
 
-            {props.loggedIn ? <NavbarDirections/> : <NavbarNotLoggedInfo/>}
+            {loggedIn ? <NavbarDirections/> : <NavbarNotLoggedInfo/>}
 
             <NavbarBreak/>
         </>
