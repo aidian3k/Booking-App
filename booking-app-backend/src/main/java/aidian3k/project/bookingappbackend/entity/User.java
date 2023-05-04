@@ -64,6 +64,12 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "user")
+    private List<Property> properties;
+
     @Override
     public boolean equals(Object comparedObject) {
         return comparedObject instanceof User

@@ -28,6 +28,10 @@ public class Photo {
     @Column(nullable = false)
     private Byte[] data;
 
+    @ManyToOne
+    @JoinColumn(name = "property_id")
+    private Property property;
+
     @Override
     public boolean equals(Object comparedObject) {
         return comparedObject instanceof Photo
