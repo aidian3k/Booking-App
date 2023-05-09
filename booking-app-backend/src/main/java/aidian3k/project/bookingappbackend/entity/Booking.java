@@ -34,4 +34,8 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

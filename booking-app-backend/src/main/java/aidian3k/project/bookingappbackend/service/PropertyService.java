@@ -1,5 +1,7 @@
 package aidian3k.project.bookingappbackend.service;
 
+import aidian3k.project.bookingappbackend.dto.MainPagePropertyDto;
+import aidian3k.project.bookingappbackend.dto.ProfileAccommodationDto;
 import aidian3k.project.bookingappbackend.dto.PropertyDto;
 import aidian3k.project.bookingappbackend.entity.Photo;
 import aidian3k.project.bookingappbackend.entity.Property;
@@ -7,10 +9,12 @@ import aidian3k.project.bookingappbackend.entity.User;
 import aidian3k.project.bookingappbackend.repository.PropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +53,48 @@ public class PropertyService {
 
     public List<Property> getAllProperties() {
         return propertyRepository.findAll();
+    }
+
+    public List<MainPagePropertyDto> getMainPageProperties() {
+        int maximumNumberOfProperties = 50;
+        List<Property> properties = propertyRepository
+                .findAll(PageRequest.of(0, maximumNumberOfProperties))
+                .getContent();
+        
+        return properties
+                .stream()
+                .map(property -> MainPagePropertyDto.builder()
+                        .id(property.getId())
+                        .pricePerNight(property.getPrice())
+                        .description(property.getDescription())
+                        .title(property.getTitle())
+                        .build())
+                .toList();
+    }
+
+    public List<ProfileAccommodationDto> getProfileAccommodation(Integer userId) {
+        List<Property> properties = getUserProperties(userId);
+        
+        return properties.stream()
+                .map(property -> new ProfileAccommodationDto(property.getId(), property.getTitle(), property.getDescription()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Property> getUserProperties(Integer userId) {
+        User user = userService.getSingleUserById(userId);
+        
+        return user.getProperties().stream()
+                .filter(property -> property.getUser().getId().equals(user.getId()))
+                .collect(Collectors.toList());
+    }
+    
+    public void deleteUserPropertyById(Integer userId, Long propertyId) {
+        User user = userService.getSingleUserById(userId);
+        Property property = user.getProperties().stream()
+                .filter(foundProperty -> foundProperty.getId().equals(propertyId))
+                .findAny()
+                .orElseThrow(IllegalArgumentException::new);
+        
+        propertyRepository.delete(property);
     }
 }

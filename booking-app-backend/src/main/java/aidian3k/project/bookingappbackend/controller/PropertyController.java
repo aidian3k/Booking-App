@@ -1,5 +1,7 @@
 package aidian3k.project.bookingappbackend.controller;
 
+import aidian3k.project.bookingappbackend.dto.MainPagePropertyDto;
+import aidian3k.project.bookingappbackend.dto.ProfileAccommodationDto;
 import aidian3k.project.bookingappbackend.dto.PropertyDto;
 import aidian3k.project.bookingappbackend.dto.PropertyRequest;
 import aidian3k.project.bookingappbackend.entity.Property;
@@ -33,8 +35,23 @@ public class PropertyController {
         return new ResponseEntity<>(propertyService.getPropertyById(propertyId), HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Property>> getAllProperties() {
         return new ResponseEntity<>(propertyService.getAllProperties(), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MainPagePropertyDto>> getMainPageProperties() {
+        return new ResponseEntity<>(propertyService.getMainPageProperties(), HttpStatus.OK);
+    }
+
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<List<ProfileAccommodationDto>> getProfileAccommodation(@PathVariable Integer userId) {
+        return new ResponseEntity<>(propertyService.getProfileAccommodation(userId), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/profile/{userId}/{propertyId}")
+    public void deleteUserProperty(@PathVariable Integer userId, @PathVariable Long propertyId) {
+        propertyService.deleteUserPropertyById(userId, propertyId);
     }
 }

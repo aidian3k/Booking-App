@@ -65,6 +65,9 @@ public class User implements UserDetails {
     private List<Token> tokens;
 
     @OneToMany(mappedBy = "user")
+    private List<Booking> bookings;
+
+    @OneToMany(mappedBy = "user")
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "user")
