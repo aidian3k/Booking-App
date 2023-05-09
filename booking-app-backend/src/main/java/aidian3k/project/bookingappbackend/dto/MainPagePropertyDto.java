@@ -14,4 +14,8 @@ public class MainPagePropertyDto {
     private String title;
     private String description;
     private Integer pricePerNight;
+    private Integer review;
+    private String city;
+    private String country;
+    private Integer ownerId;
 }

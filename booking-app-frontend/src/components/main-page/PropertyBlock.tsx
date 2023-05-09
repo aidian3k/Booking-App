@@ -1,12 +1,12 @@
 import {FC} from "react";
 import {MainListPropertyImage} from "./MainListPropertyImage";
-import {MainListPropertyInformation} from "./MainListPropertyInformation";
+import {MainListPropertyInformation, MainPageProperty} from "./MainListPropertyInformation";
 
-export const PropertyBlock: FC = () => {
+export const PropertyBlock: FC<{property: MainPageProperty}> = (props) => {
     return (
         <div className={'flex flex-col items-center cursor-pointer hover:scale-105 transition-all'}>
             <MainListPropertyImage/>
-            <MainListPropertyInformation/>
+            <MainListPropertyInformation property={props.property}/>
         </div>
     )
 }

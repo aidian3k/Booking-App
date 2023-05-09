@@ -68,6 +68,10 @@ public class PropertyService {
                         .pricePerNight(property.getPrice())
                         .description(property.getDescription())
                         .title(property.getTitle())
+                        .ownerId(property.getUser().getId())
+                        .country(property.getCountry())
+                        .city(property.getCity())
+                        .review(userService.getUserAverageReviewScale(property.getUser().getId()))
                         .build())
                 .toList();
     }

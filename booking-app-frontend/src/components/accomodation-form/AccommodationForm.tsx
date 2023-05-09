@@ -19,7 +19,6 @@ import {User} from "../../model/User";
 import {useAppSelector} from "../../hooks/reduxHooks";
 import axios, {AxiosError} from "axios";
 import {connector} from "../../utils/axios";
-import {login} from "../../redux/slices/UserSlice";
 import {ApiErrorObject} from "../../model/ApiErrorObject";
 
 export const AccommodationForm: FC = () => {
@@ -115,6 +114,12 @@ export const AccommodationForm: FC = () => {
     }
 
     async function handleAddButton() {
+        await checkAccommodationInfo();
+
+        if (error.internal) {
+            return;
+        }
+
         const propertyRequest: PropertyRequest = {
             title: title,
             city: city,
@@ -136,8 +141,8 @@ export const AccommodationForm: FC = () => {
             washingMachine: washingMachine,
             street: street
         };
+
         const userId: number = user.id;
-        debugger
         await getPhotosId(images, photosId);
 
         const request = {propertyDto: propertyRequest, photosId: photosId, userId: 1};

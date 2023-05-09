@@ -41,6 +41,10 @@ public class UserService {
         int currentReviewSum = 0;
         int numberOfReviews = reviews.size();
 
+        if (numberOfReviews == 0) {
+            return 5;
+        }
+
         for (Review review : reviews) {
             currentReviewSum += review.getRating();
         }
