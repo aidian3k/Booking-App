@@ -23,4 +23,11 @@ public class ReviewService {
 
         return user.getReviews();
     }
+
+    public Review createReviewForUser(Review review, Integer userId) {
+        User user = userService.getSingleUserById(userId);
+        user.getReviews().add(review);
+
+        return createNewReview(review);
+    }
 }

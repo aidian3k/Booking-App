@@ -1,12 +1,15 @@
 package aidian3k.project.bookingappbackend.service;
 
 import aidian3k.project.bookingappbackend.dto.MainPageStatisticsDto;
+import aidian3k.project.bookingappbackend.entity.Review;
 import aidian3k.project.bookingappbackend.entity.User;
 import aidian3k.project.bookingappbackend.exception.UserNotFoundException;
 import aidian3k.project.bookingappbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,5 +29,22 @@ public class UserService {
         User user = getSingleUserById(userId);
 
         return new MainPageStatisticsDto(user.getBookings().size(), user.getProperties().size(), user.getReviews().size());
+    }
+
+    public int getUserAverageReviewScale(Integer userId) {
+        User user = getSingleUserById(userId);
+
+        return calculateAverageReview(user.getReviews());
+    }
+
+    private int calculateAverageReview(List<Review> reviews) {
+        int currentReviewSum = 0;
+        int numberOfReviews = reviews.size();
+
+        for (Review review : reviews) {
+            currentReviewSum += review.getRating();
+        }
+
+        return currentReviewSum / numberOfReviews;
     }
 }

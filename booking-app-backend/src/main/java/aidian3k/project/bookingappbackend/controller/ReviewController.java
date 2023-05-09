@@ -19,7 +19,12 @@ public class ReviewController {
     }
 
     @PostMapping
-    public Review createNewReview(Review review) {
+    public Review createNewReview(@RequestBody Review review) {
         return reviewService.createNewReview(review);
+    }
+
+    @PostMapping("/user/{userId}")
+    public Review createReviewForUser(@RequestBody Review review, @PathVariable Integer userId) {
+        return reviewService.createReviewForUser(review, userId);
     }
 }

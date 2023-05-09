@@ -18,4 +18,9 @@ public class UserController {
     public MainPageStatisticsDto getUserStatisticsInfo(@PathVariable Integer userId) {
         return userService.getUserStatisticsInfo(userId);
     }
+
+    @GetMapping("/statistics/stars/{userId}")
+    public int getUserAverageReviewScale(@PathVariable Integer userId) {
+        return userService.getUserAverageReviewScale(userId);
+    }
 }

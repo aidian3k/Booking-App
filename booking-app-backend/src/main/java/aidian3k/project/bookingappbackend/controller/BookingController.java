@@ -15,6 +15,11 @@ import java.util.List;
 public class BookingController {
     private final BookingService bookingService;
 
+    @PostMapping("/user/{userId}/property/{propertyId}")
+    public Booking createNewBooking(@RequestBody Booking booking, @PathVariable Integer userId, @PathVariable Long propertyId) {
+        return bookingService.createNewBooking(booking, userId, propertyId);
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Booking>> getAllUserBookings(@PathVariable Integer userId) {
         return new ResponseEntity<>(bookingService.getAllUserBookings(userId), HttpStatus.OK);
