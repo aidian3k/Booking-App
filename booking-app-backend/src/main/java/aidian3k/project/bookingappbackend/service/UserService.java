@@ -1,5 +1,6 @@
 package aidian3k.project.bookingappbackend.service;
 
+import aidian3k.project.bookingappbackend.dto.MainPageStatisticsDto;
 import aidian3k.project.bookingappbackend.entity.User;
 import aidian3k.project.bookingappbackend.exception.UserNotFoundException;
 import aidian3k.project.bookingappbackend.repository.UserRepository;
@@ -19,5 +20,11 @@ public class UserService {
 
     public User saveSingleUser(User user) {
         return userRepository.save(user);
+    }
+
+    public MainPageStatisticsDto getUserStatisticsInfo(Integer userId) {
+        User user = getSingleUserById(userId);
+
+        return new MainPageStatisticsDto(user.getBookings().size(), user.getProperties().size(), user.getReviews().size());
     }
 }
