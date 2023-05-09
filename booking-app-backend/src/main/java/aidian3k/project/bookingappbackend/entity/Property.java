@@ -1,11 +1,8 @@
 package aidian3k.project.bookingappbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -33,7 +30,7 @@ public class Property {
     @Column(nullable = false)
     private String street;
 
-    @OneToMany(mappedBy = "property")
+    @OneToMany
     private List<Photo> photos;
 
     @Column(nullable = false)
@@ -83,8 +80,11 @@ public class Property {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "property")
+    @JsonIgnore
     private List<Booking> bookings;
+
 }

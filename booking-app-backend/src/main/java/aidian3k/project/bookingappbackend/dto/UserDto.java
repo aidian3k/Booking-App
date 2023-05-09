@@ -1,4 +1,4 @@
-package aidian3k.project.bookingappbackend.validation;
+package aidian3k.project.bookingappbackend.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +10,7 @@ import java.util.Date;
 @Setter
 @Builder
 public class UserDto {
+    private Integer id;
     private String email;
     private String name;
     private String surname;

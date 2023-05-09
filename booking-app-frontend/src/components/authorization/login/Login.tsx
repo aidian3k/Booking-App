@@ -8,7 +8,7 @@ import {LoadingButton} from "@mui/lab";
 import {LoginInformation} from "./LoginInformation";
 import {RememberPassword} from "./RememberPassword";
 import {RememberPasswordHelper} from "../../help-contact/RememberPasswordHelper";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
 import {ApiErrorObject} from "../../../model/ApiErrorObject";
 import {connector} from "../../../utils/axios";
 import {login} from "../../../redux/slices/UserSlice";

@@ -1,5 +1,6 @@
 package aidian3k.project.bookingappbackend.validation;
 
+import aidian3k.project.bookingappbackend.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

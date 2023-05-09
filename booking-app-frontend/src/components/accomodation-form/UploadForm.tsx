@@ -1,7 +1,7 @@
 import React, {FC, useState} from "react";
 
-export const UploadForm:FC = () => {
-    const [images, setImages] = useState<File[]>([]);
+export const UploadForm:FC<any> = (props) => {
+    const {images, setImages} = props;
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -26,7 +26,7 @@ export const UploadForm:FC = () => {
             </label>
 
             <div className="mt-2 grid gap-2 grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-                {images.map((image, index) => (
+                {images.map((image: Blob | MediaSource, index: React.Key | null | undefined) => (
                     <img
                         key={index}
                         src={URL.createObjectURL(image)}

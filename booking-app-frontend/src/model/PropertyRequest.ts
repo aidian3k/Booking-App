@@ -1,0 +1,21 @@
+export interface PropertyRequest {
+    title: string,
+    city: string,
+    country: string,
+    description: string,
+    wifi: boolean,
+    placeToWork: boolean,
+    pool: boolean,
+    allowedAnimals: boolean,
+    kitchen: boolean,
+    airConditioning: boolean,
+    gasMeter: boolean,
+    washingMachine: boolean,
+    extraInformation: string,
+    numberOfBeds: number,
+    numberOfGuests: number,
+    numberOfBedrooms: number,
+    price: number,
+    cleaningFee: number,
+    street: string
+}

@@ -28,6 +28,9 @@ public class Booking {
     @Column(nullable = false)
     private int numberOfGuests;
 
+    @Column(nullable = false)
+    private int totalPrice;
+
     @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;
