@@ -38,7 +38,7 @@ export const PropertyPage: FC<{propertyId: any}> = (props) => {
                     <div className={'flex gap-1 flex-col'}>
                         <PropertyMainInformation property={property}/>
                         <PropertyBreak/>
-                        <PropertyUtils/>
+                        <PropertyUtils property={property}/>
                         <PropertyBreak/>
                         <PropertyDescription description={property.description} extraInfo={property.extraInformation}/>
                     </div>
