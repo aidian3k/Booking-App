@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {FormControl, FormHelperText, InputAdornment, TextField} from "@mui/material";
 
-export const LoginInput: FC<any> = (props) => {
+export const LoginInput: FC<{icon: any, onChange: any, placeholder: string, formHelper: string}> = (props) => {
     return (
         <FormControl fullWidth={true} variant={'standard'} margin={'normal'}>
             <TextField

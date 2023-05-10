@@ -10,9 +10,11 @@ import {HostInformation} from "../reviews/HostInformation";
 import {Property, propertyInitialState} from "../../model/Property";
 import {connector} from "../../utils/axios";
 import {ReviewList} from "../reviews/ReviewList";
+import {ReviewAddForm} from "./ReviewAddForm";
 
-export const PropertyPage: FC<{propertyId: any}> = (props) => {
+export const PropertyPage: FC<{ propertyId: any }> = (props) => {
     const [property, setProperty] = useState<Property>(propertyInitialState);
+    const [reviewAdd, setReviewAdd] = useState<boolean>(false);
 
     useEffect(() => {
         connector.get(`/api/v1/property/${props.propertyId}`)
@@ -57,6 +59,14 @@ export const PropertyPage: FC<{propertyId: any}> = (props) => {
             <p className={'text-xl font-serif font-semibold text-center'}>Reviews about the host:</p>
             <ReviewList/>
 
+            <div className={'flex justify-center'}>
+                <button
+                    className={'w-1/2 bg-red-500 mt-2 rounded-2xl p-2 hover:scale-105 cursor-pointer transition-all'}
+                    onClick={() => setReviewAdd(true)}
+                ><p className={'text-lg text-white font-serif font-semibold'}>Add new review</p></button>
+            </div>
+
+            <ReviewAddForm reviewAdd={reviewAdd} setReviewAdd={setReviewAdd} userName={property.hostName} userId={property.hostId}/>
             <div className={'w-full h-5'}></div>
         </div>
     )
