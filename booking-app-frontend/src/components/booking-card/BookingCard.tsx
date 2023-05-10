@@ -8,14 +8,18 @@ export const BookingCard: FC<{property: Property}> = (props) => {
     const [numberOfGuests, setNumberOfGuests] = useState<number>(1);
     const {property} = props;
 
+    function getDateSubtractionInDays(firstDate: Date, secondDate: Date) {
+        return (firstDate.valueOf() - secondDate.valueOf()) / (1000 * 60 * 60 * 24);
+    }
+
     function calculateFinalPrice() {
-        const numberOfDays = checkOut.valueOf() - checkIn.valueOf();
+        const numberOfDays = getDateSubtractionInDays(checkOut, checkIn);
 
         return property.price * numberOfDays * numberOfGuests;
     }
 
     function getCleaningFee() {
-        const numberOfDays = checkOut.valueOf() - checkIn.valueOf();
+        const numberOfDays = getDateSubtractionInDays(checkOut, checkIn);
 
         return property.cleaningFee * numberOfDays;
     }
@@ -47,12 +51,12 @@ export const BookingCard: FC<{property: Property}> = (props) => {
                     <div className={'flex'}>
                         <div className={'py-3 px-4 border-r'}>
                             <label>Check in:</label>
-                            <input type={'date'} onChange={(event: any)  => setCheckIn(event.target.value)}/>
+                            <input type={'date'} onChange={(event: any)  => setCheckIn(new Date(event.target.value))}/>
                         </div>
 
                         <div className={'py-3 px-4'}>
                             <label>Check out:</label>
-                            <input type={'date'} onChange={(event: any)  => setCheckOut(event.target.value)}/>
+                            <input type={'date'} onChange={(event: any)  => setCheckOut(new Date(event.target.value))}/>
                         </div>
                     </div>
 
@@ -75,7 +79,7 @@ export const BookingCard: FC<{property: Property}> = (props) => {
                     </div>
 
                     <div className={'flex justify-between'}>
-                        <p className={'text-serif text-base underline'}>$100 x {checkOut.valueOf() - checkIn.valueOf()} days x {numberOfGuests} guests</p>
+                        <p className={'text-serif text-base underline'}>$100 x {getDateSubtractionInDays(checkOut, checkIn)} days x {numberOfGuests} guests</p>
                         <p className={'text-serif text-base'}>{calculateFinalPrice()} $</p>
                     </div>
 

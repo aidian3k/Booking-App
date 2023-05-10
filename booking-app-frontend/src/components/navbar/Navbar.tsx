@@ -8,6 +8,8 @@ import {NavbarSearchMenu} from "./NavbarSearchMenu";
 import { motion } from "framer-motion";
 import {NavbarNotLoggedInfo} from "./NavbarNotLoggedInfo";
 import {useAppSelector} from "../../hooks/reduxHooks";
+import {DotsIcon} from "../../assets/DotsIcon";
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 export const Navbar: FC = () => {
     const [searchMenuShown, setSearchMenuShown] = useState<boolean>(false);
@@ -29,6 +31,15 @@ export const Navbar: FC = () => {
                 (<motion.div initial={{ y: -100 }}
                              animate={{ y: 0 }}
                              transition={{ duration: 0.3 }}><NavbarSearchMenu/></motion.div>)}
+            <NavbarBreak/>
+
+            <div className={'flex justify-center'}>
+                <button className={'flex gap-2 p-2 border border-solid-500 rounded-xl my-2'}>
+                    <FilterListIcon/>
+                    <p className={'font-serif font-semibold'}>Filters</p>
+                </button>
+            </div>
+
             <NavbarBreak/>
 
             {loggedIn ? <NavbarDirections/> : <NavbarNotLoggedInfo/>}
