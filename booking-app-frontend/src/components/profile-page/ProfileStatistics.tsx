@@ -19,14 +19,10 @@ export const ProfileStatistics: FC = () => {
             </div>
 
             <div className={'grid justify-items-center md:grid-cols-4 grid-cols-1 gap-3 p-2'}>
-                <Review/>
-                <Review/>
-                <Review/>
-                <Review/>
-                <Review/>
-                <Review/>
-                <Review/>
-                <Review/>
+                <Review review={{owner: 'Adrian', date: new Date(), content: 'aaaaaa', rating: 5}}/>
+                <Review review={{owner: 'Adrian', date: new Date(), content: 'aaaaaa', rating: 5}}/>
+                <Review review={{owner: 'Adrian', date: new Date(), content: 'aaaaaa', rating: 5}}/>
+                <Review review={{owner: 'Adrian', date: new Date(), content: 'aaaaaa', rating: 5}}/>
             </div>
         </div>
     )

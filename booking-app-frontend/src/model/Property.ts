@@ -1,0 +1,57 @@
+export interface Property {
+    hostId: number;
+    id: number,
+    title: string,
+    country: string,
+    city: string,
+    street: string,
+    photos: File[],
+    description: string,
+    wifi: boolean,
+    placeToWork: boolean,
+    pool: boolean,
+    allowedAnimals: boolean,
+    kitchen: boolean,
+    airConditioning: boolean,
+    gasMeter: boolean,
+    washingMachine: boolean,
+    extraInformation: string,
+    numberOfGuests: number,
+    numberOfBedrooms: number,
+    numberOfBeds: number,
+    cleaningFee: number,
+    price: number,
+    hostName: string,
+    rating: number,
+    joinDate: Date
+}
+
+export const propertyInitialState: Property = {
+    title: 'Croatia',
+    street: 'aaaa',
+    wifi: false,
+    washingMachine: false,
+    pool: false,
+    placeToWork: false,
+    numberOfBeds: 1,
+    kitchen: false,
+    numberOfBedrooms: 1,
+    gasMeter: false,
+    extraInformation: 'The house has a total of 3 bedrooms and 2.5 bathrooms, including the master en-suite.\n' +
+        '                    The flooring on the main level is a combination of plush carpeting and hardwood.',
+    description: 'The house is a charming two-story brick home with a peaked roof and dormer windows. It has a neatly manicured front lawn with a winding stone path leading up to the front porch. The porch is spacious and features two white rocking chairs, perfect for enjoying the fresh air on a warm summer day.\n' +
+        '                    Upon entering the house, you are greeted by a cozy living room with plush carpeting and a large bay window that lets in plenty of natural light. To the left is a spacious dining area with a beautiful wooden table and six matching chairs. The kitchen is adjacent to the dining area and features modern stainless steel appliances and sleek granite countertops.',
+    allowedAnimals: false,
+    country: '',
+    city: '',
+    airConditioning: false,
+    id: -1,
+    photos: [],
+    price: 1,
+    cleaningFee: 10,
+    numberOfGuests: 5,
+    hostName: 'Jakub',
+    rating: 2,
+    hostId: 1,
+    joinDate: new Date()
+}
