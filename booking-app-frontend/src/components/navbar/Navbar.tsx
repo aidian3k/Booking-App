@@ -9,7 +9,7 @@ import {motion} from "framer-motion";
 import {NavbarNotLoggedInfo} from "./NavbarNotLoggedInfo";
 import {useAppSelector} from "../../hooks/reduxHooks";
 import FilterListIcon from '@mui/icons-material/FilterList';
-import {Filter} from "./Filter";
+import {Filter} from "../filter/Filter";
 
 export const Navbar: FC = () => {
     const [searchMenuShown, setSearchMenuShown] = useState<boolean>(false);
