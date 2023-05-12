@@ -3,6 +3,7 @@ package aidian3k.project.bookingappbackend.service;
 import aidian3k.project.bookingappbackend.entity.Review;
 import aidian3k.project.bookingappbackend.entity.User;
 import aidian3k.project.bookingappbackend.repository.ReviewRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +25,15 @@ public class ReviewService {
         return user.getReviews();
     }
 
+    @Transactional
     public Review createReviewForUser(Review review, Integer userId) {
         User user = userService.getSingleUserById(userId);
-        user.getReviews().add(review);
+        review.setUser(user);
+        Review newReview = createNewReview(review);
 
-        return createNewReview(review);
+        user.getReviews().add(review);
+        userService.saveSingleUser(user);
+
+        return newReview;
     }
 }

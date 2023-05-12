@@ -3,15 +3,12 @@ package aidian3k.project.bookingappbackend.entity;
 import aidian3k.project.bookingappbackend.constants.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -65,13 +62,13 @@ public class User implements UserDetails {
     private List<Token> tokens;
 
     @OneToMany(mappedBy = "user")
-    private List<Booking> bookings;
+    private List<Booking> bookings = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Property> properties;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Property> properties = new ArrayList<>();
 
     @Override
     public boolean equals(Object comparedObject) {

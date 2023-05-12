@@ -9,13 +9,15 @@ import {Add} from "@mui/icons-material";
 import {LoadingButton} from "@mui/lab";
 import {ReviewModel} from "../../model/Review";
 import {connector} from "../../utils/axios";
+import {NavigateFunction, useNavigate} from "react-router-dom";
 
-export const ReviewAddForm: FC<{reviewAdd: boolean, setReviewAdd: React.Dispatch<boolean>, userName: string, userId: number}> = (props) => {
+export const ReviewAddForm: FC<{reviewAdd: boolean, setReviewAdd: React.Dispatch<boolean>, userName: string, userId: number, propertyId: number}> = (props) => {
     const {reviewAdd, setReviewAdd} = props;
     const [whoWrites, setWhoWrites] = useState<string>('');
     const [value, setValue] = React.useState<number | null>(2);
     const [content, setContent] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const navigate: NavigateFunction = useNavigate();
 
     async function createReview() {
         const newReview: ReviewModel = {content: content, rating: value, owner: whoWrites, date: new Date()};
@@ -27,6 +29,8 @@ export const ReviewAddForm: FC<{reviewAdd: boolean, setReviewAdd: React.Dispatch
             await connector.post(`/api/v1/review/user/${props.userId}`, newReview);
             setLoading(false);
             props.setReviewAdd(false);
+
+            navigate(`/accommodation/${props.propertyId}`);
         } catch(error: any) {
             console.log(error);
         } finally {

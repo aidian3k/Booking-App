@@ -54,7 +54,7 @@ export const BookingCard: FC<{property: Property, hostId: number}> = (props) => 
         <div className={'flex justify-center items-center'}>
             <div className={'bg-white shadow shadow-gray-300 p-4 rounded-2xl'}>
                 <div className={'flex justify-between'}>
-                    <p className={'font-serif text-2xl'}>{`${property.price}$ / per night}`}</p>
+                    <p className={'font-serif text-2xl'}>{`${property.price}$ / per night`}</p>
                     <div className={'flex gap-1 items-center'}>
                         <StarSvg/>
                         <p className={'text-serif text-sm'}>{propertyRating},0</p>

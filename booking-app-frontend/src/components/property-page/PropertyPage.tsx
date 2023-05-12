@@ -60,7 +60,7 @@ export const PropertyPage: FC<{ propertyId: any }> = (props) => {
 
             <HostInformation hostName={host.name} joinDate={new Date()}/>
             <p className={'text-xl font-serif font-semibold text-center'}>Reviews about the host:</p>
-            <ReviewList/>
+            <ReviewList hostId={host.id}/>
 
             <div className={'flex justify-center'}>
                 <button
@@ -69,7 +69,7 @@ export const PropertyPage: FC<{ propertyId: any }> = (props) => {
                 ><p className={'text-lg text-white font-serif font-semibold'}>Add new review</p></button>
             </div>
 
-            <ReviewAddForm reviewAdd={reviewAdd} setReviewAdd={setReviewAdd} userName={host.name} userId={host.id}/>
+            <ReviewAddForm reviewAdd={reviewAdd} setReviewAdd={setReviewAdd} userName={host.name} userId={host.id} propertyId={property.id}/>
             <div className={'w-full h-5'}></div>
         </div>
     )

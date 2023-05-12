@@ -87,5 +87,4 @@ public class Property {
     @OneToMany(mappedBy = "property")
     @JsonIgnore
     private List<Booking> bookings = new ArrayList<>();
-
 }
