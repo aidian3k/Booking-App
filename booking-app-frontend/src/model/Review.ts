@@ -1,6 +1,6 @@
 export interface ReviewModel {
     content: string,
     rating: number | null,
-    date: Date,
+    date: string,
     owner: string
 }

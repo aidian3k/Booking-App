@@ -1,6 +1,5 @@
 import React, {FC} from "react";
 import Rating from "@mui/material/Rating";
-import {Review} from "../reviews/Review";
 
 export const ProfileStatistics: FC = () => {
     return (
@@ -19,10 +18,6 @@ export const ProfileStatistics: FC = () => {
             </div>
 
             <div className={'grid justify-items-center md:grid-cols-4 grid-cols-1 gap-3 p-2'}>
-                <Review review={{owner: 'Adrian', date: new Date(), content: 'aaaaaa', rating: 5}}/>
-                <Review review={{owner: 'Adrian', date: new Date(), content: 'aaaaaa', rating: 5}}/>
-                <Review review={{owner: 'Adrian', date: new Date(), content: 'aaaaaa', rating: 5}}/>
-                <Review review={{owner: 'Adrian', date: new Date(), content: 'aaaaaa', rating: 5}}/>
             </div>
         </div>
     )

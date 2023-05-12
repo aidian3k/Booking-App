@@ -8,14 +8,11 @@ export const Review: FC<{review: ReviewModel}> = (props) => {
             <div className={'flex gap-1 justify-center'}>
                 <div className={'flex gap-1 items-center'}>
                     <StarSvg/>
-                    <p className={'text-serif text-sm'}>5,0</p>
+                    <p className={'text-serif text-sm'}>{props.review.rating},0</p>
                 </div>
-                <p className={'text-base font-serif '}>{props.review.owner} {props.review.date.toDateString()}</p>
+                <p className={'text-base font-serif '}>{props.review.owner} {new Date(props.review.date).toLocaleDateString()}</p>
             </div>
-            <p className={'text-base font-serif '}>As a frequent Airbnb user, I can confidently say that my
-                experience with my recent host was nothing short of exceptional. From the moment I made the
-                booking, the host went above and beyond to ensure that my stay was comfortable and
-                enjoyable.</p>
+            <p className={'text-base font-serif '}>{props.review.content}</p>
         </div>
     )
 }

@@ -5,6 +5,7 @@ import {connector} from "../../utils/axios";
 
 export const ReviewList: FC<{hostId: number}> = (props) => {
     const [reviews, setReviews] = useState<ReviewModel[]>([]);
+
     debugger
     useEffect(() => {
         connector.get(`/api/v1/review/user/${props.hostId}`)

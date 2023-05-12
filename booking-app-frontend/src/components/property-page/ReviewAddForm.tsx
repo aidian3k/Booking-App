@@ -7,7 +7,6 @@ import RateReviewIcon from '@mui/icons-material/RateReview';
 import Rating from "@mui/material/Rating";
 import {Add} from "@mui/icons-material";
 import {LoadingButton} from "@mui/lab";
-import {ReviewModel} from "../../model/Review";
 import {connector} from "../../utils/axios";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 
@@ -20,7 +19,7 @@ export const ReviewAddForm: FC<{reviewAdd: boolean, setReviewAdd: React.Dispatch
     const navigate: NavigateFunction = useNavigate();
 
     async function createReview() {
-        const newReview: ReviewModel = {content: content, rating: value, owner: whoWrites, date: new Date()};
+        const newReview = {content: content, rating: value, owner: whoWrites, date: new Date()};
 
         try {
             setLoading(true);
@@ -31,6 +30,7 @@ export const ReviewAddForm: FC<{reviewAdd: boolean, setReviewAdd: React.Dispatch
             props.setReviewAdd(false);
 
             navigate(`/accommodation/${props.propertyId}`);
+            window.location.reload();
         } catch(error: any) {
             console.log(error);
         } finally {
