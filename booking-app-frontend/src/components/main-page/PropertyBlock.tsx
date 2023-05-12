@@ -5,7 +5,7 @@ import {MainListPropertyInformation, MainPageProperty} from "./MainListPropertyI
 export const PropertyBlock: FC<{property: MainPageProperty}> = (props) => {
     return (
         <div className={'flex flex-col items-center cursor-pointer hover:scale-105 transition-all'}>
-            <MainListPropertyImage/>
+            <MainListPropertyImage photo={props.property.photo}/>
             <MainListPropertyInformation property={props.property}/>
         </div>
     )

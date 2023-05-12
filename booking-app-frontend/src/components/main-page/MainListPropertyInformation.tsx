@@ -34,5 +34,5 @@ export interface MainPageProperty {
     city: string,
     country: string,
     ownerId: number,
-
+    photo: any
 }

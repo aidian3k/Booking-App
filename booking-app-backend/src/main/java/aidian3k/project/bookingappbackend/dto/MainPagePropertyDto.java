@@ -1,5 +1,6 @@
 package aidian3k.project.bookingappbackend.dto;
 
+import aidian3k.project.bookingappbackend.entity.Photo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,4 +19,5 @@ public class MainPagePropertyDto {
     private String city;
     private String country;
     private Integer ownerId;
+    private Photo photo;
 }

@@ -6,7 +6,6 @@ import aidian3k.project.bookingappbackend.dto.PropertyDto;
 import aidian3k.project.bookingappbackend.entity.Photo;
 import aidian3k.project.bookingappbackend.entity.Property;
 import aidian3k.project.bookingappbackend.entity.User;
-import aidian3k.project.bookingappbackend.repository.PhotoRepository;
 import aidian3k.project.bookingappbackend.repository.PropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -96,6 +95,7 @@ public class PropertyService {
                         .country(property.getCountry())
                         .city(property.getCity())
                         .review(userService.getUserAverageReviewScale(property.getUser().getId()))
+                        .photo(property.getPhotos().get(0))
                         .build())
                 .toList();
     }
