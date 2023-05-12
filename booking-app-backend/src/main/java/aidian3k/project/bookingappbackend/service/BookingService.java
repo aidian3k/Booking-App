@@ -4,6 +4,7 @@ import aidian3k.project.bookingappbackend.entity.Booking;
 import aidian3k.project.bookingappbackend.entity.Property;
 import aidian3k.project.bookingappbackend.entity.User;
 import aidian3k.project.bookingappbackend.repository.BookingRepository;
+import aidian3k.project.bookingappbackend.repository.PropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class BookingService {
     private final UserService userService;
     private final BookingRepository bookingRepository;
     private final PropertyService propertyService;
+    private final PropertyRepository propertyRepository;
 
     public List<Booking> getAllUserBookings(Integer userId) {
         User user = userService.getSingleUserById(userId);
@@ -59,7 +61,7 @@ public class BookingService {
     @Transactional
     public Booking createNewBooking(Booking booking, Integer userId, Long propertyId) {
         User user = userService.getSingleUserById(userId);
-        Property property = propertyService.getPropertyById(propertyId);
+        Property property = propertyRepository.findById(propertyId).orElseThrow();
         user.getBookings().add(booking);
         property.getBookings().add(booking);
 

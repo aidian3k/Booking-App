@@ -23,7 +23,7 @@ const routes = createBrowserRouter([
             element: <AuthorizationPage/>
         },
         {
-            path: 'accommodation/:id',
+            path: '/accommodation/:id',
             element: <SinglePropertyPage/>
         },
         {

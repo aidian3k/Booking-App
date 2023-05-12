@@ -3,6 +3,7 @@ package aidian3k.project.bookingappbackend.controller;
 import aidian3k.project.bookingappbackend.dto.MainPagePropertyDto;
 import aidian3k.project.bookingappbackend.dto.ProfileAccommodationDto;
 import aidian3k.project.bookingappbackend.dto.PropertyDto;
+import aidian3k.project.bookingappbackend.dto.SinglePropertyPageDto;
 import aidian3k.project.bookingappbackend.entity.Property;
 import aidian3k.project.bookingappbackend.service.PropertyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -34,7 +35,7 @@ public class PropertyController {
     }
 
     @GetMapping("/{propertyId}")
-    public ResponseEntity<Property> getPropertyById(@PathVariable Long propertyId) {
+    public ResponseEntity<SinglePropertyPageDto> getPropertyById(@PathVariable Long propertyId) {
         return new ResponseEntity<>(propertyService.getPropertyById(propertyId), HttpStatus.OK);
     }
 

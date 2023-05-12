@@ -9,16 +9,18 @@ export const PropertyList: FC = () => {
     useEffect(() => {
         try {
             connector.get("/api/v1/property")
-                .then(response => setProperties(response.data));
+                .then(response => {
+                    setProperties(response.data);
+                });
         } catch(error: any) {
             console.log(error);
         }
     }, []);
 
     const getProperties = () => {
-        return properties.map(property => {
-            return <PropertyBlock property={property}/>
-        });
+            return properties.map(property => {
+                return <PropertyBlock property={property}/>
+            });
     }
 
     const mappedProperties = getProperties();

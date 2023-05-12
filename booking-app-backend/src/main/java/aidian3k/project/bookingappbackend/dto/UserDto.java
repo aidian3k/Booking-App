@@ -1,14 +1,15 @@
 package aidian3k.project.bookingappbackend.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import aidian3k.project.bookingappbackend.entity.User;
+import lombok.*;
 
 import java.util.Date;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
     private Integer id;
     private String email;
@@ -16,4 +17,13 @@ public class UserDto {
     private String surname;
     private Date creationDate;
     private String phoneNumber;
+
+    public UserDto(User user) {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.name = user.getName();
+        this.surname = user.getSurname();
+        this.creationDate = user.getCreationDate();
+        this.phoneNumber = user.getPhoneNumber();
+    }
 }

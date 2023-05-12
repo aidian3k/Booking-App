@@ -2,13 +2,13 @@ import React, {FC} from "react";
 import {UserIconSvg} from "../../assets/UserIconSvg";
 import {Property} from "../../model/Property";
 
-export const PropertyMainInformation: FC<{property: Property}> = (props) => {
+export const PropertyMainInformation: FC<{property: Property, hostName: string}> = (props) => {
     const {property} = props;
 
     return (
         <>
             <div className={'flex gap-2'}>
-                <p className={'md:text-2xl text-xl font-semibold'}>Whole property - the host is {property.hostName}</p>
+                <p className={'md:text-2xl text-xl font-semibold'}>Whole property - the host is {props.hostName}</p>
                 <UserIconSvg/>
             </div>
 

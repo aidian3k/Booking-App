@@ -11,15 +11,18 @@ import {Property, propertyInitialState} from "../../model/Property";
 import {connector} from "../../utils/axios";
 import {ReviewList} from "../reviews/ReviewList";
 import {ReviewAddForm} from "./ReviewAddForm";
+import {User} from "../../model/User";
 
 export const PropertyPage: FC<{ propertyId: any }> = (props) => {
     const [property, setProperty] = useState<Property>(propertyInitialState);
     const [reviewAdd, setReviewAdd] = useState<boolean>(false);
+    const [host, setHost] = useState<User>({id: -1, creationDate: new Date(), email: '', surname: '', phoneNumber: '', name: ''});
 
     useEffect(() => {
         connector.get(`/api/v1/property/${props.propertyId}`)
             .then(response => {
-                setProperty(response.data);
+                setProperty(response.data.property);
+                setHost(response.data.userDto)
             })
     }, [])
 
@@ -33,12 +36,12 @@ export const PropertyPage: FC<{ propertyId: any }> = (props) => {
                 <p className={'text-serif truncate'}>{`${property.country}, ${property.city}, ${property.street}`}</p>
             </a>
 
-            <PropertyImages/>
+            <PropertyImages photos={property.photos}/>
 
             <div className={'grid md:grid-cols-2 grid-cols-1 gap-2 md:mt-4 mt-2'}>
                 <div>
                     <div className={'flex gap-1 flex-col'}>
-                        <PropertyMainInformation property={property}/>
+                        <PropertyMainInformation property={property} hostName={host.name}/>
                         <PropertyBreak/>
                         <PropertyUtils property={property}/>
                         <PropertyBreak/>
@@ -55,7 +58,7 @@ export const PropertyPage: FC<{ propertyId: any }> = (props) => {
                 <PropertyBreak/>
             </div>
 
-            <HostInformation hostName={property.hostName} joinDate={property.joinDate}/>
+            <HostInformation hostName={host.name} joinDate={new Date()}/>
             <p className={'text-xl font-serif font-semibold text-center'}>Reviews about the host:</p>
             <ReviewList/>
 
@@ -66,7 +69,7 @@ export const PropertyPage: FC<{ propertyId: any }> = (props) => {
                 ><p className={'text-lg text-white font-serif font-semibold'}>Add new review</p></button>
             </div>
 
-            <ReviewAddForm reviewAdd={reviewAdd} setReviewAdd={setReviewAdd} userName={property.hostName} userId={property.hostId}/>
+            <ReviewAddForm reviewAdd={reviewAdd} setReviewAdd={setReviewAdd} userName={host.name} userId={host.id}/>
             <div className={'w-full h-5'}></div>
         </div>
     )

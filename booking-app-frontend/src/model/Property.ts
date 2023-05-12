@@ -5,7 +5,7 @@ export interface Property {
     country: string,
     city: string,
     street: string,
-    photos: File[],
+    photos: any[],
     description: string,
     wifi: boolean,
     placeToWork: boolean,

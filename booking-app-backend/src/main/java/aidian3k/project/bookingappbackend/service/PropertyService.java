@@ -1,8 +1,6 @@
 package aidian3k.project.bookingappbackend.service;
 
-import aidian3k.project.bookingappbackend.dto.MainPagePropertyDto;
-import aidian3k.project.bookingappbackend.dto.ProfileAccommodationDto;
-import aidian3k.project.bookingappbackend.dto.PropertyDto;
+import aidian3k.project.bookingappbackend.dto.*;
 import aidian3k.project.bookingappbackend.entity.Photo;
 import aidian3k.project.bookingappbackend.entity.Property;
 import aidian3k.project.bookingappbackend.entity.User;
@@ -25,8 +23,12 @@ public class PropertyService {
     private final UserService userService;
     private final PhotoService photoService;
 
-    public Property getPropertyById(Long propertyId) {
-        return propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("The property has not been found!"));
+    public SinglePropertyPageDto getPropertyById(Long propertyId) {
+        Property property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("The property has not been found!"));
+        User host = property.getUser();
+        UserDto userDto = new UserDto(host);
+
+        return SinglePropertyPageDto.builder().userDto(userDto).property(property).build();
     }
 
     public Property saveSingleProperty(Property property) {
@@ -45,7 +47,7 @@ public class PropertyService {
                 .description(propertyDto.getDescription())
                 .wifi(propertyDto.isWifi())
                 .placeToWork(propertyDto.isPlaceToWork())
-                .pool(propertyDto.isPool())  // Corrected assignment
+                .pool(propertyDto.isPool())
                 .allowedAnimals(propertyDto.isAllowedAnimals())
                 .kitchen(propertyDto.isKitchen())
                 .airConditioning(propertyDto.isAirConditioning())
