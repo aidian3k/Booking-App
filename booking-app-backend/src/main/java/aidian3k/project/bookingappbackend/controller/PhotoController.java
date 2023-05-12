@@ -37,7 +37,7 @@ public class PhotoController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Integer> addNewImage(@RequestParam("photo") MultipartFile file) {
+    public ResponseEntity<Photo> addNewImage(@RequestParam("photo") MultipartFile file) {
         return new ResponseEntity<>(photoService.addNewImage(file), HttpStatus.CREATED);
     }
 }

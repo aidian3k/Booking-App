@@ -1,11 +1,10 @@
 package aidian3k.project.bookingappbackend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Blob;
+import java.util.Objects;
 
 @Entity(name = "photos")
 @Getter
@@ -20,11 +19,12 @@ public class Photo {
     @Schema(description = "The photo's unique Id", example = "1")
     private Integer photoId;
 
+    private String type;
+
     @Lob
     @Schema(description = "The actual photo stored in database")
     @Column(nullable = false)
-    @JsonIgnore
-    private Blob data;
+    private byte[] data;
 
     @Override
     public boolean equals(Object comparedObject) {
@@ -34,6 +34,6 @@ public class Photo {
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hashCode(photoId);
     }
 }

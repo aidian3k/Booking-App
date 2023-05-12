@@ -3,12 +3,15 @@ package aidian3k.project.bookingappbackend.controller;
 import aidian3k.project.bookingappbackend.dto.MainPagePropertyDto;
 import aidian3k.project.bookingappbackend.dto.ProfileAccommodationDto;
 import aidian3k.project.bookingappbackend.dto.PropertyDto;
-import aidian3k.project.bookingappbackend.dto.PropertyRequest;
 import aidian3k.project.bookingappbackend.entity.Property;
 import aidian3k.project.bookingappbackend.service.PropertyService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -21,13 +24,13 @@ public class PropertyController {
         this.propertyService = propertyService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Property> createNewProperty(@RequestBody PropertyRequest propertyRequest) {
-        Integer userId = propertyRequest.getUserId();
-        PropertyDto propertyDto = propertyRequest.getPropertyDto();
-        List<Long> photosId = propertyRequest.getPhotosId();
+    @PostMapping(path = "/add", consumes = {"multipart/form-data"})
+    public ResponseEntity<Property> createNewProperty(MultipartHttpServletRequest request) throws JsonProcessingException {
+        Integer userId = Integer.valueOf(request.getParameter("userId"));
+        PropertyDto propertyDto = new ObjectMapper().readValue(request.getParameter("propertyDto"), PropertyDto.class);
+        List<MultipartFile> photos = request.getFiles("photos");
 
-        return new ResponseEntity<>(propertyService.addNewProperty(userId, propertyDto, photosId), HttpStatus.CREATED);
+        return new ResponseEntity<>(propertyService.addNewProperty(userId, propertyDto, photos), HttpStatus.CREATED);
     }
 
     @GetMapping("/{propertyId}")

@@ -1,5 +1,4 @@
-import {Button, TextField} from "@mui/material";
-import SendIcon from '@mui/icons-material/Send';
+import {TextField} from "@mui/material";
 import React, {FC, useState} from "react";
 import NetworkWifiIcon from "@mui/icons-material/NetworkWifi";
 import PetsIcon from "@mui/icons-material/Pets";
@@ -17,7 +16,7 @@ import {AccommodationError} from "../../model/AccommodationError";
 import {PropertyRequest} from "../../model/PropertyRequest";
 import {User} from "../../model/User";
 import {useAppSelector} from "../../hooks/reduxHooks";
-import axios, {AxiosError} from "axios";
+import {AxiosError} from "axios";
 import {connector} from "../../utils/axios";
 import {ApiErrorObject} from "../../model/ApiErrorObject";
 
@@ -26,7 +25,7 @@ export const AccommodationForm: FC = () => {
     const [country, setCountry] = useState<string>('');
     const [city, setCity] = useState<string>('');
     const [street, setStreet] = useState<string>('');
-    const [images, setImages] = useState<File[]>([]);
+    const [images, setImages] = useState<Blob[]>([]);
     const [description, setDescription] = useState<string>('');
     const [wifi, setWifi] = useState<boolean>(false);
     const [placeToWork, setPlaceToWork] = useState<boolean>(false);
@@ -42,7 +41,6 @@ export const AccommodationForm: FC = () => {
     const [numberOfBedrooms, setNumberOfBedrooms] = useState<number>(1);
     const [pricePerNight, setPricePerNight] = useState<number>(1);
     const [priceCleaning, setPriceCleaning] = useState<number>(1);
-    const [photosId, setPhotosId] = useState<any>([]);
     const [error, setError] = useState<AccommodationError>({
         title: false,
         city: false,
@@ -88,31 +86,6 @@ export const AccommodationForm: FC = () => {
         }
     }
 
-    const addNewImage = async (photo: File, photosId: number[]) => {
-        try {
-            const formData = new FormData();
-            formData.append('photo', photo);
-
-            const response = await axios.post('http://localhost:8080/api/v1/photo/add', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-
-            const id: number = response.data;
-            const updatedPhotosId = [...photosId, id];
-            setPhotosId(updatedPhotosId);
-        } catch (error) {
-            console.debug('Wystąpił błąd podczas przesyłania zdjęcia:', error);
-        }
-    };
-
-    async function getPhotosId(images: File[], photosId: number[]) {
-        for (const image of images) {
-            await addNewImage(image, photosId);
-        }
-    }
-
     async function handleAddButton() {
         await checkAccommodationInfo();
 
@@ -143,17 +116,30 @@ export const AccommodationForm: FC = () => {
         };
 
         const userId: number = user.id;
-        await getPhotosId(images, photosId);
 
-        const request = {propertyDto: propertyRequest, photosId: photosId, userId: 1};
-        debugger
+        const request = {
+            propertyDto: propertyRequest, photos: images, userId: 1
+        };
+
+        const formData: FormData = new FormData();
+        formData.append('userId', request.userId.toString());
+        formData.append('propertyDto', JSON.stringify(request.propertyDto));
+
+        for (let i = 0; i < images.length; ++i) {
+            formData.append('photos', images[i]);
+        }
+
 
         try {
             setLoading(true);
 
             await new Promise(resolve => setTimeout(resolve, 2000));
 
-            await connector.post('/api/v1/property/add', request);
+            await connector.post('/api/v1/property/add', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
         } catch (error: any) {
             const axiosError: AxiosError = error as AxiosError;
             const errorData = axiosError.response?.data as ApiErrorObject | undefined;
@@ -205,19 +191,8 @@ export const AccommodationForm: FC = () => {
                 />
 
                 <InputDescription heading={'Photos'} helperText={'The more photos, the better it is!'}/>
-                <div className={'grid grid-cols-4 gap-2'}>
-                    <TextField label={'Add photo using link'}
-                               placeholder={'Place here link to photo!'}
-                               size={'small'}
-                               className={'col-span-3'}
-                    />
 
-                    <Button variant="contained" endIcon={<SendIcon/>} color={'secondary'}>
-                        <p className={'font-serif md:text-xl text-xs text-white-300'}>SEND</p>
-                    </Button>
-                </div>
-
-                <p className={'text-xl text-black font-bold font-serif text-center'}>Or upload it from your device!</p>
+                <p className={'text-xl text-black font-bold font-serif text-center'}>Upload photos from your device!</p>
                 <UploadForm images={images} setImages={setImages}/>
 
 

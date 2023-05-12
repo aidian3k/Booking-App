@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,7 +32,7 @@ public class Property {
     private String street;
 
     @OneToMany
-    private List<Photo> photos;
+    private List<Photo> photos = new ArrayList<>();
 
     @Column(nullable = false)
     private String description;
@@ -85,6 +86,6 @@ public class Property {
 
     @OneToMany(mappedBy = "property")
     @JsonIgnore
-    private List<Booking> bookings;
+    private List<Booking> bookings = new ArrayList<>();
 
 }

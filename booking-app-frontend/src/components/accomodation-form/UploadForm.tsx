@@ -1,4 +1,5 @@
-import React, {FC, useState} from "react";
+import React, {FC} from "react";
+import {PhotoCamera} from "@mui/icons-material";
 
 export const UploadForm:FC<any> = (props) => {
     const {images, setImages} = props;
@@ -12,9 +13,8 @@ export const UploadForm:FC<any> = (props) => {
 
     return (
         <div className="flex flex-col items-center justify-center">
-
             <label htmlFor="image-upload" className="mb-4 cursor-pointer">
-                <span className="text-lg font-medium text-gray-700">Choose a photo</span>
+                <PhotoCamera color={'primary'}/>
                 <input
                     id="image-upload"
                     type="file"
