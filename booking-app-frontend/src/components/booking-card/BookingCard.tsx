@@ -1,11 +1,25 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {StarSvg} from "../../assets/StarSvg";
 import {Property} from "../../model/Property";
+import {connector} from "../../utils/axios";
 
-export const BookingCard: FC<{property: Property}> = (props) => {
+export const BookingCard: FC<{property: Property, hostId: number}> = (props) => {
     const [checkIn, setCheckIn] = useState<Date>(new Date());
     const [checkOut, setCheckOut] = useState<Date>(new Date());
     const [numberOfGuests, setNumberOfGuests] = useState<number>(1);
+    const [propertyRating, setPropertyRating] = useState<number>(2);
+
+    useEffect(() => {
+        if(props.hostId === -1) {
+            return;
+        }
+
+        connector.get(`http://localhost:8080/api/v1/user/statistics/stars/${props.hostId}`)
+            .then(response => {
+                setPropertyRating(response.data);
+            });
+    }, []);
+
     const {property} = props;
 
     function getDateSubtractionInDays(firstDate: Date, secondDate: Date) {
@@ -43,7 +57,7 @@ export const BookingCard: FC<{property: Property}> = (props) => {
                     <p className={'font-serif text-2xl'}>{`${property.price}$ / per night}`}</p>
                     <div className={'flex gap-1 items-center'}>
                         <StarSvg/>
-                        <p className={'text-serif text-sm'}>{property.rating},0</p>
+                        <p className={'text-serif text-sm'}>{propertyRating},0</p>
                     </div>
                 </div>
 

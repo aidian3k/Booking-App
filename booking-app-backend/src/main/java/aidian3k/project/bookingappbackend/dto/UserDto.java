@@ -1,7 +1,11 @@
 package aidian3k.project.bookingappbackend.dto;
 
 import aidian3k.project.bookingappbackend.entity.User;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 

@@ -19,6 +19,7 @@ import {useAppSelector} from "../../hooks/reduxHooks";
 import {AxiosError} from "axios";
 import {connector} from "../../utils/axios";
 import {ApiErrorObject} from "../../model/ApiErrorObject";
+import {NavigateFunction, useNavigate} from "react-router-dom";
 
 export const AccommodationForm: FC = () => {
     const [title, setTitle] = useState<string>('');
@@ -53,6 +54,7 @@ export const AccommodationForm: FC = () => {
         pricePerNight: false,
         internal: false
     });
+    const navigate: NavigateFunction = useNavigate();
     const user: User = useAppSelector(state => state.user.value);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -140,6 +142,8 @@ export const AccommodationForm: FC = () => {
                     'Content-Type': 'multipart/form-data',
                 }
             });
+
+            navigate('/');
         } catch (error: any) {
             const axiosError: AxiosError = error as AxiosError;
             const errorData = axiosError.response?.data as ApiErrorObject | undefined;

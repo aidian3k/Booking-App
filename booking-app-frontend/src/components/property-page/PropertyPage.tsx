@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useLayoutEffect, useState} from "react";
 import {PropertyImages} from "./PropertyImages";
 import {LocationSvg} from "../../assets/LocationSvg";
 import {PropertyBreak} from "./PropertyBreak";
@@ -16,9 +16,9 @@ import {User} from "../../model/User";
 export const PropertyPage: FC<{ propertyId: any }> = (props) => {
     const [property, setProperty] = useState<Property>(propertyInitialState);
     const [reviewAdd, setReviewAdd] = useState<boolean>(false);
-    const [host, setHost] = useState<User>({id: -1, creationDate: new Date(), email: '', surname: '', phoneNumber: '', name: ''});
+    const [host, setHost] = useState<User>({id: 1, creationDate: new Date(), email: '', surname: '', phoneNumber: '', name: ''});
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         connector.get(`/api/v1/property/${props.propertyId}`)
             .then(response => {
                 setProperty(response.data.property);
@@ -51,7 +51,7 @@ export const PropertyPage: FC<{ propertyId: any }> = (props) => {
 
                 </div>
 
-                <BookingCard property={property}/>
+                <BookingCard property={property} hostId={host.id}/>
             </div>
 
             <div className={'my-2'}>
