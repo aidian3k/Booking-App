@@ -23,7 +23,7 @@ import {ApiErrorObject} from "../../model/ApiErrorObject";
 
 export const AccommodationEditForm: FC = () => {
     const [property, setProperty] = useState<Property>(propertyInitialState);
-    const id = useParams();
+    const routerParams = useParams();
 
     useEffect(() => {
         fetchData();
@@ -31,11 +31,9 @@ export const AccommodationEditForm: FC = () => {
 
     async function fetchData() {
         await connector
-            .get('/api/v1/property/1')
+            .get(`/api/v1/property/${routerParams.id}`)
             .then((response) => setProperty(response.data.property));
     }
-
-    console.log(property)
 
     useEffect(() => {
         if (property) {
@@ -43,7 +41,6 @@ export const AccommodationEditForm: FC = () => {
             setCountry(property.country);
             setCity(property.city);
             setStreet(property.street);
-            setImages(property.photos);
             setDescription(property.description);
             setWifi(property.wifi);
             setPlaceToWork(property.placeToWork);
@@ -66,7 +63,6 @@ export const AccommodationEditForm: FC = () => {
     const [country, setCountry] = useState<string>(property.country);
     const [city, setCity] = useState<string>(property.city);
     const [street, setStreet] = useState<string>(property.street);
-    const [images, setImages] = useState<Blob[]>(property.photos);
     const [description, setDescription] = useState<string>(property.description);
     const [wifi, setWifi] = useState<boolean>(property.wifi);
     const [placeToWork, setPlaceToWork] = useState<boolean>(property.placeToWork);
@@ -101,37 +97,46 @@ export const AccommodationEditForm: FC = () => {
     async function checkAccommodationInfo() {
         if (title.length == 0) {
             await setError({...error, internal: true, title: true});
+            return;
         }
 
         if (city.length == 0) {
             await setError({...error, internal: true, city: true});
+            return;
         }
 
         if (country.length == 0) {
             await setError({...error, internal: true, country: true});
+            return;
         }
 
         if (description.length == 0) {
             await setError({...error, internal: true, description: true});
+            return;
         }
 
         if (extraInformation.length == 0) {
             await setError({...error, internal: true, extraInformation: true});
+            return;
         }
 
         if (priceCleaning <= 0) {
             await setError({...error, internal: true, title: true});
+            return;
         }
 
         if (pricePerNight <= 0) {
             await setError({...error, internal: true, pricePerNight: true});
+            return;
         }
     }
 
     async function handleEditButton() {
         await checkAccommodationInfo();
+        setLoading(true);
 
         if (error.internal) {
+            setLoading(false);
             return;
         }
 
@@ -159,30 +164,20 @@ export const AccommodationEditForm: FC = () => {
 
         const userId: number = user.id;
 
-        const request = {
-            propertyDto: propertyRequest, photos: images, userId: 1
-        };
-
         const formData: FormData = new FormData();
-        formData.append('userId', request.userId.toString());
-        formData.append('propertyDto', JSON.stringify(request.propertyDto));
-
-        for (let i = 0; i < images.length; ++i) {
-            formData.append('photos', images[i]);
-        }
+        formData.append('propertyDto', JSON.stringify(propertyRequest));
 
         try {
-            setLoading(true);
-
             await new Promise(resolve => setTimeout(resolve, 2000));
+            debugger
 
-            await connector.put(`/api/v1/property/edit/${property.id}`, formData, {
+            await connector.put(`/api/v1/property/${1}/${routerParams.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
             });
 
-            navigate('/');
+            navigate('/profile/accommodations');
         } catch (error: any) {
             const axiosError: AxiosError = error as AxiosError;
             const errorData = axiosError.response?.data as ApiErrorObject | undefined;
@@ -363,11 +358,16 @@ export const AccommodationEditForm: FC = () => {
                     </div>
                 </div>
 
+                {error.internal && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center" role="alert">
+                    <strong className="font-bold">Error: </strong>
+                    <span className="block sm:inline">{'There is an error in the form!'}</span>
+                </div>}
+
                 <button
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-full transition-all"
                     onClick={() => handleEditButton()}
                 >
-                    <p className={'text-xl font-serif text-white font-semibold'}>{!loading ? 'Create a place!' : 'Loading...'}</p>
+                    <p className={'text-xl font-serif text-white font-semibold'}>{!loading ? 'Edit property!' : 'Loading...'}</p>
                 </button>
             </div>
         </div>

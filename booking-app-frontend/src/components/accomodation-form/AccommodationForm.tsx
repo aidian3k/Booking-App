@@ -59,39 +59,48 @@ export const AccommodationForm: FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     async function checkAccommodationInfo() {
-        if (title.length == 0) {
+        if (title.length === 0) {
             await setError({...error, internal: true, title: true});
+            return;
         }
 
         if (city.length == 0) {
             await setError({...error, internal: true, city: true});
+            return;
         }
 
-        if (country.length == 0) {
+        if (country.length === 0) {
             await setError({...error, internal: true, country: true});
+            return;
         }
 
-        if (description.length == 0) {
+        if (description.length === 0) {
             await setError({...error, internal: true, description: true});
+            return;
         }
 
-        if (extraInformation.length == 0) {
+        if (extraInformation.length === 0) {
             await setError({...error, internal: true, extraInformation: true});
+            return;
         }
 
         if (priceCleaning <= 0) {
             await setError({...error, internal: true, title: true});
+            return;
         }
 
         if (pricePerNight <= 0) {
             await setError({...error, internal: true, pricePerNight: true});
+            return;
         }
     }
 
     async function handleAddButton() {
         await checkAccommodationInfo();
+        setLoading(true);
 
         if (error.internal) {
+            setLoading(false);
             return;
         }
 
@@ -133,8 +142,6 @@ export const AccommodationForm: FC = () => {
 
 
         try {
-            setLoading(true);
-
             await new Promise(resolve => setTimeout(resolve, 2000));
 
             await connector.post('/api/v1/property/add', formData, {
@@ -149,7 +156,6 @@ export const AccommodationForm: FC = () => {
             const errorData = axiosError.response?.data as ApiErrorObject | undefined;
 
             await new Promise(resolve => setTimeout(resolve, 2000));
-            console.log(errorData);
         } finally {
             setLoading(false);
         }
@@ -319,6 +325,11 @@ export const AccommodationForm: FC = () => {
                         />
                     </div>
                 </div>
+
+                {error.internal && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center" role="alert">
+                    <strong className="font-bold">Error: </strong>
+                    <span className="block sm:inline">{'There is an error in the form!'}</span>
+                </div>}
 
                 <button
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-full transition-all"

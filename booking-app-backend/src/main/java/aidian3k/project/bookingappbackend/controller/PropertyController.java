@@ -10,7 +10,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -57,5 +63,14 @@ public class PropertyController {
     @DeleteMapping("/profile/{userId}/{propertyId}")
     public void deleteUserProperty(@PathVariable Integer userId, @PathVariable Long propertyId) {
         propertyService.deleteUserPropertyById(userId, propertyId);
+    }
+
+    @PutMapping(path = "/{userId}/{propertyId}", consumes = {"multipart/form-data"})
+    public ResponseEntity<Property> editUserProperty(MultipartHttpServletRequest request, @PathVariable Integer userId
+            , @PathVariable Long propertyId) throws JsonProcessingException {
+        PropertyDto propertyDto = new ObjectMapper()
+                .readValue(request.getParameter("propertyDto"), PropertyDto.class);
+
+        return new ResponseEntity<>(propertyService.editUserProperty(propertyDto, userId, propertyId), HttpStatus.OK);
     }
 }

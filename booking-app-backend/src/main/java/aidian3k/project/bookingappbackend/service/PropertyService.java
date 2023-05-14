@@ -39,7 +39,21 @@ public class PropertyService {
     public Property addNewProperty(Integer userId, PropertyDto propertyDto, List<MultipartFile> files) {
         User user = userService.getSingleUserById(userId);
 
-        Property property = Property.builder()
+        Property property = mapPropertyDtoToProperty(propertyDto, user);
+
+        for (MultipartFile file : files) {
+            Photo singlePhoto = photoService.addNewImage(file);
+            property.getPhotos().add(singlePhoto);
+        }
+
+        user.getProperties().add(property);
+        userService.saveSingleUser(user);
+
+        return saveSingleProperty(property);
+    }
+
+    private static Property mapPropertyDtoToProperty(PropertyDto propertyDto, User user) {
+        return Property.builder()
                 .title(propertyDto.getTitle())
                 .country(propertyDto.getCountry())
                 .city(propertyDto.getCity())
@@ -64,16 +78,6 @@ public class PropertyService {
                 .photos(new ArrayList<>())
                 .bookings(new ArrayList<>())
                 .build();
-
-        for (MultipartFile file : files) {
-            Photo singlePhoto = photoService.addNewImage(file);
-            property.getPhotos().add(singlePhoto);
-        }
-
-        user.getProperties().add(property);
-        userService.saveSingleUser(user);
-
-        return saveSingleProperty(property);
     }
 
     public List<Property> getAllProperties() {
@@ -137,5 +141,20 @@ public class PropertyService {
                 .orElseThrow(IllegalArgumentException::new);
         
         propertyRepository.delete(property);
+    }
+
+    @Transactional
+    public Property editUserProperty(PropertyDto propertyDto, Integer userId, Long propertyId) {
+        Property property = propertyRepository.findById(propertyId).orElseThrow();
+        User user = userService.getSingleUserById(userId);
+        Property mappedProperty = mapPropertyDtoToProperty(propertyDto, user);
+        mappedProperty.setPhotos(property.getPhotos());
+        mappedProperty.setId(property.getId());
+
+        user.getProperties().removeIf(foundProperty -> foundProperty.getId().equals(propertyId));
+        user.getProperties().add(mappedProperty);
+        userService.saveSingleUser(user);
+
+        return saveSingleProperty(property);
     }
 }
