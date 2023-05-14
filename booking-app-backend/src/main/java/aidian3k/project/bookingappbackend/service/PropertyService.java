@@ -151,10 +151,12 @@ public class PropertyService {
         mappedProperty.setPhotos(property.getPhotos());
         mappedProperty.setId(property.getId());
 
+        Property addedProperty = saveSingleProperty(mappedProperty);
+
         user.getProperties().removeIf(foundProperty -> foundProperty.getId().equals(propertyId));
-        user.getProperties().add(mappedProperty);
+        user.getProperties().add(addedProperty);
         userService.saveSingleUser(user);
 
-        return saveSingleProperty(property);
+        return addedProperty;
     }
 }
