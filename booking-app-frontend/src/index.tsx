@@ -12,6 +12,7 @@ import {UserAccommodationPage} from "./pages/UserAccommodationPage";
 import {AccommodationAddPage} from "./pages/AccommodationAddPage";
 import {MyBookingsPage} from "./pages/MyBookingsPage";
 import {MainPage} from "./pages/MainPage";
+import {AccommodationEditPage} from "./pages/AccommodationEditPage";
 
 const routes = createBrowserRouter([
         {
@@ -37,6 +38,10 @@ const routes = createBrowserRouter([
         {
             path: '/profile/accommodations/add',
             element: <AccommodationAddPage/>
+        },
+        {
+          path: '/profile/accommodations/edit/:id',
+          element: <AccommodationEditPage/>
         },
         {
             path: '*',

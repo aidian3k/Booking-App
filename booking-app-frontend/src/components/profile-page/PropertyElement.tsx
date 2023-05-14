@@ -1,9 +1,11 @@
 import React, {FC, useState} from "react";
 import {PropertyElementModel} from "../../pages/UserAccommodationPage";
 import {DeletingPopUp} from "./DeletingPopUp";
+import {NavigateFunction, useNavigate} from "react-router-dom";
 
 export const PropertyElement: FC<{property: PropertyElementModel}> = (props) => {
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
+    const navigate: NavigateFunction = useNavigate();
 
     function handleDeleteButton() {
         setIsDeleting(true);
@@ -41,7 +43,9 @@ export const PropertyElement: FC<{property: PropertyElementModel}> = (props) => 
                         <p className={'font-serif text-white '}>Delete accommodation</p>
                     </button>
 
-                    <button className={'cursor-pointer bg-orange-400 hover:scale-105 transition-all hover:bg-orange-500 shadow rounded-full p-2 mt-1'}>
+                    <button className={'cursor-pointer bg-orange-400 hover:scale-105 transition-all hover:bg-orange-500 shadow rounded-full p-2 mt-1'}
+                        onClick={() => navigate(`/profile/accommodations/edit/${props.property.id}`)}
+                    >
                         <p className={'font-serif text-white '}>Edit accommodation</p>
                     </button>
                 </div>
