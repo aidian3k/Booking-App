@@ -98,7 +98,15 @@ public class AuthenticationService {
     private AuthenticationResponse getAuthenticationResponse(User user, String jwtToken, String refreshToken) {
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
-        UserDto userDto = UserDto.builder().name(user.getName()).surname(user.getSurname()).phoneNumber(user.getPhoneNumber()).email(user.getEmail()).creationDate(user.getCreationDate()).id(user.getId()).build();
+        UserDto userDto = UserDto
+                .builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .phoneNumber(user.getPhoneNumber())
+                .email(user.getEmail())
+                .creationDate(user.getCreationDate())
+                .id(user.getId())
+                .build();
 
         return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).requestDate(new Date()).user(userDto).build();
     }

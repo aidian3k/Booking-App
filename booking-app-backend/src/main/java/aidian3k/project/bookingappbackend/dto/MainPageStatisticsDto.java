@@ -11,4 +11,5 @@ public class MainPageStatisticsDto {
     private int bookedProperties;
     private int currentlyOwnedProperties;
     private int writtenReviews;
+    private int averageReview;
 }

@@ -28,7 +28,7 @@ public class UserService {
     public MainPageStatisticsDto getUserStatisticsInfo(Integer userId) {
         User user = getSingleUserById(userId);
 
-        return new MainPageStatisticsDto(user.getBookings().size(), user.getProperties().size(), user.getReviews().size());
+        return new MainPageStatisticsDto(user.getBookings().size(), user.getProperties().size(), user.getReviews().size(), getUserAverageReviewScale(userId));
     }
 
     public int getUserAverageReviewScale(Integer userId) {

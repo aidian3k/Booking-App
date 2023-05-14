@@ -1,23 +1,43 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
+import {PropertyElementModel} from "../../pages/UserAccommodationPage";
+import {DeletingPopUp} from "./DeletingPopUp";
 
-export const PropertyElement: FC = () => {
+export const PropertyElement: FC<{property: PropertyElementModel}> = (props) => {
+    const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
+    function handleDeleteButton() {
+        setIsDeleting(true);
+    }
+
     return (
         <>
             <div className={'w-full bg-gray-300 hover:scale-105 transition-all cursor-pointer border-1 outline'}>
                 <div className={'flex gap-2 md:p-4 p-2'}>
-                    <div className={'md:block flex items-center rounded-2xl w-52'}>
+                    <div className={'md:block flex items-center rounded-2xl w-64'}>
                         <img className={'rounded-2xl object-cover'} alt={'image'}
-                             src={'https://fujifilm-x.com/wp-content/uploads/2021/01/gfx100s_sample_04_thum-1.jpg'}/>
+                             src={`data:image/png;base64,${props.property.photo.data}`}/>
                     </div>
 
-                    <div className={'w-4/5 bg-red p-1 max-h-44 overflow-hidden'}>
-                        <p className={'md:text-2xl text-base font-serif font-semibold'}>Amazing apartment in Austria</p>
-                        <p className={'md:text-base text-xs font-serif md:overflow-hidden'}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid pariatur, ullam. Alias architecto dolorem dolores eaque enim eum exercitationem nemo nisi perspiciatis. Accusantium assumenda earum odit, porro quia quisquam ut. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem, officia, reprehenderit. Ab doloribus dolorum in molestias nisi rem tempore tenetur voluptas! Assumenda consequatur error minus natus quas vel voluptatem voluptatibus.</p>
+                    <div className={'w-4/5 bg-red p-1 max-h-52 overflow-hidden'}>
+                        <p className={'md:text-2xl text-base font-serif font-semibold'}>{props.property.title}</p>
+                        <p className={'font-semibold text-xl font-serif'}>Description:</p>
+                        <p className={'md:text-base text-xs font-serif md:overflow-hidden'}>{props.property.description}</p>
+                        <p className={'font-semibold text-xl font-serif'}>Extra information:</p>
+                        <p className={'md:text-base text-xs font-serif md:overflow-hidden'}>{props.property.extraInformation}</p>
                     </div>
                 </div>
 
+                <div className={'flex gap-2 justify-between p-2'}>
+                    <p className={'text-base font-serif font-semibold tex-center'}>Country: {props.property.country}</p>
+                    <p className={'text-base font-serif font-semibold text-center'}>City: {props.property.city}</p>
+                    <p className={'text-base font-serif font-semibold text-center'}>Price per night: ${props.property.pricePerNight}</p>
+                    <p className={'text-base font-serif font-semibold text-center'}>Street: {props.property.street}</p>
+                </div>
+
                 <div className={'flex gap-2 justify-center py-2 md:px-2'}>
-                    <button className={'cursor-pointer bg-red-500 hover:scale-105 transition-all hover:bg-red-700 rounded-full p-2 mt-1'}>
+                    <button className={'cursor-pointer bg-red-500 hover:scale-105 transition-all hover:bg-red-700 rounded-full p-2 mt-1'}
+                    onClick={() => handleDeleteButton()}
+                    >
                         <p className={'font-serif text-white '}>Delete accommodation</p>
                     </button>
 
@@ -26,6 +46,8 @@ export const PropertyElement: FC = () => {
                     </button>
                 </div>
             </div>
+
+            <DeletingPopUp isDeleting={isDeleting} setIsDeleting={setIsDeleting} property={props.property}/>
         </>
 
     )

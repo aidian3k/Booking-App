@@ -3,14 +3,14 @@ import {StarSvg} from "../../assets/StarSvg";
 import {Property} from "../../model/Property";
 import {connector} from "../../utils/axios";
 
-export const BookingCard: FC<{property: Property, hostId: number}> = (props) => {
+export const BookingCard: FC<{ property: Property, hostId: number }> = (props) => {
     const [checkIn, setCheckIn] = useState<Date>(new Date());
     const [checkOut, setCheckOut] = useState<Date>(new Date());
     const [numberOfGuests, setNumberOfGuests] = useState<number>(1);
     const [propertyRating, setPropertyRating] = useState<number>(2);
 
     useEffect(() => {
-        if(props.hostId === -1) {
+        if (props.hostId === -1) {
             return;
         }
 
@@ -23,24 +23,24 @@ export const BookingCard: FC<{property: Property, hostId: number}> = (props) => 
     const {property} = props;
 
     function getDateSubtractionInDays(firstDate: Date, secondDate: Date) {
-        return (firstDate.valueOf() - secondDate.valueOf()) / (1000 * 60 * 60 * 24);
+        return Math.floor((firstDate.getTime() - secondDate.getTime()) / (1000 * 60 * 60 * 24));
     }
 
-    function calculateFinalPrice() {
+    function calculateFinalPrice(): number {
         const numberOfDays = getDateSubtractionInDays(checkOut, checkIn);
 
         return property.price * numberOfDays * numberOfGuests;
     }
 
-    function getCleaningFee() {
-        const numberOfDays = getDateSubtractionInDays(checkOut, checkIn);
+    function getCleaningFee(): number {
+        const numberOfDays: number = getDateSubtractionInDays(checkOut, checkIn);
 
         return property.cleaningFee * numberOfDays;
     }
 
     function changeNumberOfGuests(event: any) {
-        if (event.target.value - 1 <= 0) {
-            setNumberOfGuests(event.target.value);
+        if (event.target.value <= 0) {
+            setNumberOfGuests(1);
         } else {
             setNumberOfGuests(event.target.value);
         }
@@ -48,6 +48,18 @@ export const BookingCard: FC<{property: Property, hostId: number}> = (props) => 
 
     function processCheckout() {
         console.log(checkIn, checkOut, numberOfGuests)
+    }
+
+    function changeCheckoutDate(checkoutDate: Date) {
+        if (checkoutDate.getTime() > checkIn.getTime()) {
+            setCheckOut(checkoutDate);
+        }
+    }
+
+    function changeCheckInDate(checkIn: Date) {
+        if (checkIn.getTime() < checkIn.getTime()) {
+            setCheckIn(checkIn);
+        }
     }
 
     return (
@@ -65,22 +77,26 @@ export const BookingCard: FC<{property: Property, hostId: number}> = (props) => 
                     <div className={'flex'}>
                         <div className={'py-3 px-4 border-r'}>
                             <label>Check in:</label>
-                            <input type={'date'} onChange={(event: any)  => setCheckIn(new Date(event.target.value))}/>
+                            <input type={'date'} onChange={(event: any) => changeCheckInDate(new Date(event.target.value))}/>
                         </div>
 
                         <div className={'py-3 px-4'}>
                             <label>Check out:</label>
-                            <input type={'date'} onChange={(event: any)  => setCheckOut(new Date(event.target.value))}/>
+                            <input type={'date'}
+                                   onChange={(event: any) => changeCheckoutDate(new Date(event.target.value))}/>
                         </div>
                     </div>
 
                     <div className={'py-3 px-4 border-t flex flex-col items-centers text-center'}>
                         <p>Number of guests:</p>
-                        <input type={'number'} value={numberOfGuests} onChange={(event: any) => changeNumberOfGuests(event)} className={'border rounded-xl text-center'}/>
+                        <input type={'number'} value={numberOfGuests}
+                               onChange={(event: any) => changeNumberOfGuests(event)}
+                               className={'border rounded-xl text-center'}/>
                     </div>
                 </div>
 
-                <button className={'w-full bg-red-500 mt-2 rounded-2xl p-2 hover:scale-105 cursor-pointer transition-all'}
+                <button
+                    className={'w-full bg-red-500 mt-2 rounded-2xl p-2 hover:scale-105 cursor-pointer transition-all'}
                     onClick={() => processCheckout()}
                 >
                     <p className={'text-lg text-white font-serif font-semibold'}>Book this place</p>
@@ -93,7 +109,8 @@ export const BookingCard: FC<{property: Property, hostId: number}> = (props) => 
                     </div>
 
                     <div className={'flex justify-between'}>
-                        <p className={'text-serif text-base underline'}>$100 x {getDateSubtractionInDays(checkOut, checkIn)} days x {numberOfGuests} guests</p>
+                        <p className={'text-serif text-base underline'}>$100
+                            x {getDateSubtractionInDays(checkOut, checkIn)} days x {numberOfGuests} guests</p>
                         <p className={'text-serif text-base'}>{calculateFinalPrice()} $</p>
                     </div>
 

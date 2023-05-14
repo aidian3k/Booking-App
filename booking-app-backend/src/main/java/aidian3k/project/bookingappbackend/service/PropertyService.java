@@ -106,7 +106,17 @@ public class PropertyService {
         List<Property> properties = getUserProperties(userId);
         
         return properties.stream()
-                .map(property -> new ProfileAccommodationDto(property.getId(), property.getTitle(), property.getDescription()))
+                .map(property -> ProfileAccommodationDto.builder()
+                        .street(property.getStreet())
+                        .id(property.getId())
+                        .photo(property.getPhotos().get(0))
+                        .city(property.getCity())
+                        .country(property.getCountry())
+                        .description(property.getDescription())
+                        .extraInformation(property.getExtraInformation())
+                        .pricePerNight(property.getPrice())
+                        .title(property.getTitle())
+                        .build())
                 .collect(Collectors.toList());
     }
 
@@ -120,6 +130,7 @@ public class PropertyService {
     
     public void deleteUserPropertyById(Integer userId, Long propertyId) {
         User user = userService.getSingleUserById(userId);
+
         Property property = user.getProperties().stream()
                 .filter(foundProperty -> foundProperty.getId().equals(propertyId))
                 .findAny()
