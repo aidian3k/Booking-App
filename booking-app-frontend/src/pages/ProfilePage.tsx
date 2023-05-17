@@ -6,9 +6,14 @@ import {Footer} from "../components/footer/Footer";
 import {Navbar} from "../components/navbar/Navbar";
 import {ReservedProperties} from "../components/profile-page/ReservedProperties";
 import {useAuth} from "../hooks/useAuth";
+import LoadingPage from "./LoadingPage";
 
 export const ProfilePage: FC = () => {
-    useAuth();
+    const isLoading = useAuth();
+
+    if (isLoading) {
+        return <LoadingPage/>
+    }
 
     return (
         <>

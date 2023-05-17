@@ -18,7 +18,6 @@ export const ProfileEditingData: FC = () => {
     const [phoneNumber, setPhone] = useState<string>(user.phoneNumber);
     const [loading, setLoading] = useState<boolean>(false);
     const [password, setPassword] = useState<string>('');
-    debugger
 
     const [error, setError] = useState<RegisterError>({
         surname: false,
@@ -38,19 +37,35 @@ export const ProfileEditingData: FC = () => {
     async function checkRegistrationData() {
         if (!nameRegex.test(name)) {
             await setError({...error, internal: true, name: true});
+            return;
         }
 
         if (!surnameRegex.test(surname)) {
             await setError({...error, internal: true, surname: true});
+            return;
         }
 
         if (!phoneRegex.test(phoneNumber)) {
             await setError({...error, internal: true, phone: true});
+            return;
         }
 
         if (!emailRegex.test(email)) {
             await setError({...error, internal: true, email: true});
+            return;
         }
+
+        setError({
+            surname: false,
+            internal: false,
+            phone: false,
+            name: false,
+            password: false,
+            checkBox: false,
+            email: false
+        });
+
+        return;
     }
 
     return (

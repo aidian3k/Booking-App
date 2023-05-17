@@ -1,13 +1,16 @@
 import React, {FC, useEffect, useState} from "react";
 import Rating from "@mui/material/Rating";
 import {ProfilePageStatistics} from "../../model/ProfilePageStatistics";
-import {connector} from "../../utils/axios";
+import {authConnector} from "../../utils/axios";
+import {useAppSelector} from "../../hooks/reduxHooks";
+import {User} from "../../model/User";
 
 export const ProfileStatistics: FC = () => {
     const [profileStatistics, setProfileStatistics] = useState<ProfilePageStatistics>({averageReview: 0, writtenReviews: 0, bookedProperties: 0, currentlyOwnedProperties: 0});
+    const user: User = useAppSelector(state => state.user.value);
 
     useEffect(() => {
-        connector.get(`/api/v1/user/statistics/${1}`)
+        authConnector(localStorage.getItem('access_token')).get(`/api/v1/user/statistics/${user.id}`)
             .then(response => setProfileStatistics(response.data));
     }, []);
 

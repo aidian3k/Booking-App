@@ -25,6 +25,7 @@ export const PropertyPage: FC<{ propertyId: any }> = (props) => {
                 setHost(response.data.userDto)
             })
     }, [])
+    debugger
 
     return (
         <div className={'bg-gray-100 md:px-20 px-5 py-2 flex-col'}>

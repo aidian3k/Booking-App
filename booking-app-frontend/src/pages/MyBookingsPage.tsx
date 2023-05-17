@@ -3,9 +3,14 @@ import {Navbar} from "../components/navbar/Navbar";
 import {Footer} from "../components/footer/Footer";
 import {MyBookingElement} from "../components/my-bookings/MyBookingElement";
 import {useAuth} from "../hooks/useAuth";
+import LoadingPage from "./LoadingPage";
 
 export const MyBookingsPage: FC = () => {
-    useAuth();
+    const isLoading = useAuth();
+
+    if (isLoading) {
+        return <LoadingPage/>
+    }
 
     return (
         <>

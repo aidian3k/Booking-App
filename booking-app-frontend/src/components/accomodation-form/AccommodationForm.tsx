@@ -17,7 +17,7 @@ import {PropertyRequest} from "../../model/PropertyRequest";
 import {User} from "../../model/User";
 import {useAppSelector} from "../../hooks/reduxHooks";
 import {AxiosError} from "axios";
-import {connector} from "../../utils/axios";
+import {authConnector} from "../../utils/axios";
 import {ApiErrorObject} from "../../model/ApiErrorObject";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 
@@ -129,7 +129,7 @@ export const AccommodationForm: FC = () => {
         const userId: number = user.id;
 
         const request = {
-            propertyDto: propertyRequest, photos: images, userId: 1
+            propertyDto: propertyRequest, photos: images, userId: userId
         };
 
         const formData: FormData = new FormData();
@@ -144,7 +144,7 @@ export const AccommodationForm: FC = () => {
         try {
             await new Promise(resolve => setTimeout(resolve, 2000));
 
-            await connector.post('/api/v1/property/add', formData, {
+            await authConnector(localStorage.getItem('access_token')).post('/api/v1/property/add', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }

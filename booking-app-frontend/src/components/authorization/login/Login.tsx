@@ -16,6 +16,7 @@ import {NavigateFunction, useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../hooks/reduxHooks";
 import {LoginRequest} from "../../../model/LoginRequest";
 import {LoginError} from "../../help-contact/LoginError";
+import {setLoggedIn} from "../../../redux/slices/AuthSlice";
 
 export const Login: FC<any> = (props) => {
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
@@ -42,6 +43,7 @@ export const Login: FC<any> = (props) => {
                 localStorage.setItem('access_token', response.data.access_token);
                 localStorage.setItem('refresh_token', response.data.refresh_token);
                 dispatch(login(response.data.user));
+                dispatch(setLoggedIn(true));
             });
 
             setLoading(false);
@@ -56,6 +58,8 @@ export const Login: FC<any> = (props) => {
             if (errorData?.numberStatus === 406) {
                 setError(true);
             }
+
+            dispatch(setLoggedIn(false));
         } finally {
             setLoading(false);
         }

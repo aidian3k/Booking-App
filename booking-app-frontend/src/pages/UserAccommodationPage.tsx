@@ -5,20 +5,30 @@ import {Footer} from "../components/footer/Footer";
 import {PropertyElement} from "../components/profile-page/PropertyElement";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {connector} from "../utils/axios";
+import {useAuth} from "../hooks/useAuth";
+import LoadingPage from "./LoadingPage";
+import {User} from "../model/User";
+import {useAppSelector} from "../hooks/reduxHooks";
 
 export const UserAccommodationPage: FC = () => {
+    const isLoading = useAuth();
     const navigate: NavigateFunction = useNavigate();
     const [properties, setProperties] = useState<PropertyElementModel[]>([]);
+    const user: User = useAppSelector(state => state.user.value);
 
 
     useEffect(() => {
-        connector.get(`/api/v1/property/profile/${1}`)
+        connector.get(`/api/v1/property/profile/${user.id}`)
             .then(response => setProperties(response.data))
-    }, []);
+    }, [user.id]);
 
     const propertyJsx: JSX.Element[] = properties.map(property => {
         return <PropertyElement property={property}/>
     })
+
+    if (isLoading) {
+        return <LoadingPage/>
+    }
 
     return (
         <>
