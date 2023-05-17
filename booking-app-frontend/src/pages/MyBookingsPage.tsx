@@ -6,7 +6,7 @@ import {useAuth} from "../hooks/useAuth";
 import LoadingPage from "./LoadingPage";
 
 export const MyBookingsPage: FC = () => {
-    const isLoading = useAuth();
+    const isLoading = useAuth(true);
 
     if (isLoading) {
         return <LoadingPage/>

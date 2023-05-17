@@ -5,7 +5,7 @@ import {PropertyList} from "../components/main-page/PropertyList";
 import {useAuth} from "../hooks/useAuth";
 
 export const MainPage: FC = () => {
-    useAuth();
+    useAuth(false);
 
     return (
         <>

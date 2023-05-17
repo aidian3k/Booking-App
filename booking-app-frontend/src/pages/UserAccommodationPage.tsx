@@ -11,11 +11,10 @@ import {User} from "../model/User";
 import {useAppSelector} from "../hooks/reduxHooks";
 
 export const UserAccommodationPage: FC = () => {
-    const isLoading = useAuth();
+    const isLoading = useAuth(true);
     const navigate: NavigateFunction = useNavigate();
     const [properties, setProperties] = useState<PropertyElementModel[]>([]);
     const user: User = useAppSelector(state => state.user.value);
-
 
     useEffect(() => {
         connector.get(`/api/v1/property/profile/${user.id}`)

@@ -8,7 +8,7 @@ import {ThunkDispatch} from "@reduxjs/toolkit";
 import {login} from "../redux/slices/UserSlice";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 
-export function useAuth() {
+export function useAuth(isNavigating: boolean) {
     const dispatch: ThunkDispatch<any, any, any> = useAppDispatch();
     const refreshToken = localStorage.getItem("refresh_token") as string | null;
     const [isLoading, setIsLoading] = useState<boolean>(true); // State to track loading state
@@ -19,7 +19,11 @@ export function useAuth() {
             if (refreshToken == null) {
                 await dispatch(setLoggedIn(false));
                 setIsLoading(false);
-                navigate('/authorization')
+
+                if (isNavigating) {
+                    navigate('/authorization')
+                }
+
                 return;
             }
 
@@ -41,7 +45,9 @@ export function useAuth() {
             dispatch(setLoggedIn(false));
             setIsLoading(false);
 
-            navigate('/authorization');
+            if (isNavigating) {
+                navigate('/authorization')
+            }
         }
     };
 

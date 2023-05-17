@@ -6,7 +6,7 @@ import {useAuth} from "../hooks/useAuth";
 import LoadingPage from "./LoadingPage";
 
 export const AccommodationEditPage: FC = () => {
-    const isLoading = useAuth();
+    const isLoading = useAuth(true);
 
     if (isLoading) {
         return <LoadingPage/>

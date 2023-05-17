@@ -1,13 +1,25 @@
 import React, {FC, useEffect, useState} from "react";
 import {StarSvg} from "../../assets/StarSvg";
 import {Property} from "../../model/Property";
-import {connector} from "../../utils/axios";
+import {authConnector, connector} from "../../utils/axios";
+import {Booking} from "../../model/Booking";
+import {NavigateFunction, useNavigate} from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../hooks/reduxHooks";
+import {User} from "../../model/User";
+import axios, {AxiosError} from "axios";
+import {ApiErrorObject} from "../../model/ApiErrorObject";
 
 export const BookingCard: FC<{ property: Property, hostId: number }> = (props) => {
     const [checkIn, setCheckIn] = useState<Date>(new Date());
     const [checkOut, setCheckOut] = useState<Date>(new Date());
     const [numberOfGuests, setNumberOfGuests] = useState<number>(1);
     const [propertyRating, setPropertyRating] = useState<number>(2);
+    const navigate: NavigateFunction = useNavigate();
+    const loggedIn: boolean = useAppSelector(state => state.auth.value);
+    const user: User = useAppSelector(state => state.user.value);
+    const dispatch = useAppDispatch();
+    const [loading, setLoading] = useState<boolean>(false);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     useEffect(() => {
         if (props.hostId === -1) {
@@ -46,8 +58,34 @@ export const BookingCard: FC<{ property: Property, hostId: number }> = (props) =
         }
     }
 
-    function processCheckout() {
-        console.log(checkIn, checkOut, numberOfGuests)
+    async function processCheckout() {
+        const newBooking: Booking = {checkIn: checkIn,
+            checkOut: checkOut,
+            numberOfGuests: numberOfGuests,
+            totalPrice: getCleaningFee() + calculateFinalPrice()};
+
+        if (!loggedIn) {
+            await setIsLoggedIn(true);
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            await authConnector(localStorage.getItem('access_token')).post(`/api/v1/booking/user/${user.id}/property/${property.id}`, newBooking);
+
+            navigate('/profile/bookings');
+        } catch (error: any) {
+            const axiosError: AxiosError = error as AxiosError;
+            const errorData = axiosError.response?.data as ApiErrorObject | undefined;
+            console.log(axiosError);
+        } finally {
+            setLoading(false);
+        }
+
+        return;
     }
 
     function changeCheckoutDate(checkoutDate: Date) {
@@ -99,7 +137,7 @@ export const BookingCard: FC<{ property: Property, hostId: number }> = (props) =
                     className={'w-full bg-red-500 mt-2 rounded-2xl p-2 hover:scale-105 cursor-pointer transition-all'}
                     onClick={() => processCheckout()}
                 >
-                    <p className={'text-lg text-white font-serif font-semibold'}>Book this place</p>
+                    <p className={'text-lg text-white font-serif font-semibold'}>{!loading ? 'Book this place' : 'Loading...'}</p>
                 </button>
 
                 <div className={'flex flex-col gap-2'}>

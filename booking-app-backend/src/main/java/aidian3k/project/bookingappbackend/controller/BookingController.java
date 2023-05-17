@@ -30,13 +30,8 @@ public class BookingController {
         return new ResponseEntity<>(bookingService.getProfilePageReservations(userId), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{bookingId}/user/{userId}")
-    public void deleteUserReservation(@PathVariable Long bookingId, @PathVariable Integer userId) {
-        bookingService.deleteUserReservation(bookingId, userId);
-    }
-
-    @DeleteMapping("/{bookingId}")
-    public void deleteReservation(@PathVariable Long bookingId, @PathVariable Integer userId) {
-        bookingService.deleteReservation(bookingId, userId);
+    @DeleteMapping("/{bookingId}/user")
+    public void deleteReservation(@PathVariable Long bookingId) {
+        bookingService.deleteSingleReservation(bookingId);
     }
 }

@@ -1,6 +1,7 @@
 package aidian3k.project.bookingappbackend.service;
 
 import aidian3k.project.bookingappbackend.dto.*;
+import aidian3k.project.bookingappbackend.entity.Booking;
 import aidian3k.project.bookingappbackend.entity.Photo;
 import aidian3k.project.bookingappbackend.entity.Property;
 import aidian3k.project.bookingappbackend.entity.User;
@@ -24,7 +25,7 @@ public class PropertyService {
     private final PhotoService photoService;
 
     public SinglePropertyPageDto getPropertyById(Long propertyId) {
-        Property property = propertyRepository.findById(propertyId).orElseThrow(() -> new NotFoundException("The property has not been found!"));
+        Property property = getPropertyFromRepository(propertyId);
         User host = property.getUser();
         UserDto userDto = new UserDto(host);
 
@@ -33,6 +34,12 @@ public class PropertyService {
 
     public Property saveSingleProperty(Property property) {
         return propertyRepository.save(property);
+    }
+
+    public Property getPropertyFromRepository(Long propertyId) {
+        return propertyRepository
+                .findById(propertyId)
+                .orElseThrow(() -> new NotFoundException("The property has not been found!"));
     }
 
     @Transactional
@@ -158,5 +165,18 @@ public class PropertyService {
         userService.saveSingleUser(user);
 
         return addedProperty;
+    }
+
+    @Transactional
+    public void updateUserBookingProperty(Booking booking, Integer userId, Long propertyId) {
+        Property property = propertyRepository.findById(propertyId).orElseThrow();
+        User user = userService.getSingleUserById(userId);
+        property.getBookings().add(booking);
+
+        Property addedProperty = saveSingleProperty(property);
+
+        user.getProperties().removeIf(foundProperty -> foundProperty.getId().equals(propertyId));
+        user.getProperties().add(addedProperty);
+        userService.saveSingleUser(user);
     }
 }

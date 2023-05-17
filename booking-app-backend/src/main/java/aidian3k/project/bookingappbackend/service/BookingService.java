@@ -4,26 +4,34 @@ import aidian3k.project.bookingappbackend.entity.Booking;
 import aidian3k.project.bookingappbackend.entity.Property;
 import aidian3k.project.bookingappbackend.entity.User;
 import aidian3k.project.bookingappbackend.repository.BookingRepository;
-import aidian3k.project.bookingappbackend.repository.PropertyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
+import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class BookingService {
+    private final PropertyService propertyService;
     private final UserService userService;
     private final BookingRepository bookingRepository;
-    private final PropertyService propertyService;
-    private final PropertyRepository propertyRepository;
 
     public List<Booking> getAllUserBookings(Integer userId) {
         User user = userService.getSingleUserById(userId);
 
         return user.getBookings();
+    }
+
+    public Booking getSingleBooking(Long bookingId) {
+        return bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException(""));
+    }
+
+    public Booking saveSingleBooking(Booking booking) {
+        return bookingRepository.save(booking);
     }
 
     public List<Booking> getProfilePageReservations(Integer userId) {
@@ -39,32 +47,20 @@ public class BookingService {
         return profileBookings;
     }
 
-    public void deleteUserReservation(Long bookingId, Integer userId) {
-        User user = userService.getSingleUserById(userId);
-        Booking booking = user.getBookings().stream()
-                .filter(foundBooking -> foundBooking.getId().equals(bookingId))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-
-        bookingRepository.delete(booking);
-    }
-
-    public void deleteReservation(Long bookingId, Integer userId) {
-        List<Booking> bookings = getProfilePageReservations(userId);
-        Booking booking = bookings.stream()
-                .filter(foundBooking -> foundBooking.getId().equals(bookingId))
-                .findAny().orElseThrow(IllegalArgumentException::new);
-
-        bookingRepository.delete(booking);
+    public void deleteSingleReservation(Long bookingId) {
+        bookingRepository.delete(getSingleBooking(bookingId));
     }
 
     @Transactional
     public Booking createNewBooking(Booking booking, Integer userId, Long propertyId) {
-        User user = userService.getSingleUserById(userId);
-        Property property = propertyRepository.findById(propertyId).orElseThrow();
-        user.getBookings().add(booking);
-        property.getBookings().add(booking);
+        User reservationUser = userService.getSingleUserById(userId);
+        Property property = propertyService.getPropertyFromRepository(propertyId);
+        User hostUser = property.getUser();
 
-        return bookingRepository.save(booking);
+        reservationUser.getBookings().add(booking);
+        userService.saveSingleUser(reservationUser);
+        propertyService.updateUserBookingProperty(booking, hostUser.getId(), propertyId);
+
+        return saveSingleBooking(booking);
     }
 }

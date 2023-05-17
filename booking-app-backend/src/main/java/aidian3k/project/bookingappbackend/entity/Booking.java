@@ -1,5 +1,6 @@
 package aidian3k.project.bookingappbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,10 +33,12 @@ public class Booking {
     private int totalPrice;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "property_id")
     private Property property;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 }
