@@ -6,7 +6,7 @@ import {Booking} from "../../model/Booking";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../hooks/reduxHooks";
 import {User} from "../../model/User";
-import axios, {AxiosError} from "axios";
+import {AxiosError} from "axios";
 import {ApiErrorObject} from "../../model/ApiErrorObject";
 
 export const BookingCard: FC<{ property: Property, hostId: number }> = (props) => {
@@ -147,7 +147,7 @@ export const BookingCard: FC<{ property: Property, hostId: number }> = (props) =
                     </div>
 
                     <div className={'flex justify-between'}>
-                        <p className={'text-serif text-base underline'}>$100
+                        <p className={'text-serif text-base underline'}>${`${property.price} `}
                             x {getDateSubtractionInDays(checkOut, checkIn)} days x {numberOfGuests} guests</p>
                         <p className={'text-serif text-base'}>{calculateFinalPrice()} $</p>
                     </div>

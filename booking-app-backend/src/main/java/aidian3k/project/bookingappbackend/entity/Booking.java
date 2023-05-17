@@ -30,7 +30,7 @@ public class Booking {
     private int numberOfGuests;
 
     @Column(nullable = false)
-    private int totalPrice;
+    private double totalPrice;
 
     @ManyToOne
     @JsonIgnore

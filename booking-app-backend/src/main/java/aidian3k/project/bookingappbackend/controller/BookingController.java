@@ -1,5 +1,6 @@
 package aidian3k.project.bookingappbackend.controller;
 
+import aidian3k.project.bookingappbackend.dto.ProfilePageBookingDto;
 import aidian3k.project.bookingappbackend.entity.Booking;
 import aidian3k.project.bookingappbackend.service.BookingService;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,17 @@ public class BookingController {
         return new ResponseEntity<>(bookingService.getAllUserBookings(userId), HttpStatus.OK);
     }
 
+    @GetMapping("/profile/user/{userId}")
+    public ResponseEntity<List<ProfilePageBookingDto>> getProfilePageBookingsInformation(@PathVariable Integer userId) {
+        return new ResponseEntity<>(bookingService.getProfilePageBookingInformation(userId), HttpStatus.OK);
+    }
+
     @GetMapping("/profile/{userId}")
     public ResponseEntity<List<Booking>> getProfilePageReservations(@PathVariable Integer userId) {
         return new ResponseEntity<>(bookingService.getProfilePageReservations(userId), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{bookingId}/user")
+    @DeleteMapping("/{bookingId}")
     public void deleteReservation(@PathVariable Long bookingId) {
         bookingService.deleteSingleReservation(bookingId);
     }

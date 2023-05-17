@@ -4,7 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import {Footer} from "../components/footer/Footer";
 import {PropertyElement} from "../components/profile-page/PropertyElement";
 import {NavigateFunction, useNavigate} from "react-router-dom";
-import {connector} from "../utils/axios";
+import {authConnector} from "../utils/axios";
 import {useAuth} from "../hooks/useAuth";
 import LoadingPage from "./LoadingPage";
 import {User} from "../model/User";
@@ -17,7 +17,7 @@ export const UserAccommodationPage: FC = () => {
     const user: User = useAppSelector(state => state.user.value);
 
     useEffect(() => {
-        connector.get(`/api/v1/property/profile/${user.id}`)
+        authConnector(localStorage.getItem('access_token')).get(`/api/v1/property/profile/${user.id}`)
             .then(response => setProperties(response.data))
     }, [user.id]);
 

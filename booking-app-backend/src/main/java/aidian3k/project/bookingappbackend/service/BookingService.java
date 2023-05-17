@@ -1,5 +1,6 @@
 package aidian3k.project.bookingappbackend.service;
 
+import aidian3k.project.bookingappbackend.dto.ProfilePageBookingDto;
 import aidian3k.project.bookingappbackend.entity.Booking;
 import aidian3k.project.bookingappbackend.entity.Property;
 import aidian3k.project.bookingappbackend.entity.User;
@@ -9,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,10 +57,39 @@ public class BookingService {
         Property property = propertyService.getPropertyFromRepository(propertyId);
         User hostUser = property.getUser();
 
+        booking.setUser(reservationUser);
+        booking.setProperty(property);
+
+        Booking savedBooking = saveSingleBooking(booking);
         reservationUser.getBookings().add(booking);
         userService.saveSingleUser(reservationUser);
         propertyService.updateUserBookingProperty(booking, hostUser.getId(), propertyId);
 
-        return saveSingleBooking(booking);
+        return savedBooking;
+    }
+
+    public List<ProfilePageBookingDto> getProfilePageBookingInformation(Integer userId) {
+        User user = userService.getSingleUserById(userId);
+        List<Booking> userBookings = user.getBookings();
+        List<ProfilePageBookingDto> transferBookings = new ArrayList<>();
+
+        userBookings.forEach(booking -> {
+            Property bookingProperty = booking.getProperty();
+            ProfilePageBookingDto bookingDto = ProfilePageBookingDto.builder()
+                    .photo(bookingProperty.getPhotos().get(0))
+                    .checkIn(booking.getCheckIn())
+                    .checkOut(booking.getCheckOut())
+                    .title(bookingProperty.getTitle())
+                    .hostId(bookingProperty.getUser().getId())
+                    .totalPrice(booking.getTotalPrice())
+                    .numberOfGuests(booking.getNumberOfGuests())
+                    .propertyId(bookingProperty.getId())
+                    .bookingId(booking.getId())
+                    .build();
+
+            transferBookings.add(bookingDto);
+        });
+
+        return transferBookings;
     }
 }

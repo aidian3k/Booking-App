@@ -11,7 +11,7 @@ import {NavigateFunction, useNavigate} from "react-router-dom";
 export function useAuth(isNavigating: boolean) {
     const dispatch: ThunkDispatch<any, any, any> = useAppDispatch();
     const refreshToken = localStorage.getItem("refresh_token") as string | null;
-    const [isLoading, setIsLoading] = useState<boolean>(true); // State to track loading state
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const navigate: NavigateFunction = useNavigate();
 
     const handleAuthorization = async () => {
