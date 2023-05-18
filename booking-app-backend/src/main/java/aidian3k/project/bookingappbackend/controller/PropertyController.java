@@ -1,22 +1,13 @@
 package aidian3k.project.bookingappbackend.controller;
 
-import aidian3k.project.bookingappbackend.dto.MainPagePropertyDto;
-import aidian3k.project.bookingappbackend.dto.ProfileAccommodationDto;
-import aidian3k.project.bookingappbackend.dto.PropertyDto;
-import aidian3k.project.bookingappbackend.dto.SinglePropertyPageDto;
+import aidian3k.project.bookingappbackend.dto.*;
 import aidian3k.project.bookingappbackend.entity.Property;
 import aidian3k.project.bookingappbackend.service.PropertyService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -43,6 +34,16 @@ public class PropertyController {
     @GetMapping("/{propertyId}")
     public ResponseEntity<SinglePropertyPageDto> getPropertyById(@PathVariable Long propertyId) {
         return new ResponseEntity<>(propertyService.getPropertyById(propertyId), HttpStatus.OK);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<MainPagePropertyDto>> filterPropertiesOnMainPage(@RequestBody MainFilterObject mainFilterObject) {
+        return new ResponseEntity<>(propertyService.filterPropertiesOnMainPage(mainFilterObject), HttpStatus.OK);
+    }
+
+    @GetMapping("/filter/advanced")
+    public ResponseEntity<List<MainPagePropertyDto>> performAdvancedFilterOnMainPage(@RequestBody AdvancedFilterDto advancedFilterDto) {
+        return new ResponseEntity<>(propertyService.performAdvancedFilterOnMainPage(advancedFilterDto), HttpStatus.OK);
     }
 
     @GetMapping("/all")

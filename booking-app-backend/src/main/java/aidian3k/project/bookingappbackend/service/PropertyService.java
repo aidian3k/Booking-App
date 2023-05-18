@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -99,18 +101,22 @@ public class PropertyService {
         
         return properties
                 .stream()
-                .map(property -> MainPagePropertyDto.builder()
-                        .id(property.getId())
-                        .pricePerNight(property.getPrice())
-                        .description(property.getDescription())
-                        .title(property.getTitle())
-                        .ownerId(property.getUser().getId())
-                        .country(property.getCountry())
-                        .city(property.getCity())
-                        .review(userService.getUserAverageReviewScale(property.getUser().getId()))
-                        .photo(property.getPhotos().get(0))
-                        .build())
+                .map(this::getMainPagePropertyDto)
                 .toList();
+    }
+
+    private MainPagePropertyDto getMainPagePropertyDto(Property property) {
+        return MainPagePropertyDto.builder()
+                .id(property.getId())
+                .pricePerNight(property.getPrice())
+                .description(property.getDescription())
+                .title(property.getTitle())
+                .ownerId(property.getUser().getId())
+                .country(property.getCountry())
+                .city(property.getCity())
+                .review(userService.getUserAverageReviewScale(property.getUser().getId()))
+                .photo(property.getPhotos().get(0))
+                .build();
     }
 
     public List<ProfileAccommodationDto> getProfileAccommodation(Integer userId) {
@@ -178,5 +184,87 @@ public class PropertyService {
         user.getProperties().removeIf(foundProperty -> foundProperty.getId().equals(propertyId));
         user.getProperties().add(addedProperty);
         userService.saveSingleUser(user);
+    }
+
+    public List<MainPagePropertyDto> filterPropertiesOnMainPage(MainFilterObject mainFilterObject) {
+        List<Property> properties = getAllProperties();
+
+        properties = properties
+                .stream()
+                .filter(property -> property.getCity().equals(mainFilterObject.getPlace())
+                        || property.getCountry().equals(mainFilterObject.getPlace()))
+                .toList();
+
+        properties = filterPropertiesByDate(properties, mainFilterObject.getArrival(), mainFilterObject.getDepartment());
+        properties = properties.stream()
+                .filter(property -> property.getNumberOfGuests() >= mainFilterObject.getNumberOfGuests())
+                .collect(Collectors.toList());
+
+        return properties.stream()
+                .map(this::getMainPagePropertyDto)
+                .toList();
+    }
+
+    private List<Property> filterPropertiesByDate(List<Property> properties, Date arrival, Date department) {
+        List<Property> filteredProperties = new LinkedList<>();
+
+        for (Property property : properties) {
+            List<Booking> bookings = property.getBookings();
+
+            if (checkIfBookingIsAvailable(bookings, arrival, department)) {
+                filteredProperties.add(property);
+            }
+        }
+
+        return filteredProperties;
+    }
+
+    private boolean checkIfBookingIsAvailable(List<Booking> bookings, Date arrival, Date department) {
+        for (Booking booking : bookings) {
+            Date bookingStartDate = booking.getCheckIn();
+            Date bookingEndDate = booking.getCheckOut();
+
+            if (bookingStartDate.compareTo(arrival) >= 0 && bookingStartDate.compareTo(department) < 0) {
+                return false;
+            }
+
+            if (bookingEndDate.compareTo(arrival) > 0 && bookingEndDate.compareTo(department) <= 0) {
+                return false;
+            }
+
+            if (bookingStartDate.compareTo(arrival) <= 0 && bookingEndDate.compareTo(department) >= 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public List<MainPagePropertyDto> performAdvancedFilterOnMainPage(AdvancedFilterDto advancedFilterDto) {
+        List<MainPagePropertyDto> currentFilteredProperties = advancedFilterDto.getPropertyDtoList();
+        int minimalPrice = advancedFilterDto.getMinimalPrice();
+        int maximalPrice = advancedFilterDto.getMaximalPrice();
+        int numberOfBeds = advancedFilterDto.getNumberOfBeds();
+        int numberOfBedrooms = advancedFilterDto.getNumberOfBedrooms();
+
+        List<Property> filteredProperties = currentFilteredProperties
+                .stream().map(propertyDto -> getPropertyFromRepository(propertyDto.getId()))
+                .toList();
+
+        filteredProperties = filteredProperties.stream()
+                .filter(property -> property.getPrice() >= minimalPrice && property.getPrice() <= maximalPrice)
+                .collect(Collectors.toList());
+
+        filteredProperties = filteredProperties.stream()
+                .filter(property -> property.getNumberOfBeds() == numberOfBeds)
+                .collect(Collectors.toList());
+
+        filteredProperties = filteredProperties.stream()
+                .filter(property -> property.getNumberOfBedrooms() == numberOfBedrooms)
+                .collect(Collectors.toList());
+
+        return filteredProperties.stream()
+                .map(this::getMainPagePropertyDto)
+                .toList();
     }
 }
