@@ -1,6 +1,7 @@
 package aidian3k.project.bookingappbackend.service;
 
 import aidian3k.project.bookingappbackend.dto.MainPageStatisticsDto;
+import aidian3k.project.bookingappbackend.dto.UserDto;
 import aidian3k.project.bookingappbackend.entity.Review;
 import aidian3k.project.bookingappbackend.entity.User;
 import aidian3k.project.bookingappbackend.exception.UserNotFoundException;
@@ -50,5 +51,17 @@ public class UserService {
         }
 
         return currentReviewSum / numberOfReviews;
+    }
+
+    public UserDto getSingleUserDto(Integer userId) {
+        User user = getSingleUserById(userId);
+        return UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .creationDate(user.getCreationDate())
+                .build();
     }
 }

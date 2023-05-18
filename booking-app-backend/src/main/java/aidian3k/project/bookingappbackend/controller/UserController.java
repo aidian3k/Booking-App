@@ -1,6 +1,7 @@
 package aidian3k.project.bookingappbackend.controller;
 
 import aidian3k.project.bookingappbackend.dto.MainPageStatisticsDto;
+import aidian3k.project.bookingappbackend.dto.UserDto;
 import aidian3k.project.bookingappbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,11 @@ public class UserController {
     @GetMapping("/statistics/{userId}")
     public MainPageStatisticsDto getUserStatisticsInfo(@PathVariable Integer userId) {
         return userService.getUserStatisticsInfo(userId);
+    }
+
+    @GetMapping("/{userId}")
+    public UserDto getSingleUserDto(@PathVariable Integer userId) {
+        return userService.getSingleUserDto(userId);
     }
 
     @GetMapping("/statistics/stars/{userId}")

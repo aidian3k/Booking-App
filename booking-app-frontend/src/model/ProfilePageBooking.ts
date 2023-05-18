@@ -7,5 +7,6 @@ export interface ProfilePageBooking {
     propertyId: number,
     title: number,
     hostId: number,
-    bookingId: number
+    bookingId: number,
+    clientId: number
 }

@@ -9,6 +9,15 @@ export const MyBookingInfoElement: FC<MyBookingInfoProps> = (props) => {
     )
 }
 
+export const MyBookingInfoElementBlack: FC<MyBookingInfoProps> = (props) => {
+    return (
+        <div className={'flex gap-2'}>
+            {props.icon}
+            <p className={'text-black font-serif font-semibold'}>{props.textElement}</p>
+        </div>
+    )
+}
+
 export interface MyBookingInfoProps {
     icon: any,
     textElement: string;

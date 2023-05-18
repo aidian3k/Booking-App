@@ -34,7 +34,7 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public List<Booking> getProfilePageReservations(Integer userId) {
+    public List<ProfilePageBookingDto> getProfilePageReservations(Integer userId) {
         User user = userService.getSingleUserById(userId);
         List<Property> properties = user.getProperties();
         List<Booking> profileBookings = new ArrayList<>();
@@ -44,7 +44,7 @@ public class BookingService {
             profileBookings.addAll(bookings);
         }
 
-        return profileBookings;
+        return mapBookingListToBookingDto(profileBookings);
     }
 
     public void deleteSingleReservation(Long bookingId) {
@@ -71,6 +71,11 @@ public class BookingService {
     public List<ProfilePageBookingDto> getProfilePageBookingInformation(Integer userId) {
         User user = userService.getSingleUserById(userId);
         List<Booking> userBookings = user.getBookings();
+
+        return mapBookingListToBookingDto(userBookings);
+    }
+
+    private List<ProfilePageBookingDto> mapBookingListToBookingDto(List<Booking> userBookings) {
         List<ProfilePageBookingDto> transferBookings = new ArrayList<>();
 
         userBookings.forEach(booking -> {
@@ -85,6 +90,7 @@ public class BookingService {
                     .numberOfGuests(booking.getNumberOfGuests())
                     .propertyId(bookingProperty.getId())
                     .bookingId(booking.getId())
+                    .clientId(booking.getUser().getId())
                     .build();
 
             transferBookings.add(bookingDto);

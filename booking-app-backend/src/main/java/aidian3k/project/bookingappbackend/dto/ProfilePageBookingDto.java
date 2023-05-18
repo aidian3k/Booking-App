@@ -18,6 +18,7 @@ public class ProfilePageBookingDto {
     private Long bookingId;
     private Date checkIn;
     private Date checkOut;
+    private Integer clientId;
     private double totalPrice;
     private int numberOfGuests;
     private Photo photo;

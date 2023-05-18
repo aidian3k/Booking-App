@@ -31,8 +31,8 @@ public class BookingController {
         return new ResponseEntity<>(bookingService.getProfilePageBookingInformation(userId), HttpStatus.OK);
     }
 
-    @GetMapping("/profile/{userId}")
-    public ResponseEntity<List<Booking>> getProfilePageReservations(@PathVariable Integer userId) {
+    @GetMapping("/profile/property/reservation/user/{userId}")
+    public ResponseEntity<List<ProfilePageBookingDto>> getProfilePageReservations(@PathVariable Integer userId) {
         return new ResponseEntity<>(bookingService.getProfilePageReservations(userId), HttpStatus.OK);
     }
 
