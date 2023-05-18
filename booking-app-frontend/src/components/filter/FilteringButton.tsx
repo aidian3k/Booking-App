@@ -15,7 +15,7 @@ export const FilteringButton: FC<{text: string, number: number, setNumber:any }>
     }
 
     function getText() {
-        if(props.text === '1') {
+        if(props.text === '0') {
             return 'Any';
         } else if(props.text === '6') {
             return '5+';

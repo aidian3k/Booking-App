@@ -36,12 +36,12 @@ public class PropertyController {
         return new ResponseEntity<>(propertyService.getPropertyById(propertyId), HttpStatus.OK);
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     public ResponseEntity<List<MainPagePropertyDto>> filterPropertiesOnMainPage(@RequestBody MainFilterObject mainFilterObject) {
         return new ResponseEntity<>(propertyService.filterPropertiesOnMainPage(mainFilterObject), HttpStatus.OK);
     }
 
-    @GetMapping("/filter/advanced")
+    @PostMapping("/filter/advanced")
     public ResponseEntity<List<MainPagePropertyDto>> performAdvancedFilterOnMainPage(@RequestBody AdvancedFilterDto advancedFilterDto) {
         return new ResponseEntity<>(propertyService.performAdvancedFilterOnMainPage(advancedFilterDto), HttpStatus.OK);
     }

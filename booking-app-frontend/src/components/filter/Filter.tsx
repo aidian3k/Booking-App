@@ -7,14 +7,23 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import {FilterAbstractPopUpWindow} from "./PopUpAbstractWindow";
 import {Close} from "@mui/icons-material";
 import {FilteringButton} from "./FilteringButton";
+import {LoadingButton} from "@mui/lab";
+import {useAppDispatch, useAppSelector} from "../../hooks/reduxHooks";
+import {AdvancedFilter} from "../../model/AdvancedFilter";
+import {connector} from "../../utils/axios";
+import {setMainProperties} from "../../redux/slices/PropertiesSlice";
+import {AxiosError} from "axios";
 
 export const Filter: FC<{ isFiltering: boolean, setIsFiltering: any }> = (props) => {
     const [minimalPrice, setMinimalPrice] = useState<number>(0);
     const [maximumPrice, setMaximumPrice] = useState<number>(300);
-    const [numberOfBeds, setNumberOfBeds] = useState<number>(1);
-    const [numberOfBedrooms, setNumberOfBedrooms] = useState<number>(1);
+    const [numberOfBeds, setNumberOfBeds] = useState<number>(0);
+    const [numberOfBedrooms, setNumberOfBedrooms] = useState<number>(0);
     const [typeOfProperty, setTypeOfProperty] = useState<string>('');
     const [value, setValue] = React.useState<number[]>([0, 300]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const dispatch = useAppDispatch();
+    const properties = useAppSelector(state => state.properties.value);
 
     const handleChange = (event: Event, newValue: number | number[]) => {
         setValue(newValue as number[]);
@@ -41,15 +50,46 @@ export const Filter: FC<{ isFiltering: boolean, setIsFiltering: any }> = (props)
         setValue([0, 300]);
     }
 
-    function showPlaces() {
-        console.log(minimalPrice, maximumPrice, numberOfBedrooms, numberOfBeds, typeOfProperty)
+    async function showPlaces() {
+        try {
+            const advancedFilter: AdvancedFilter = {
+                maximalPrice: maximumPrice,
+                numberOfBedrooms: numberOfBeds,
+                minimalPrice: minimalPrice,
+                numberOfBeds: numberOfBeds,
+                propertyDtoList: properties
+            };
+
+            setLoading(true);
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            await connector.post('/api/v1/property/filter/advanced', advancedFilter).then(response => {
+                dispatch(setMainProperties(response.data));
+            });
+
+            console.log(properties)
+
+            setLoading(false);
+            props.setIsFiltering(false);
+        } catch (error: any) {
+            const axiosError: AxiosError = error as AxiosError;
+            console.log(axiosError);
+
+            setLoading(false);
+        } finally {
+            setLoading(false);
+        }
+
+        return;
     }
 
     return (
         <FilterAbstractPopUpWindow isOpen={props.isFiltering} onClose={() => props.setIsFiltering(false)}>
             <div className={'max-h-[32rem] overflow-y-scroll w-full px-4 py-2'}>
                 <div className={'flex items-center justify-between px-2'}>
-                    <button className={'rounded-full bg-gray-300 p-1 hover:bg-red-300 hover:scale-105 transition-all self-center mb-1'}
+                    <button
+                        className={'rounded-full bg-gray-300 p-1 hover:bg-red-300 hover:scale-105 transition-all self-center mb-1'}
                         onClick={() => props.setIsFiltering(false)}
                     >
                         <Close/>
@@ -116,24 +156,26 @@ export const Filter: FC<{ isFiltering: boolean, setIsFiltering: any }> = (props)
                 <div className={'flex flex-col gap-2'}>
                     <p className={'mt-2 font-serif text-base text-center'}>Beds</p>
                     <div className={'flex gap-2 justify-center'}>
+                        <FilteringButton text={'0'} number={numberOfBeds} setNumber={setNumberOfBeds}/>
                         <FilteringButton text={'1'} number={numberOfBeds} setNumber={setNumberOfBeds}/>
                         <FilteringButton text={'2'} number={numberOfBeds} setNumber={setNumberOfBeds}/>
                         <FilteringButton text={'3'} number={numberOfBeds} setNumber={setNumberOfBeds}/>
                         <FilteringButton text={'4'} number={numberOfBeds} setNumber={setNumberOfBeds}/>
                         <FilteringButton text={'5'} number={numberOfBeds} setNumber={setNumberOfBeds}/>
-                        <FilteringButton text={'5+'} number={numberOfBeds} setNumber={setNumberOfBeds}/>
+                        <FilteringButton text={'6'} number={numberOfBeds} setNumber={setNumberOfBeds}/>
                     </div>
                 </div>
 
                 <div className={'flex flex-col gap-2'}>
                     <p className={'mt-2 font-serif text-base text-center'}>Bedrooms</p>
                     <div className={'flex gap-2 justify-center'}>
+                        <FilteringButton text={'0'} number={numberOfBedrooms} setNumber={setNumberOfBedrooms}/>
                         <FilteringButton text={'1'} number={numberOfBedrooms} setNumber={setNumberOfBedrooms}/>
                         <FilteringButton text={'2'} number={numberOfBedrooms} setNumber={setNumberOfBedrooms}/>
                         <FilteringButton text={'3'} number={numberOfBedrooms} setNumber={setNumberOfBedrooms}/>
                         <FilteringButton text={'4'} number={numberOfBedrooms} setNumber={setNumberOfBedrooms}/>
                         <FilteringButton text={'5'} number={numberOfBedrooms} setNumber={setNumberOfBedrooms}/>
-                        <FilteringButton text={'5+'} number={numberOfBedrooms} setNumber={setNumberOfBedrooms}/>
+                        <FilteringButton text={'6'} number={numberOfBedrooms} setNumber={setNumberOfBedrooms}/>
                     </div>
                 </div>
 
@@ -147,7 +189,7 @@ export const Filter: FC<{ isFiltering: boolean, setIsFiltering: any }> = (props)
 
                 <div className={'flex gap-2 mt-2 justify-center'}>
                     <div
-                        className={`flex flex-col justify-between border border-1 border-gray-400 py-2 px-4 h-28 rounded-xl w-32 cursor-pointer hover:bg-gray-300 hover:scale-105 transition-all ${typeOfProperty==='House' ? 'bg-gray-300' : ''}`}
+                        className={`flex flex-col justify-between border border-1 border-gray-400 py-2 px-4 h-28 rounded-xl w-32 cursor-pointer hover:bg-gray-300 hover:scale-105 transition-all ${typeOfProperty === 'House' ? 'bg-gray-300' : ''}`}
                         onClick={() => setTypeOfProperty('House')}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
@@ -160,7 +202,7 @@ export const Filter: FC<{ isFiltering: boolean, setIsFiltering: any }> = (props)
                     </div>
 
                     <div
-                        className={`flex flex-col justify-between border border-1 border-gray-400 py-2 px-4 h-28 rounded-xl w-32 cursor-pointer hover:bg-gray-300 hover:scale-105 transition-all ${typeOfProperty==='Apartment' ? 'bg-gray-300' : ''}`}
+                        className={`flex flex-col justify-between border border-1 border-gray-400 py-2 px-4 h-28 rounded-xl w-32 cursor-pointer hover:bg-gray-300 hover:scale-105 transition-all ${typeOfProperty === 'Apartment' ? 'bg-gray-300' : ''}`}
                         onClick={() => setTypeOfProperty('Apartment')}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
@@ -176,14 +218,15 @@ export const Filter: FC<{ isFiltering: boolean, setIsFiltering: any }> = (props)
 
             <div className={'flex gap-2 mt-2'}>
                 <Button variant="contained" color="error" sx={{width: 1 / 2}}
-                onClick={() => clearAllElements()}
+                        onClick={() => clearAllElements()}
                 >
                     Clear all
                 </Button>
 
-                <Button variant="contained" color="success" sx={{width: 1 / 2}} onClick={() => showPlaces()}>
+                <LoadingButton loading={loading} variant="contained" color="success" sx={{width: 1 / 2}}
+                               onClick={() => showPlaces()}>
                     Show places
-                </Button>
+                </LoadingButton>
             </div>
         </FilterAbstractPopUpWindow>
     )

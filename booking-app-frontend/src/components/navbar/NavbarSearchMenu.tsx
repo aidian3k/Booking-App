@@ -5,12 +5,19 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import Fab from "@mui/material/Fab";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import {useAppDispatch} from "../../hooks/reduxHooks";
+import {MainFilterObject} from "../../model/MainFilterObject";
+import {connector} from "../../utils/axios";
+import {AxiosError} from "axios";
+import {setMainProperties} from "../../redux/slices/PropertiesSlice";
 
 export const NavbarSearchMenu: FC = () => {
     const [direction, setDirection] = useState<string>('');
     const [department, setDepartment] = useState<Date>(new Date());
     const [arrival, setArrival] = useState<Date>(new Date());
     const [guests, setGuests] = useState<number>(1);
+    const [loading, setLoading] = useState<boolean>(false);
+    const dispatch = useAppDispatch();
 
     function decreaseNumberOfGuests() {
         if(guests == 1) {
@@ -24,8 +31,33 @@ export const NavbarSearchMenu: FC = () => {
         setGuests(prevState => prevState + 1);
     }
 
-    function search() {
-        console.log(direction, department, arrival, guests);
+    async function search() {
+        try {
+            const mainFilterObject: MainFilterObject = {arrival: arrival,
+                department: department,
+                numberOfGuests: guests,
+                place: direction};
+
+            setLoading(true);
+
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            await connector.post('/api/v1/property/filter', mainFilterObject).then(response => {
+                dispatch(setMainProperties(response.data));
+            });
+
+            setLoading(false);
+        } catch (error: any) {
+            const axiosError: AxiosError = error as AxiosError;
+            console.log(axiosError);
+
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            setLoading(false);
+        } finally {
+            setLoading(false);
+        }
+
+        return;
     }
 
     return (
@@ -78,7 +110,7 @@ export const NavbarSearchMenu: FC = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" strokeWidth={2.5} stroke="white" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>
-                    <p className={'text-base font-semibold font-serif text-white'}>Search</p>
+                    <p className={'text-base font-semibold font-serif text-white'}>{!loading ? 'Search' : 'Loading'}</p>
                 </button>
             </div>
         </div>

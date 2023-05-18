@@ -1,21 +1,24 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useEffect} from "react";
 import {PropertyBlock} from "./PropertyBlock";
 import {connector} from "../../utils/axios";
 import {MainPageProperty} from "./MainListPropertyInformation";
+import {useAppDispatch, useAppSelector} from "../../hooks/reduxHooks";
+import {setMainProperties} from "../../redux/slices/PropertiesSlice";
 
 export const PropertyList: FC = () => {
-    const [properties, setProperties] = useState<MainPageProperty[]>([]);
+    const properties: MainPageProperty[] = useAppSelector(state => state.properties.value);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         try {
             connector.get("/api/v1/property")
                 .then(response => {
-                    setProperties(response.data);
+                    dispatch(setMainProperties(response.data));
                 });
         } catch(error: any) {
             console.log(error);
         }
-    }, []);
+    }, [dispatch]);
 
     const getProperties = () => {
             return properties.map(property => {

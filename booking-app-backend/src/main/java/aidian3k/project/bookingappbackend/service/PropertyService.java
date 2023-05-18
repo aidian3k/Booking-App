@@ -26,6 +26,34 @@ public class PropertyService {
     private final UserService userService;
     private final PhotoService photoService;
 
+    private static Property mapPropertyDtoToProperty(PropertyDto propertyDto, User user) {
+        return Property.builder()
+                .title(propertyDto.getTitle())
+                .country(propertyDto.getCountry())
+                .city(propertyDto.getCity())
+                .street(propertyDto.getStreet())
+                .description(propertyDto.getDescription())
+                .wifi(propertyDto.isWifi())
+                .placeToWork(propertyDto.isPlaceToWork())
+                .pool(propertyDto.isPool())
+                .allowedAnimals(propertyDto.isAllowedAnimals())
+                .kitchen(propertyDto.isKitchen())
+                .airConditioning(propertyDto.isAirConditioning())
+                .gasMeter(propertyDto.isGasMeter())
+                .washingMachine(propertyDto.isWashingMachine())
+                .extraInformation(propertyDto.getExtraInformation())
+                .numberOfGuests(propertyDto.getNumberOfGuests())
+                .numberOfBedrooms(propertyDto.getNumberOfBedrooms())
+                .numberOfBeds(propertyDto.getNumberOfBeds())
+                .cleaningFee(propertyDto.getCleaningFee())
+                .price(propertyDto.getCleaningFee())
+                .price(propertyDto.getPrice())
+                .user(user)
+                .photos(new ArrayList<>())
+                .bookings(new ArrayList<>())
+                .build();
+    }
+
     public SinglePropertyPageDto getPropertyById(Long propertyId) {
         Property property = getPropertyFromRepository(propertyId);
         User host = property.getUser();
@@ -61,34 +89,6 @@ public class PropertyService {
         return saveSingleProperty(property);
     }
 
-    private static Property mapPropertyDtoToProperty(PropertyDto propertyDto, User user) {
-        return Property.builder()
-                .title(propertyDto.getTitle())
-                .country(propertyDto.getCountry())
-                .city(propertyDto.getCity())
-                .street(propertyDto.getStreet())
-                .description(propertyDto.getDescription())
-                .wifi(propertyDto.isWifi())
-                .placeToWork(propertyDto.isPlaceToWork())
-                .pool(propertyDto.isPool())
-                .allowedAnimals(propertyDto.isAllowedAnimals())
-                .kitchen(propertyDto.isKitchen())
-                .airConditioning(propertyDto.isAirConditioning())
-                .gasMeter(propertyDto.isGasMeter())
-                .washingMachine(propertyDto.isWashingMachine())
-                .extraInformation(propertyDto.getExtraInformation())
-                .numberOfGuests(propertyDto.getNumberOfGuests())
-                .numberOfBedrooms(propertyDto.getNumberOfBedrooms())
-                .numberOfBeds(propertyDto.getNumberOfBeds())
-                .cleaningFee(propertyDto.getCleaningFee())
-                .price(propertyDto.getCleaningFee())
-                .price(propertyDto.getPrice())
-                .user(user)
-                .photos(new ArrayList<>())
-                .bookings(new ArrayList<>())
-                .build();
-    }
-
     public List<Property> getAllProperties() {
         return propertyRepository.findAll();
     }
@@ -98,7 +98,7 @@ public class PropertyService {
         List<Property> properties = propertyRepository
                 .findAll(PageRequest.of(0, maximumNumberOfProperties))
                 .getContent();
-        
+
         return properties
                 .stream()
                 .map(this::getMainPagePropertyDto)
@@ -121,7 +121,7 @@ public class PropertyService {
 
     public List<ProfileAccommodationDto> getProfileAccommodation(Integer userId) {
         List<Property> properties = getUserProperties(userId);
-        
+
         return properties.stream()
                 .map(property -> ProfileAccommodationDto.builder()
                         .street(property.getStreet())
@@ -139,12 +139,12 @@ public class PropertyService {
 
     private List<Property> getUserProperties(Integer userId) {
         User user = userService.getSingleUserById(userId);
-        
+
         return user.getProperties().stream()
                 .filter(property -> property.getUser().getId().equals(user.getId()))
                 .collect(Collectors.toList());
     }
-    
+
     public void deleteUserPropertyById(Integer userId, Long propertyId) {
         User user = userService.getSingleUserById(userId);
 
@@ -152,7 +152,7 @@ public class PropertyService {
                 .filter(foundProperty -> foundProperty.getId().equals(propertyId))
                 .findAny()
                 .orElseThrow(IllegalArgumentException::new);
-        
+
         propertyRepository.delete(property);
     }
 
@@ -255,13 +255,27 @@ public class PropertyService {
                 .filter(property -> property.getPrice() >= minimalPrice && property.getPrice() <= maximalPrice)
                 .collect(Collectors.toList());
 
-        filteredProperties = filteredProperties.stream()
-                .filter(property -> property.getNumberOfBeds() == numberOfBeds)
-                .collect(Collectors.toList());
+        if (numberOfBeds == 0) {
+        } else if (numberOfBeds == 6) {
+            filteredProperties = filteredProperties.stream()
+                    .filter(property -> property.getNumberOfBeds() >= 5)
+                    .collect(Collectors.toList());
+        } else {
+            filteredProperties = filteredProperties.stream()
+                    .filter(property -> property.getNumberOfBeds() == numberOfBeds)
+                    .collect(Collectors.toList());
+        }
 
-        filteredProperties = filteredProperties.stream()
-                .filter(property -> property.getNumberOfBedrooms() == numberOfBedrooms)
-                .collect(Collectors.toList());
+        if (numberOfBeds == 0) {
+        } else if (numberOfBedrooms == 6) {
+            filteredProperties = filteredProperties.stream()
+                    .filter(property -> property.getNumberOfBedrooms() >= 5)
+                    .collect(Collectors.toList());
+        } else {
+            filteredProperties = filteredProperties.stream()
+                    .filter(property -> property.getNumberOfBedrooms() == numberOfBedrooms)
+                    .collect(Collectors.toList());
+        }
 
         return filteredProperties.stream()
                 .map(this::getMainPagePropertyDto)
