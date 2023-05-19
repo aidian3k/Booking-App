@@ -7,7 +7,6 @@ import {NavigateFunction, useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../hooks/reduxHooks";
 import {User} from "../../model/User";
 import {AxiosError} from "axios";
-import {ApiErrorObject} from "../../model/ApiErrorObject";
 
 export const BookingCard: FC<{ property: Property, hostId: number }> = (props) => {
     const [checkIn, setCheckIn] = useState<Date>(new Date());
@@ -35,7 +34,7 @@ export const BookingCard: FC<{ property: Property, hostId: number }> = (props) =
     const {property} = props;
 
     function getDateSubtractionInDays(firstDate: Date, secondDate: Date) {
-        return Math.floor((firstDate.getTime() - secondDate.getTime()) / (1000 * 60 * 60 * 24));
+        return Math.abs(Math.floor((secondDate.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24)));
     }
 
     function calculateFinalPrice(): number {
@@ -79,7 +78,6 @@ export const BookingCard: FC<{ property: Property, hostId: number }> = (props) =
             navigate('/profile/bookings');
         } catch (error: any) {
             const axiosError: AxiosError = error as AxiosError;
-            const errorData = axiosError.response?.data as ApiErrorObject | undefined;
             console.log(axiosError);
         } finally {
             setLoading(false);
