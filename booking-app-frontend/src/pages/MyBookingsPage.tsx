@@ -9,19 +9,25 @@ import {authConnector} from "../utils/axios";
 import {User} from "../model/User";
 import {useAppSelector} from "../hooks/reduxHooks";
 import {NavigateFunction, useNavigate} from "react-router-dom";
+import {HistoryBookingElement} from "../components/my-bookings/HistoryBookingElement";
+import {NothingHere} from "../components/my-bookings/NothingHere";
 
 export const MyBookingsPage: FC = () => {
     const isLoading = useAuth(true);
     const user: User = useAppSelector(state => state.user.value);
-    const [bookingsData, setBookingsData] = useState<ProfilePageBooking[]>([]);
+    const [currentBookings, setCurrentBookings] = useState<ProfilePageBooking[]>([]);
+    const [historyBookings, setHistoryBookings] = useState<ProfilePageBooking[]>([]);
     const navigate: NavigateFunction = useNavigate();
 
     const fetchBookingData = async () => {
         await authConnector(localStorage.getItem('access_token'))
             .get(`/api/v1/booking/profile/user/${user.id}`)
             .then(response => {
-                setBookingsData(response.data);
+                debugger
+                setCurrentBookings(response.data.currentBookings);
+                setHistoryBookings(response.data.historyBookings);
             });
+
         return;
     }
 
@@ -29,8 +35,12 @@ export const MyBookingsPage: FC = () => {
         fetchBookingData();
     }, [isLoading]);
 
-    const bookingsJsx: JSX.Element[] = bookingsData.map(booking => {
+    const currentBookingsJsx: JSX.Element[] = currentBookings.map(booking => {
         return <MyBookingElement bookingInfo={booking}/>
+    });
+
+    const historyBookingsJsx: JSX.Element[] = historyBookings.map(booking => {
+        return <HistoryBookingElement bookingInfo={booking}/>
     });
 
     if (isLoading) {
@@ -40,21 +50,27 @@ export const MyBookingsPage: FC = () => {
             <>
                 <Navbar/>
 
-                {bookingsJsx.length === 0 ?
-                    <div className={'flex flex-col items-center'}>
-                        <p className={'font-serif text-4xl mb-4 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent font-semibold mt-2'}>Nothing is here :(</p>
-                        <button className={'cursor-pointer bg-green-400 transition-all hover:bg-green-600 rounded-full p-2'} onClick={() => navigate('/')}>
-                            <p className={'font-serif text-white text-xl font-semibold'}>Find something for you!</p>
-                        </button>
+                    <div className={'w-full md:flex md:justify-between justify-center md:p-4 p-2'}>
+                        <div className={'flex flex-col  items-center md:w-1/2 w-full gap-2'}>
+                            <h1 className={'mb-2'}>
+                                <span className="bg-gradient-to-br from-pink-500 to-violet-500 bg-clip-text text-transparent box-decoration-clone text-4xl font-serif font-semibold">
+                                    Current bookings
+                                </span>
+                            </h1>
+                            {currentBookingsJsx.length !== 0 ? currentBookingsJsx : <NothingHere onClick={() => navigate('/')} buttonText={'Explore properties!'}/>}
+                        </div>
+
+                        <div className={'border border-indigo-500 bg-orange-400 outline-1 w-1 md:block hidden'}/>
+
+                        <div className={'flex flex-col  items-center md:w-1/2 w-full gap-2'}>
+                            <h1 className={'mb-2'}>
+                                <span className="bg-gradient-to-br from-pink-500 to-violet-500 bg-clip-text text-transparent box-decoration-clone text-4xl font-serif font-semibold mt-2">
+                                    Booking history
+                                </span>
+                            </h1>
+                            {historyBookingsJsx.length !== 0 ? historyBookingsJsx : <NothingHere onClick={() => navigate('/')} buttonText={'You do not have any history!'}/>}
+                        </div>
                     </div>
-
-                    :
-
-                <div className={'grid md:grid-cols-2 grid-cols-1 md:gap-4 gap-2 md:mx-8 mx-2 my-2'}>
-                    {bookingsJsx}
-                </div>
-                }
-
                 <Footer/>
             </>
         )

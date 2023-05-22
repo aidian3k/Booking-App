@@ -58,10 +58,12 @@ export const BookingCard: FC<{ property: Property, hostId: number }> = (props) =
     }
 
     async function processCheckout() {
-        const newBooking: Booking = {checkIn: checkIn,
+        const newBooking: Booking = {
+            checkIn: checkIn,
             checkOut: checkOut,
             numberOfGuests: numberOfGuests,
-            totalPrice: getCleaningFee() + calculateFinalPrice()};
+            totalPrice: getCleaningFee() + calculateFinalPrice()
+        };
 
         if (!loggedIn) {
             await setIsLoggedIn(true);
@@ -113,7 +115,8 @@ export const BookingCard: FC<{ property: Property, hostId: number }> = (props) =
                     <div className={'flex'}>
                         <div className={'py-3 px-4 border-r'}>
                             <label>Check in:</label>
-                            <input type={'date'} onChange={(event: any) => changeCheckInDate(new Date(event.target.value))}/>
+                            <input type={'date'}
+                                   onChange={(event: any) => changeCheckInDate(new Date(event.target.value))}/>
                         </div>
 
                         <div className={'py-3 px-4'}>

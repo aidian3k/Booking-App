@@ -5,13 +5,12 @@ import Person2Icon from '@mui/icons-material/Person2';
 import {MyBookingInfoElement} from "./MyBookingInfoElement";
 import {ProfilePageBooking} from "../../model/ProfilePageBooking";
 import {NavigateFunction, useNavigate} from "react-router-dom";
-import {BookingDeletingPopUp} from "./BookingDeletingPopUp";
+import {ReviewAddForm} from "../property-page/ReviewAddForm";
 
-export const MyBookingElement: FC<{bookingInfo: ProfilePageBooking}> = (props) => {
+export const HistoryBookingElement: FC<{bookingInfo: ProfilePageBooking}> = (props) => {
     const {bookingInfo} = props;
     const navigate: NavigateFunction = useNavigate();
-    const [isDeleting, setIsDeleting] = useState<boolean>(false);
-
+    const [reviewAdd, setReviewAdd] = useState<boolean>(false);
 
     return (
         <>
@@ -28,12 +27,12 @@ export const MyBookingElement: FC<{bookingInfo: ProfilePageBooking}> = (props) =
                     </div>
                 </div>
 
-                <button className="px-4 py-2 bg-red-500 text-white rounded-md my-2 hover:bg-red-700 transition-all duration-500 md:mt-14 mr-2"
-                        onClick={() => setIsDeleting(true)}>
-                    <p className={'font-serif font-semibold'}>Cancel reservation</p>
+                <button className="px-4 py-2 bg-red-500 text-white rounded-md my-2 hover:bg-red-700 transition-all duration-500 md:mt-14 mr-2" onClick={() => setReviewAdd(true)}>
+                    <p className={'font-serif font-semibold'}>Add review</p>
+                    <p className={'font-serif font-semibold'}>about the host</p>
                 </button>
             </div>
-            <BookingDeletingPopUp isDeleting={isDeleting} setIsDeleting={setIsDeleting} bookingInfo={bookingInfo}/>
+            <ReviewAddForm reviewAdd={reviewAdd} setReviewAdd={setReviewAdd} hostId={bookingInfo.hostId} clientId={bookingInfo.clientId} propertyId={bookingInfo.propertyId}/>
         </>
     )
 }

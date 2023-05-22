@@ -1,5 +1,6 @@
 package aidian3k.project.bookingappbackend.service;
 
+import aidian3k.project.bookingappbackend.dto.BookingPageDto;
 import aidian3k.project.bookingappbackend.dto.ProfilePageBookingDto;
 import aidian3k.project.bookingappbackend.entity.Booking;
 import aidian3k.project.bookingappbackend.entity.Property;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -68,11 +71,21 @@ public class BookingService {
         return savedBooking;
     }
 
-    public List<ProfilePageBookingDto> getProfilePageBookingInformation(Integer userId) {
+    public BookingPageDto getProfilePageBookingInformation(Integer userId) {
         User user = userService.getSingleUserById(userId);
         List<Booking> userBookings = user.getBookings();
+        List<Booking> currentBookings = new LinkedList<>();
+        List<Booking> historyBookings = new LinkedList<>();
 
-        return mapBookingListToBookingDto(userBookings);
+        userBookings.forEach(booking -> {
+            if (booking.getCheckOut().before(new Date())) {
+                historyBookings.add(booking);
+            } else {
+                currentBookings.add(booking);
+            }
+        });
+
+        return new BookingPageDto(mapBookingListToBookingDto(currentBookings), mapBookingListToBookingDto(historyBookings));
     }
 
     private List<ProfilePageBookingDto> mapBookingListToBookingDto(List<Booking> userBookings) {

@@ -1,5 +1,6 @@
 package aidian3k.project.bookingappbackend.controller;
 
+import aidian3k.project.bookingappbackend.dto.BookingPageDto;
 import aidian3k.project.bookingappbackend.dto.ProfilePageBookingDto;
 import aidian3k.project.bookingappbackend.entity.Booking;
 import aidian3k.project.bookingappbackend.service.BookingService;
@@ -27,7 +28,7 @@ public class BookingController {
     }
 
     @GetMapping("/profile/user/{userId}")
-    public ResponseEntity<List<ProfilePageBookingDto>> getProfilePageBookingsInformation(@PathVariable Integer userId) {
+    public ResponseEntity<BookingPageDto> getProfilePageBookingsInformation(@PathVariable Integer userId) {
         return new ResponseEntity<>(bookingService.getProfilePageBookingInformation(userId), HttpStatus.OK);
     }
 

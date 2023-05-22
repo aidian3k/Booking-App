@@ -10,12 +10,10 @@ import {HostInformation} from "../reviews/HostInformation";
 import {Property, propertyInitialState} from "../../model/Property";
 import {connector} from "../../utils/axios";
 import {ReviewList} from "../reviews/ReviewList";
-import {ReviewAddForm} from "./ReviewAddForm";
 import {User} from "../../model/User";
 
 export const PropertyPage: FC<{ propertyId: any }> = (props) => {
     const [property, setProperty] = useState<Property>(propertyInitialState);
-    const [reviewAdd, setReviewAdd] = useState<boolean>(false);
     const [host, setHost] = useState<User>({id: 1, creationDate: new Date(), email: '', surname: '', phoneNumber: '', name: ''});
 
     useLayoutEffect(() => {
@@ -63,14 +61,6 @@ export const PropertyPage: FC<{ propertyId: any }> = (props) => {
             <p className={'text-xl font-serif font-semibold text-center'}>Reviews about the host:</p>
             <ReviewList hostId={host.id}/>
 
-            <div className={'flex justify-center'}>
-                <button
-                    className={'w-1/2 bg-red-500 mt-2 rounded-2xl p-2 hover:scale-105 cursor-pointer transition-all'}
-                    onClick={() => setReviewAdd(true)}
-                ><p className={'text-lg text-white font-serif font-semibold'}>Add new review</p></button>
-            </div>
-
-            <ReviewAddForm reviewAdd={reviewAdd} setReviewAdd={setReviewAdd} userName={host.name} userId={host.id} propertyId={property.id}/>
             <div className={'w-full h-5'}></div>
         </div>
     )
