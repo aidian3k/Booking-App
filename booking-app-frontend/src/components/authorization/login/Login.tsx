@@ -17,6 +17,7 @@ import {useAppDispatch} from "../../../hooks/reduxHooks";
 import {LoginRequest} from "../../../model/LoginRequest";
 import {LoginError} from "../../help-contact/LoginError";
 import {setLoggedIn} from "../../../redux/slices/AuthSlice";
+import {setSuccessLogin} from "../../../redux/slices/LoginSlice";
 
 export const Login: FC<any> = (props) => {
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
@@ -46,6 +47,8 @@ export const Login: FC<any> = (props) => {
                 dispatch(setLoggedIn(true));
             });
 
+            dispatch(setSuccessLogin(true));
+            await new Promise(resolve => setTimeout(resolve, 500));
             setLoading(false);
 
             navigate('/profile');
@@ -140,6 +143,7 @@ export const Login: FC<any> = (props) => {
                     </button>
                 </Button>
             </div>
+
         </>
     )
 }

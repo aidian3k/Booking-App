@@ -7,6 +7,7 @@ import {setLoggedIn} from "../../../redux/slices/AuthSlice";
 import {AxiosError} from "axios";
 import {ApiErrorObject} from "../../../model/ApiErrorObject";
 import {useAppDispatch} from "../../../hooks/reduxHooks";
+import {setSuccessLogout} from "../../../redux/slices/LogoutSlice";
 
 export const LoggedInItems: FC = () => {
     const navigate: NavigateFunction = useNavigate();
@@ -27,6 +28,7 @@ export const LoggedInItems: FC = () => {
             });
 
             setLoading(false);
+            dispatch(setSuccessLogout(true));
 
             navigate('/');
         } catch (error: any) {

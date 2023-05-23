@@ -10,11 +10,11 @@ import {emailRegex, nameRegex, phoneRegex, surnameRegex} from "../../../constans
 import {ApiErrorObject} from "../../../model/ApiErrorObject";
 import {AxiosError} from "axios";
 import {connector} from "../../../utils/axios";
-import {NavigateFunction, useNavigate} from "react-router-dom";
 import {useAppDispatch} from "../../../hooks/reduxHooks";
 import {ThunkDispatch} from "@reduxjs/toolkit";
 import {login} from "../../../redux/slices/UserSlice";
 import {RegistrationUser} from "../../../model/RegistrationUser";
+import {setSuccessRegister} from "../../../redux/slices/RegisterSlice";
 
 export const Register: FC<any> = (props) => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -106,6 +106,7 @@ export const Register: FC<any> = (props) => {
                 checkBox: false,
                 email: false})
 
+            dispatch(setSuccessRegister(true));
             await props.setIsLogging(true);
         } catch (error: any) {
             const axiosError: AxiosError = error as AxiosError;
