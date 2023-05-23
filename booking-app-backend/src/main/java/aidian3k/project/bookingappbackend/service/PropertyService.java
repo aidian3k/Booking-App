@@ -72,7 +72,6 @@ public class PropertyService {
                 .orElseThrow(() -> new NotFoundException("The property has not been found!"));
     }
 
-    @Transactional
     public Property addNewProperty(Integer userId, PropertyDto propertyDto, List<MultipartFile> files) {
         User user = userService.getSingleUserById(userId);
 

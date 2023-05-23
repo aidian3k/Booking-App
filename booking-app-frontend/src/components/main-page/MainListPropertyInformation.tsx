@@ -15,7 +15,7 @@ export const MainListPropertyInformation: FC<{property: MainPageProperty}> = (pr
                 </div>
             </div>
 
-            <h3 className="text-sm text-gray-500">{property.description}</h3>
+            <h3 className="text-sm text-gray-500">{property.title}</h3>
 
             <div className="mt-1 flex gap-1">
                 <p className="font-semibold">${property.pricePerNight}</p>

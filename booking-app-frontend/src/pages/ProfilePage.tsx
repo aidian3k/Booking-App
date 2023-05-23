@@ -13,18 +13,18 @@ export const ProfilePage: FC = () => {
 
     if (isLoading) {
         return <LoadingPage/>
+    } else {
+        return (
+            <>
+                <Navbar/>
+                <div className={'p-4'}>
+                    <ProfilePageHeading/>
+                    <ProfileStatistics/>
+                    <ReservedProperties/>
+                    <ProfileEditingData/>
+                </div>
+                <Footer/>
+            </>
+        )
     }
-
-    return (
-        <>
-            <Navbar/>
-            <div className={'p-4'}>
-                <ProfilePageHeading/>
-                <ProfileStatistics/>
-                <ReservedProperties/>
-                <ProfileEditingData/>
-            </div>
-            <Footer/>
-        </>
-    )
 }

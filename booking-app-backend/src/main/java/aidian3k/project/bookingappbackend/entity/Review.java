@@ -24,7 +24,7 @@ public class Review {
     private String owner;
 
     @Column(nullable = false)
-    @Length(max = 255)
+    @Length(max = 2000)
     private String content;
 
     @Column(nullable = false)

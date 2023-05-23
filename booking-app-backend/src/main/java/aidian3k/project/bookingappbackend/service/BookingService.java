@@ -44,7 +44,12 @@ public class BookingService {
 
         for (Property property : properties) {
             List<Booking> bookings = property.getBookings();
-            profileBookings.addAll(bookings);
+
+            for(Booking booking : bookings) {
+                if (booking.getCheckOut().after(new Date())) {
+                    profileBookings.add(booking);
+                }
+            }
         }
 
         return mapBookingListToBookingDto(profileBookings);

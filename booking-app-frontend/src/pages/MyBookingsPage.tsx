@@ -60,7 +60,7 @@ export const MyBookingsPage: FC = () => {
                             {currentBookingsJsx.length !== 0 ? currentBookingsJsx : <NothingHere onClick={() => navigate('/')} buttonText={'Explore properties!'}/>}
                         </div>
 
-                        <div className={'border border-indigo-500 bg-orange-400 outline-1 w-1 md:block hidden'}/>
+                        <div className={'border border-indigo-500 bg-orange-400 outline-1 w-1 md:block hidden mx-2'}/>
 
                         <div className={'flex flex-col  items-center md:w-1/2 w-full gap-2'}>
                             <h1 className={'mb-2'}>

@@ -3,6 +3,7 @@ package aidian3k.project.bookingappbackend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,21 +21,26 @@ public class Property {
     private Long id;
 
     @Column(nullable = false)
+    @Length(max = 100)
     private String title;
 
     @Column(nullable = false)
+    @Length(max = 30)
     private String country;
 
     @Column(nullable = false)
+    @Length(max = 50)
     private String city;
 
     @Column(nullable = false)
+    @Length(max = 100)
     private String street;
 
     @OneToMany
     private List<Photo> photos = new ArrayList<>();
 
     @Column(nullable = false)
+    @Length(max = 20000)
     private String description;
 
     @Column(nullable = false)
@@ -62,6 +68,7 @@ public class Property {
     private boolean washingMachine;
 
     @Column(nullable = false)
+    @Length(max = 20000)
     private String extraInformation;
 
     @Column(nullable = false)

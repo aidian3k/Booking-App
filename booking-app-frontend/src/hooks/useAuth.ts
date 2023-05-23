@@ -31,8 +31,8 @@ export function useAuth(isNavigating: boolean) {
                 "/api/v1/auth/refresh-token"
             );
 
-            localStorage.setItem("access_token", response.data.access_token);
-            localStorage.setItem("refresh_token", response.data.refresh_token);
+            await localStorage.setItem("access_token", response.data.access_token);
+            await localStorage.setItem("refresh_token", response.data.refresh_token);
             dispatch(login(response.data.user));
             dispatch(setLoggedIn(true));
 

@@ -49,6 +49,7 @@ export const Login: FC<any> = (props) => {
             setLoading(false);
 
             navigate('/profile');
+            window.location.reload();
         } catch (error: any) {
             const axiosError: AxiosError = error as AxiosError;
             const errorData = axiosError.response?.data as ApiErrorObject | undefined;

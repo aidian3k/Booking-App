@@ -47,7 +47,7 @@ export const ReservationElement: FC<{bookingInfo: ProfilePageBooking}> = (props)
             </div>
 
             <BookingDeletingPopUp isDeleting={isDeleting} setIsDeleting={setIsDeleting} bookingInfo={bookingInfo}/>
-            <ClientInformationPopUp isCheckingClient={isCheckingClient} setIsCheckingClient={setIsCheckingClient} userId={1}/>
+            <ClientInformationPopUp isCheckingClient={isCheckingClient} setIsCheckingClient={setIsCheckingClient} userId={bookingInfo.clientId}/>
         </>
     )
 }
