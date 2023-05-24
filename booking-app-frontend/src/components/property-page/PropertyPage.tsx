@@ -11,19 +11,21 @@ import {Property, propertyInitialState} from "../../model/Property";
 import {connector} from "../../utils/axios";
 import {ReviewList} from "../reviews/ReviewList";
 import {User} from "../../model/User";
+import {useAppSelector} from "../../hooks/reduxHooks";
 
 export const PropertyPage: FC<{ propertyId: any }> = (props) => {
     const [property, setProperty] = useState<Property>(propertyInitialState);
     const [host, setHost] = useState<User>({id: 1, creationDate: new Date(), email: '', surname: '', phoneNumber: '', name: ''});
+    const user: User = useAppSelector(state => state.user.value);
 
     useLayoutEffect(() => {
         connector.get(`/api/v1/property/${props.propertyId}`)
             .then(response => {
+                debugger
                 setProperty(response.data.property);
                 setHost(response.data.userDto)
             })
     }, [])
-    debugger
 
     return (
         <div className={'bg-gray-100 md:px-20 px-5 py-2 flex-col'}>
@@ -50,7 +52,7 @@ export const PropertyPage: FC<{ propertyId: any }> = (props) => {
 
                 </div>
 
-                <BookingCard property={property} hostId={host.id}/>
+                {host.id !== user.id && <BookingCard property={property} hostId={host.id}/>}
             </div>
 
             <div className={'my-2'}>
