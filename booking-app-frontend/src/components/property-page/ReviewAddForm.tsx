@@ -10,6 +10,7 @@ import {authConnector, connector} from "../../utils/axios";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {User} from "../../model/User";
 import {initialUserState} from "../../redux/slices/UserSlice";
+import {useAppSelector} from "../../hooks/reduxHooks";
 
 export const ReviewAddForm: FC<{reviewAdd: boolean, setReviewAdd: React.Dispatch<boolean>, clientId: number, propertyId: number, hostId: number}> = (props) => {
     const {reviewAdd, setReviewAdd} = props;
@@ -18,6 +19,7 @@ export const ReviewAddForm: FC<{reviewAdd: boolean, setReviewAdd: React.Dispatch
     const [host, setHost] = useState<User>(initialUserState.value);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate: NavigateFunction = useNavigate();
+    const client: User = useAppSelector(state => state.user.value);
 
     const fetchHostData = async () => {
         authConnector(localStorage.getItem('access_token')).get(`/api/v1/user/${props.hostId}`)
@@ -29,7 +31,7 @@ export const ReviewAddForm: FC<{reviewAdd: boolean, setReviewAdd: React.Dispatch
     }, []);
 
     async function createReview() {
-        const newReview = {content: content, rating: value, owner: host.name, date: new Date()};
+        const newReview = {content: content, rating: value, owner: client.name, date: new Date()};
 
         try {
             setLoading(true);
@@ -53,7 +55,7 @@ export const ReviewAddForm: FC<{reviewAdd: boolean, setReviewAdd: React.Dispatch
             <h2 className={'font-serif font-semibold text-center text-xl'}>Adding new review about {host.name}</h2>
             <div>
                 <TextField
-                    value={'Adrian'}
+                    value={client.name}
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -83,7 +85,7 @@ export const ReviewAddForm: FC<{reviewAdd: boolean, setReviewAdd: React.Dispatch
                     onChange={(event: any) => setContent(event.target.value)}
                 />
 
-                <p className={'font-serif text-base font-semibold text-black text-center'}>Place your rating about {'Adrian'}</p>
+                <p className={'font-serif text-base font-semibold text-black text-center'}>Place your rating about {host.name}</p>
                 <div className={'flex justify-center'}>
                     <Rating
                         name="simple-controlled"
