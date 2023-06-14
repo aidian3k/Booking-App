@@ -8,7 +8,7 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
     ports:
-      - "5042:5042"
+      - "5432:5432"
 
   backend:
     container_name: booking-app-backend
