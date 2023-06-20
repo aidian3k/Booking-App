@@ -13,6 +13,7 @@ import {AccommodationAddPage} from "./pages/AccommodationAddPage";
 import {MyBookingsPage} from "./pages/MyBookingsPage";
 import {MainPage} from "./pages/MainPage";
 import {AccommodationEditPage} from "./pages/AccommodationEditPage";
+import {LoginCallback} from "./components/authorization/LoginCallback";
 
 const routes = createBrowserRouter([
         {
@@ -48,9 +49,13 @@ const routes = createBrowserRouter([
             element: <ErrorPage/>
         },
         {
+            path: '/oauth2/react/login',
+            element: <LoginCallback/>
+        },
+        {
             path: '/profile/bookings',
             element: <MyBookingsPage/>
-        }
+        },
     ]
 )
 

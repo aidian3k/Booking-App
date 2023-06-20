@@ -1,6 +1,6 @@
 import React, {FC, useState} from "react"
 import {IconicButton} from "../login/IconicButton";
-import {Email, Facebook, Google, Person, Person2, Phone, Visibility, VisibilityOff} from "@mui/icons-material";
+import {Email, Google, Person, Person2, Phone, Visibility, VisibilityOff} from "@mui/icons-material";
 import {Checkbox, FormControlLabel, IconButton, InputAdornment, TextField} from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import {LoadingButton} from "@mui/lab";
@@ -123,7 +123,6 @@ export const Register: FC<any> = (props) => {
         <>
             <div className={'flex flex-col gap-2 mb-4'}>
                 <IconicButton text={'Register via Google'} icon={<Google/>}/>
-                <IconicButton text={'Register via Facebook'} icon={<Facebook/>}/>
             </div>
 
             <TextField

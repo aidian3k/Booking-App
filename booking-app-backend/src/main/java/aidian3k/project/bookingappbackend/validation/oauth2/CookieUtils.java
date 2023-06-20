@@ -1,58 +1,52 @@
 package aidian3k.project.bookingappbackend.validation.oauth2;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.util.SerializationUtils;
-import java.util.Base64;
-import java.util.Optional;
 
+import com.nimbusds.jose.shaded.gson.Gson;
+import jakarta.servlet.http.Cookie;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
+import java.util.Base64;
+
+@Component
 public class CookieUtils {
 
-    public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
-        Cookie[] cookies = request.getCookies();
+    public Cookie buildRefreshTokenCookie(String refreshToken) {
+        final String refreshTokenCookieName = "refreshToken";
+        final int maxRefreshTokenCookieAge = 240;
 
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(name)) {
-                    return Optional.of(cookie);
-                }
-            }
-        }
+        Cookie refreshTokenCookie = new Cookie(refreshTokenCookieName, refreshToken);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(maxRefreshTokenCookieAge);
+        refreshTokenCookie.setSecure(false);
 
-        return Optional.empty();
+        return refreshTokenCookie;
     }
 
-    public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(maxAge);
-        response.addCookie(cookie);
+    public Cookie buildAuthTokenCookie(String token) {
+        final String tokenCookieName = "token";
+        final int maxAuthTokenCookieAge = 240;
+
+        Cookie tokenCookie = new Cookie(tokenCookieName, token);
+        tokenCookie.setPath("/");
+        tokenCookie.setMaxAge(maxAuthTokenCookieAge);
+        tokenCookie.setSecure(false);
+        tokenCookie.setHttpOnly(false);
+
+        return tokenCookie;
     }
 
-    public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie: cookies) {
-                if (cookie.getName().equals(name)) {
-                    cookie.setValue("");
-                    cookie.setPath("/");
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
-                }
-            }
-        }
+    public Cookie buildUserCookie(UserDetails principal) {
+        final String userCookieName = "user";
+        final int maxRefreshTokenCookieAge = 240;
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(principal);
+        String encodedString = Base64.getEncoder().encodeToString(jsonString.getBytes());
+
+        Cookie userCookie = new Cookie(userCookieName, encodedString);
+        userCookie.setPath("/");
+        userCookie.setMaxAge(maxRefreshTokenCookieAge);
+        userCookie.setSecure(false);
+
+        return userCookie;
     }
-
-    public static String serialize(Object object) {
-        return Base64.getUrlEncoder()
-                .encodeToString(SerializationUtils.serialize(object));
-    }
-
-    public static <T> T deserialize(Cookie cookie, Class<T> cls) {
-        return cls.cast(SerializationUtils.deserialize(
-                Base64.getUrlDecoder().decode(cookie.getValue())));
-    }
-
-
 }

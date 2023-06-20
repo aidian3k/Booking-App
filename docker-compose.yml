@@ -31,4 +31,4 @@ services:
       context: booking-app-frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:443"
+      - "80:3000"

@@ -20,7 +20,7 @@ public class GoogleOAuthUserInfo extends OAuthUserInfo{
 
 
     public String getSurname() {
-        return "Nowosielski";
+        return attributes.get("family_name").toString();
     }
 
     @Override
@@ -30,6 +30,6 @@ public class GoogleOAuthUserInfo extends OAuthUserInfo{
 
 
     public String phoneNumber() {
-        return "728221243";
+        return "777777777";
     }
 }

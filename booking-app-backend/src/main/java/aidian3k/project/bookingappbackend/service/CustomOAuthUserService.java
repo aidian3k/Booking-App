@@ -3,8 +3,8 @@ package aidian3k.project.bookingappbackend.service;
 import aidian3k.project.bookingappbackend.entity.User;
 import aidian3k.project.bookingappbackend.repository.UserRepository;
 import aidian3k.project.bookingappbackend.validation.UserPrincipal;
-import aidian3k.project.bookingappbackend.validation.oauth2.model.OAuthUserInfo;
 import aidian3k.project.bookingappbackend.validation.oauth2.OauthUserInfoFactory;
+import aidian3k.project.bookingappbackend.validation.oauth2.model.OAuthUserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -30,7 +31,9 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
     }
 
     private OAuth2User processOAuthUser(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
-        OAuthUserInfo oAuthUserInfo = OauthUserInfoFactory.getOAuthUserInfo(userRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
+        OAuthUserInfo oAuthUserInfo = OauthUserInfoFactory
+                .getOAuthUserInfo(userRequest.getClientRegistration().getRegistrationId(),
+                        oAuth2User.getAttributes());
         String userEmail = oAuthUserInfo.getEmail();
 
         if (StringUtils.isEmpty(userEmail)) {
@@ -40,7 +43,7 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
         Optional<User> authenticateUser = userRepository.findByEmail(userEmail);
         User user;
 
-        if(authenticateUser.isPresent()) {
+        if (authenticateUser.isPresent()) {
             user = authenticateUser.get();
             user = updateExisitingUser(user, oAuthUserInfo);
         } else {
@@ -58,8 +61,13 @@ public class CustomOAuthUserService extends DefaultOAuth2UserService {
     }
 
     private User registerUser(OAuthUserInfo oAuthUserInfo) {
-        User newUser = User.builder().name(oAuthUserInfo.getName()).surname("Nowosielski")
-                .email(oAuthUserInfo.getEmail()).build();
+        User newUser = User.builder()
+                .name(oAuthUserInfo.getName())
+                .surname(oAuthUserInfo.getEmail())
+                .email(oAuthUserInfo.getEmail())
+                .creationDate(new Date())
+                .phoneNumber("777777777")
+                .build();
 
         return userRepository.save(newUser);
     }

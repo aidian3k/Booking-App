@@ -2,7 +2,7 @@ package aidian3k.project.bookingappbackend.config;
 
 import aidian3k.project.bookingappbackend.security.TokenAuthenticationFilter;
 import aidian3k.project.bookingappbackend.service.CustomOAuthUserService;
-import aidian3k.project.bookingappbackend.validation.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import aidian3k.project.bookingappbackend.validation.oauth2.OAuthAuthenticationFailure;
 import aidian3k.project.bookingappbackend.validation.oauth2.OAuthSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,11 +31,7 @@ public class SecurityConfiguration {
     private final CustomOAuthUserService customOAuthUserService;
     private final OAuthSuccessHandler oAuthSuccessHandler;
     private final LogoutHandler logoutHandler;
-
-    @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
-        return new HttpCookieOAuth2AuthorizationRequestRepository();
-    }
+    private final OAuthAuthenticationFailure oAuthAuthenticationFailure;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -58,13 +54,19 @@ public class SecurityConfiguration {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(customOAuthUserService)
+                .and()
+                .successHandler(oAuthSuccessHandler)
+                .failureHandler(oAuthAuthenticationFailure);
+
+        return http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(authenticationProvider)
                 .logout()
                 .logoutUrl("/api/v1/auth/logout")
                 .addLogoutHandler(logoutHandler)
-                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
-
-        return http.build();
+                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+                .and().build();
     }
 }

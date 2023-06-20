@@ -27,22 +27,18 @@ public class User implements UserDetails {
     private Integer id;
 
     @Schema(description = "Field for user's name")
-    @Column(nullable = false)
     //@Pattern(regexp = "[A-Za-z]+", message = "Name must contain only letters")
     private String name;
 
     @Schema(description = "Field for user's surname")
-    @Column(nullable = false)
     //@Pattern(regexp = "[A-Za-z]+", message = "Surname must contain only letters")
     private String surname;
 
     @Schema(description = "Field for user's login")
-    @Column(nullable = false)
     //@Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email must contain be valid")
     private String email;
 
     @Schema(description = "Field for user's phoneNumber assuming that it is Polish number", example = "728111321")
-    @Column(length = 10, nullable = false)
     //@Pattern(regexp = "\"\\\\d{3}-\\\\d{3}-\\\\d{3}\"", message = "Email must contain be valid")
     private String phoneNumber;
 
@@ -52,7 +48,6 @@ public class User implements UserDetails {
     private String password;
 
     @Schema(description = "Field for storing user's creation date")
-    @Column(nullable = false)
     private Date creationDate;
 
     @Enumerated(EnumType.STRING)
@@ -83,7 +78,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority("USER"));
     }
 
     @Override
